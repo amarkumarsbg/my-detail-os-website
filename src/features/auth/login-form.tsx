@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { loginPublic } from "@/services/auth";
 import { mapApiError } from "@/lib/error-messages";
-import { workshopAppLoginUrl } from "@/config/site";
+import { siteConfig, workshopAppLoginUrl } from "@/config/site";
 import { useAuthStore } from "@/store/auth-store";
 import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
@@ -31,20 +31,32 @@ export function LoginForm() {
 
       if (session.user.role === "PLATFORM_OWNER") {
         setSuccess("Platform owner accounts sign in via the Admin Portal.");
-        setError(null);
+        setIsLoading(false);
         return;
       }
 
-      setSuccess("Login successful! Redirecting to Workshop App...");
-      window.location.assign(
-        workshopAppLoginUrl({
-          accessToken: session.accessToken,
-          next: session.user.mustChangePassword ? "/change-password" : "/dashboard",
-        })
-      );
+      const dest = workshopAppLoginUrl({
+        accessToken: session.accessToken,
+        next: session.user.mustChangePassword ? "/change-password" : "/dashboard",
+      });
+
+      // Guard: never "succeed" into a localhost workshop from a hosted marketing site.
+      const isHostedMarketing =
+        typeof window !== "undefined" &&
+        !/^localhost$|^127\.0\.0\.1$/.test(window.location.hostname);
+      if (isHostedMarketing && /localhost|127\.0\.0\.1/.test(dest)) {
+        setError(
+          `Workshop app URL is misconfigured (points to localhost). Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel to your live workshop URL. Current target: ${siteConfig.workshopAppUrl}`
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      setSuccess("Login successful! Opening Workshop App…");
+      // Full navigation — do not clear loading in finally or React may remount before leave.
+      window.location.href = dest;
     } catch (err) {
       setError(mapApiError(err));
-    } finally {
       setIsLoading(false);
     }
   }

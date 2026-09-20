@@ -15,12 +15,12 @@ export const siteConfig = {
 } as const;
 
 /**
- * When true, auth/contact/signup use local mock responses.
- * Set NEXT_PUBLIC_USE_MOCK_PUBLIC_API=true to force mocks in any environment.
- * Defaults to false so real backend integration is the normal path.
+ * Mock auth/contact/signup ONLY when explicitly enabled AND running on localhost.
+ * Production / Vercel never uses mocks — that caused "success" with no Network traffic.
  */
 export const USE_MOCK_PUBLIC_API =
-  process.env.NEXT_PUBLIC_USE_MOCK_PUBLIC_API === "true";
+  process.env.NEXT_PUBLIC_USE_MOCK_PUBLIC_API === "true" &&
+  process.env.NODE_ENV !== "production";
 
 /** Redirect target after successful workshop owner login/signup. */
 export function workshopAppLoginUrl(opts?: {
