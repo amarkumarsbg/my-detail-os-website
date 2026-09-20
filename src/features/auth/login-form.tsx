@@ -158,9 +158,12 @@ export function LoginForm() {
             <AlertDescription>{success}</AlertDescription>
           </Alert>
           {redirectHref && (
-            <Button asChild size="lg" className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium">
-              <a href={redirectHref}>Continue to Workshop App</a>
-            </Button>
+            <a
+              href={redirectHref}
+              className="inline-flex w-full h-11 items-center justify-center rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium shadow-sm"
+            >
+              Continue to Workshop App
+            </a>
           )}
         </div>
       )}
