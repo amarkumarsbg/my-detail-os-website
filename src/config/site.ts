@@ -1,16 +1,57 @@
+const DEFAULT_WORKSHOP_APP_URL = "https://app.primedetailers.com";
+const DEFAULT_API_URL = "https://prime-detailers-api.onrender.com";
+const DEFAULT_SITE_URL = "https://www.primedetailers.com";
+
+/** Normalize a public app origin: trim, require absolute http(s), fix bare hostnames. */
+export function normalizePublicOrigin(
+  value: string | undefined | null,
+  fallback: string
+): string {
+  let raw = (value ?? "").trim();
+  if (!raw) raw = fallback;
+
+  // Bare hostname (missing scheme) becomes a same-origin relative path and
+  // login appears to "succeed" while never leaving /login.
+  if (!/^https?:\/\//i.test(raw)) {
+    raw = `https://${raw.replace(/^\/+/, "")}`;
+  }
+
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      return fallback.replace(/\/$/, "");
+    }
+    // Bare http://localhost (no port) hits port 80 / Caddy — not the Next workshop app.
+    if (
+      (url.hostname === "localhost" || url.hostname === "127.0.0.1") &&
+      !url.port &&
+      url.protocol === "http:"
+    ) {
+      url.port = "3000";
+    }
+    return url.origin;
+  } catch {
+    return fallback.replace(/\/$/, "");
+  }
+}
+
 export const siteConfig = {
   name: "Prime Detailers",
   tagline: "Complete Workshop Management Software",
   description:
     "Modern workshop management software for car service centers, detailing studios and auto workshops. Manage customers, vehicles, job cards, billing, inventory, staff, rewards and customer communication from one platform.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.primedetailers.com",
-  workshopAppUrl:
-    process.env.NEXT_PUBLIC_WORKSHOP_APP_URL ?? "https://app.primedetailers.com",
-  apiUrl:
-    process.env.NEXT_PUBLIC_API_URL ?? "https://prime-detailers-api.onrender.com",
+  url: normalizePublicOrigin(process.env.NEXT_PUBLIC_SITE_URL, DEFAULT_SITE_URL),
+  workshopAppUrl: normalizePublicOrigin(
+    process.env.NEXT_PUBLIC_WORKSHOP_APP_URL,
+    DEFAULT_WORKSHOP_APP_URL
+  ),
+  apiUrl: normalizePublicOrigin(process.env.NEXT_PUBLIC_API_URL, DEFAULT_API_URL),
   ogImage: "/og-image.svg",
   links: {
-    workshop: process.env.NEXT_PUBLIC_WORKSHOP_APP_URL ?? "https://app.primedetailers.com",
+    workshop: normalizePublicOrigin(
+      process.env.NEXT_PUBLIC_WORKSHOP_APP_URL,
+      DEFAULT_WORKSHOP_APP_URL
+    ),
   },
 } as const;
 
@@ -25,12 +66,7 @@ export function workshopAppLoginUrl(opts?: {
   accessToken?: string;
   next?: string;
 }): string {
-  let base = (siteConfig.workshopAppUrl || "http://localhost:3000").replace(/\/$/, "");
-
-  // Guard: bare http://localhost (no port) hits port 80 / Caddy — not the Next workshop app.
-  if (base === "http://localhost" || base === "https://localhost") {
-    base = "http://localhost:3000";
-  }
+  const base = normalizePublicOrigin(siteConfig.workshopAppUrl, DEFAULT_WORKSHOP_APP_URL);
 
   const next = opts?.next ?? "/dashboard";
   if (!opts?.accessToken) {

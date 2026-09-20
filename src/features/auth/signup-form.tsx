@@ -82,18 +82,36 @@ export function SignupForm() {
         accessToken: result.accessToken,
         next: result.user.mustChangePassword ? "/change-password" : "/dashboard",
       });
-      const isHostedMarketing =
-        typeof window !== "undefined" &&
-        !/^localhost$|^127\.0\.0\.1$/.test(window.location.hostname);
-      if (isHostedMarketing && /localhost|127\.0\.0\.1/.test(dest)) {
+
+      let destUrl: URL;
+      try {
+        destUrl = new URL(dest);
+      } catch {
+        setError(
+          "Workshop app URL is invalid. Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel (include https://)."
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      const isHostedMarketing = !/^localhost$|^127\.0\.0\.1$/.test(window.location.hostname);
+      if (isHostedMarketing && /localhost|127\.0\.0\.1/.test(destUrl.hostname)) {
         setError(
           "Workshop app URL is misconfigured (points to localhost). Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel."
         );
         setIsLoading(false);
         return;
       }
+      if (destUrl.origin === window.location.origin) {
+        setError(
+          "Workshop app URL points at this marketing site. Set NEXT_PUBLIC_WORKSHOP_APP_URL to the workshop app, then redeploy."
+        );
+        setIsLoading(false);
+        return;
+      }
+
       setSuccess("Trial account created. Opening your Workshop App...");
-      window.location.href = dest;
+      window.location.assign(dest);
     } catch (err) {
       setError(mapApiError(err));
       setIsLoading(false);

@@ -17,12 +17,14 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [redirectHref, setRedirectHref] = useState<string | null>(null);
   const setSession = useAuthStore((s) => s.setSession);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setSuccess(null);
+    setRedirectHref(null);
     setIsLoading(true);
 
     try {
@@ -40,11 +42,20 @@ export function LoginForm() {
         next: session.user.mustChangePassword ? "/change-password" : "/dashboard",
       });
 
+      let destUrl: URL;
+      try {
+        destUrl = new URL(dest);
+      } catch {
+        setError(
+          `Workshop app URL is invalid. Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel to your live workshop origin (include https://). Current: ${siteConfig.workshopAppUrl}`
+        );
+        setIsLoading(false);
+        return;
+      }
+
       // Guard: never "succeed" into a localhost workshop from a hosted marketing site.
-      const isHostedMarketing =
-        typeof window !== "undefined" &&
-        !/^localhost$|^127\.0\.0\.1$/.test(window.location.hostname);
-      if (isHostedMarketing && /localhost|127\.0\.0\.1/.test(dest)) {
+      const isHostedMarketing = !/^localhost$|^127\.0\.0\.1$/.test(window.location.hostname);
+      if (isHostedMarketing && /localhost|127\.0\.0\.1/.test(destUrl.hostname)) {
         setError(
           `Workshop app URL is misconfigured (points to localhost). Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel to your live workshop URL. Current target: ${siteConfig.workshopAppUrl}`
         );
@@ -52,8 +63,22 @@ export function LoginForm() {
         return;
       }
 
-      setSuccess(`Login successful! Opening ${dest} …`);
-      window.location.replace(dest);
+      // Same-origin /login#token only changes the hash — page never leaves (looks "stuck").
+      if (destUrl.origin === window.location.origin) {
+        setError(
+          `Workshop app URL points at this marketing site (${destUrl.origin}). Set NEXT_PUBLIC_WORKSHOP_APP_URL to the workshop app (e.g. https://prime-detailer-fs-demo.vercel.app), then redeploy.`
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      setRedirectHref(dest);
+      setSuccess("Login successful! Opening workshop…");
+      setIsLoading(false);
+      // Full page navigation to a different origin.
+      window.setTimeout(() => {
+        window.location.assign(dest);
+      }, 50);
     } catch (err) {
       setError(mapApiError(err));
       setIsLoading(false);
@@ -128,11 +153,19 @@ export function LoginForm() {
       )}
 
       {success && (
-        <div className="mt-6">
+        <div className="mt-6 space-y-3">
           <Alert tone="success">
             <AlertTitle>Success</AlertTitle>
             <AlertDescription>{success}</AlertDescription>
           </Alert>
+          {redirectHref && (
+            <a
+              href={redirectHref}
+              className="block text-center text-sm font-semibold text-teal-700 hover:text-teal-600 underline"
+            >
+              Continue to Workshop App
+            </a>
+          )}
         </div>
       )}
     </form>
