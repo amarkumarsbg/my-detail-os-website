@@ -1,4 +1,4 @@
-export type PricingPlanId = "starter" | "growth" | "business" | "enterprise";
+export type PricingPlanId = string;
 
 export interface PricingPlan {
   id: PricingPlanId;
@@ -14,6 +14,8 @@ export interface PricingPlan {
   highlighted?: boolean;
   ctaLabel: string;
   ctaHref: string;
+  /** Backend plan code when loaded from public API */
+  planCode?: string;
 }
 
 /**
@@ -104,4 +106,4 @@ export const pricingPlans: PricingPlan[] = [
 ];
 
 export const pricingNote =
-  "Prices shown are mock/demo values for presentation. Final billing will be connected to backend plan configuration.";
+  "Prices are synced from the platform admin catalog. GST extra as applicable.";

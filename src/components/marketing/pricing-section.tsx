@@ -1,11 +1,41 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/ui/fade-in";
-import { pricingNote, pricingPlans } from "@/data/pricing";
+import { pricingNote, pricingPlans, type PricingPlan } from "@/data/pricing";
+import { getPublicPlans, mapPublicPlansToCards } from "@/api/pricing";
 import { cn } from "@/lib/utils";
 
 export function PricingSection({ compact = false }: { compact?: boolean }) {
+  const [plans, setPlans] = useState<PricingPlan[]>(pricingPlans);
+  const [note, setNote] = useState(pricingNote);
+
+  useEffect(() => {
+    let cancelled = false;
+    getPublicPlans()
+      .then((res) => {
+        if (cancelled) return;
+        const mapped = mapPublicPlansToCards(res);
+        if (mapped.length) {
+          setPlans(mapped);
+          setNote(
+            res.pricing.source === "platform_settings"
+              ? "Live prices from platform admin. GST extra as applicable."
+              : "Prices from platform configuration. GST extra as applicable."
+          );
+        }
+      })
+      .catch(() => {
+        /* keep static fallback */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section className={compact ? "mt-2" : "pt-10 pb-16 sm:pt-12 sm:pb-20"} id="pricing">
       {!compact && (
@@ -22,8 +52,8 @@ export function PricingSection({ compact = false }: { compact?: boolean }) {
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className={cn("grid gap-5 lg:grid-cols-4", compact ? "" : "mt-10")}>
-          {pricingPlans.map((plan, index) => (
-            <FadeIn key={plan.id} delay={index * 0.15} className="h-full flex">
+          {plans.map((plan, index) => (
+            <FadeIn key={`${plan.id}-${plan.name}`} delay={index * 0.15} className="h-full flex">
               <article
                 className={cn(
                   "flex w-full flex-col rounded-2xl border bg-white p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-teal-500/50",
@@ -67,7 +97,7 @@ export function PricingSection({ compact = false }: { compact?: boolean }) {
         </div>
 
         <FadeIn delay={0.8}>
-          <p className="mt-6 text-center text-xs text-muted-foreground">{pricingNote}</p>
+          <p className="mt-6 text-center text-xs text-muted-foreground">{note}</p>
         </FadeIn>
       </div>
     </section>

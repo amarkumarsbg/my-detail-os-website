@@ -25,7 +25,7 @@ export interface AuthSession {
 }
 
 // ─── Subscription / Pricing ───────────────────────────────────────────────────
-export type PlanCode = "STARTER" | "GROWTH" | "BUSINESS" | "ENTERPRISE" | "CUSTOM";
+export type PlanCode = string;
 export type SubscriptionStatus = "ACTIVE" | "PAST_DUE" | "EXPIRED" | "CANCELLED";
 export type SubscriptionPaymentStatus = "PAID" | "PENDING" | "PROCESSING" | "FAILED";
 export type GraceOrLockStatus = "OK" | "GRACE" | "LOCKED" | "SUSPENDED";
