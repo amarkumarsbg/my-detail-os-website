@@ -15,12 +15,10 @@ export const siteConfig = {
 } as const;
 
 /**
- * Mock auth/contact/signup ONLY when explicitly enabled AND running on localhost.
- * Production / Vercel never uses mocks — that caused "success" with no Network traffic.
+ * Mock flag removed — auth always uses the real API.
+ * Kept as `false` so any leftover imports still compile.
  */
-export const USE_MOCK_PUBLIC_API =
-  process.env.NEXT_PUBLIC_USE_MOCK_PUBLIC_API === "true" &&
-  process.env.NODE_ENV !== "production";
+export const USE_MOCK_PUBLIC_API = false;
 
 /** Redirect target after successful workshop owner login/signup. */
 export function workshopAppLoginUrl(opts?: {

@@ -52,9 +52,8 @@ export function LoginForm() {
         return;
       }
 
-      setSuccess("Login successful! Opening Workshop App…");
-      // Full navigation — do not clear loading in finally or React may remount before leave.
-      window.location.href = dest;
+      setSuccess(`Login successful! Opening ${dest} …`);
+      window.location.replace(dest);
     } catch (err) {
       setError(mapApiError(err));
       setIsLoading(false);
