@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const PLAN_CODE = "BASIC";
+const PLAN_CODE = "STARTER";
 
 export function PricingCalculator() {
   const [termMonths, setTermMonths] = useState<12 | 24 | 36 | 60>(12);
@@ -53,6 +53,7 @@ export function PricingCalculator() {
 
     try {
       const result = await getPricingQuote({
+        planCode: PLAN_CODE,
         termMonths,
         extraBranches,
         extraUsers,

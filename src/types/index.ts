@@ -26,17 +26,23 @@ export interface AuthSession {
 
 // ─── Subscription / Pricing ───────────────────────────────────────────────────
 export type PlanCode = string;
-export type SubscriptionStatus = "ACTIVE" | "PAST_DUE" | "EXPIRED" | "CANCELLED";
+export type SubscriptionStatus =
+  | "ACTIVE"
+  | "PAST_DUE"
+  | "EXPIRED"
+  | "CANCELLED"
+  | "TRIAL";
 export type SubscriptionPaymentStatus = "PAID" | "PENDING" | "PROCESSING" | "FAILED";
 export type GraceOrLockStatus = "OK" | "GRACE" | "LOCKED" | "SUSPENDED";
 
+/** Normalized quote shape used by the pricing calculator UI. */
 export interface PricingQuote {
   planCode: PlanCode;
   planName: string;
-  termMonths: 12 | 24 | 36 | 60;
+  termMonths: number;
   termLabel: string;
-  baseBranches: number;
-  baseUsers: number;
+  baseBranches: number | null;
+  baseUsers: number | null;
   extraBranches: number;
   extraUsers: number;
   basePlanAmount: number;
@@ -49,6 +55,28 @@ export interface PricingQuote {
   gstRate: number;
   gstAmount: number;
   totalAmount: number;
+  currency: string;
+}
+
+/** Raw backend quote envelope from POST /api/public/pricing/quote */
+export interface PricingQuoteBreakdown {
+  planCode: string;
+  planName: string;
+  termMonths: number;
+  termLabel: string;
+  extraBranches: number;
+  extraUsers: number;
+  baseAmount: number;
+  extraBranchCost: number;
+  extraUserCost: number;
+  onboardingFee: number;
+  referralDiscount: number;
+  gstPercent: number;
+  gstAmount: number;
+  subTotalBeforeTax: number;
+  finalAmount: number;
+  includedBranches: number | null;
+  includedUsers: number | null;
   currency: string;
 }
 

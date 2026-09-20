@@ -1,6 +1,14 @@
+import { siteConfig } from "@/config/site";
 import type { ApiResponse } from "@/types";
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/$/, "");
+/** Prefer explicit env; in local `next dev` never fall back to production API. */
+const BASE = (
+  process.env.NEXT_PUBLIC_API_URL ??
+  (process.env.NODE_ENV === "development"
+    ? "http://localhost:4000"
+    : siteConfig.apiUrl) ??
+  "http://localhost:4000"
+).replace(/\/$/, "");
 
 const TOKEN_KEY = "pd_token";
 
@@ -53,7 +61,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (!res.ok) {
     const msg =
       (json as { message?: string } | null)?.message ??
-      (json?.error?.message) ??
+      json?.error?.message ??
       `Request failed (${res.status})`;
     const code = json?.error?.code;
     throw new ApiError(res.status, msg, code);

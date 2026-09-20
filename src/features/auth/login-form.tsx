@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { loginPublic } from "@/services/auth";
 import { mapApiError } from "@/lib/error-messages";
+import { workshopAppLoginUrl } from "@/config/site";
+import { useAuthStore } from "@/store/auth-store";
 import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { Alert, AlertDescription, AlertTitle } from "@/features/shared/alert";
-import { cn } from "@/lib/utils";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const setSession = useAuthStore((s) => s.setSession);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,9 +26,21 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      await loginPublic(email.trim(), password);
-      setSuccess(
-        "Login UI ready. Authentication will redirect to the Workshop App once backend auth is connected."
+      const session = await loginPublic(email.trim(), password);
+      setSession(session.user, session.accessToken);
+
+      if (session.user.role === "PLATFORM_OWNER") {
+        setSuccess("Platform owner accounts sign in via the Admin Portal.");
+        setError(null);
+        return;
+      }
+
+      setSuccess("Login successful! Redirecting to Workshop App...");
+      window.location.assign(
+        workshopAppLoginUrl({
+          accessToken: session.accessToken,
+          next: session.user.mustChangePassword ? "/change-password" : "/dashboard",
+        })
       );
     } catch (err) {
       setError(mapApiError(err));
@@ -35,16 +49,13 @@ export function LoginForm() {
     }
   }
 
-  const inputClasses = "bg-white border-slate-300 text-slate-900 focus-visible:ring-teal-600 focus-visible:border-teal-600 rounded-lg h-11 shadow-sm";
-  const labelClasses = "text-sm font-semibold text-slate-900";
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="text-left">
         <FloatingInput
           id="email"
           type="email"
-          label="Email / Phone Number"
+          label="Email"
           placeholder="example@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -73,7 +84,12 @@ export function LoginForm() {
         />
       </div>
 
-      <Button type="submit" size="lg" disabled={isLoading} className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={isLoading}
+        className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm"
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 size-4 animate-spin" />
@@ -85,7 +101,7 @@ export function LoginForm() {
       </Button>
 
       <p className="text-center text-sm text-slate-600 mt-6">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/signup" className="font-semibold text-teal-600 hover:underline">
           Sign Up
         </Link>
@@ -104,7 +120,7 @@ export function LoginForm() {
         <div className="mt-6">
           <Alert tone="success">
             <AlertTitle>Success</AlertTitle>
-            <AlertDescription>Login successful! Redirecting...</AlertDescription>
+            <AlertDescription>{success}</AlertDescription>
           </Alert>
         </div>
       )}

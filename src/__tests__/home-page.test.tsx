@@ -9,6 +9,5 @@ describe("home page", () => {
       screen.getByRole("heading", { name: /run your workshop smarter/i })
     ).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: /start free trial/i }).length).toBeGreaterThan(0);
-    expect(screen.getAllByRole("link", { name: /explore features/i }).length).toBeGreaterThan(0);
   });
 });

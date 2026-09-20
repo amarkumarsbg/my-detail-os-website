@@ -12,7 +12,7 @@ describe("login form", () => {
 
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: "a@b.com" } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: "secret" } });
-    fireEvent.click(screen.getByRole("button", { name: /^login$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /sign in/i }));
 
     await waitFor(() => {
       expect(screen.getByText(/network error/i)).toBeInTheDocument();

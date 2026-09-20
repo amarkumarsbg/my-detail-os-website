@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { PricingQuote } from "@/types";
+import type { PricingQuote, PricingQuoteBreakdown } from "@/types";
 import { ApiError } from "@/lib/api-client";
 import type { PricingPlan } from "@/data/pricing";
 
@@ -117,6 +117,32 @@ export function mapPublicPlansToCards(res: PublicPlansResponse): PricingPlan[] {
     });
 }
 
+export function mapBreakdownToQuote(
+  breakdown: PricingQuoteBreakdown
+): PricingQuote {
+  return {
+    planCode: breakdown.planCode,
+    planName: breakdown.planName,
+    termMonths: breakdown.termMonths,
+    termLabel: breakdown.termLabel,
+    baseBranches: breakdown.includedBranches,
+    baseUsers: breakdown.includedUsers,
+    extraBranches: breakdown.extraBranches,
+    extraUsers: breakdown.extraUsers,
+    basePlanAmount: breakdown.baseAmount,
+    extraBranchAmount: breakdown.extraBranchCost,
+    extraUserAmount: breakdown.extraUserCost,
+    onboardingFee: breakdown.onboardingFee,
+    subtotal: breakdown.subTotalBeforeTax,
+    referralDiscount: breakdown.referralDiscount,
+    taxableAmount: breakdown.subTotalBeforeTax - breakdown.referralDiscount,
+    gstRate: breakdown.gstPercent,
+    gstAmount: breakdown.gstAmount,
+    totalAmount: breakdown.finalAmount,
+    currency: breakdown.currency,
+  };
+}
+
 export async function getPublicPlans(): Promise<PublicPlansResponse> {
   return apiClient.get<PublicPlansResponse>("/api/public/plans");
 }
@@ -128,11 +154,34 @@ export async function getPricingQuote(input: {
   extraUsers?: number;
   referralCode?: string | null;
 }): Promise<PricingQuote> {
+  const payload = {
+    planCode: input.planCode ?? "STARTER",
+    termMonths: input.termMonths,
+    extraBranches: input.extraBranches ?? 0,
+    extraUsers: input.extraUsers ?? 0,
+    referralCode: input.referralCode ?? null,
+    isFirstSubscription: true,
+  };
+
   try {
-    return await apiClient.post<PricingQuote>("/api/public/pricing/quote", input);
+    const res = await apiClient.post<{ breakdown: PricingQuoteBreakdown } | PricingQuote>(
+      "/api/public/pricing/quote",
+      payload
+    );
+    if (res && typeof res === "object" && "breakdown" in res && res.breakdown) {
+      return mapBreakdownToQuote(res.breakdown);
+    }
+    return res as PricingQuote;
   } catch (error) {
     if (error instanceof ApiError && (error.status === 404 || error.status === 405)) {
-      return apiClient.post<PricingQuote>("/api/public/subscription/pricing", input);
+      const res = await apiClient.post<{ breakdown: PricingQuoteBreakdown } | PricingQuote>(
+        "/api/public/subscription/pricing",
+        payload
+      );
+      if (res && typeof res === "object" && "breakdown" in res && res.breakdown) {
+        return mapBreakdownToQuote(res.breakdown);
+      }
+      return res as PricingQuote;
     }
     throw error;
   }

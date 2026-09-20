@@ -5,21 +5,38 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { signupPublic } from "@/services/signup";
 import { mapApiError } from "@/lib/error-messages";
+import { workshopAppLoginUrl } from "@/config/site";
+import { useAuthStore } from "@/store/auth-store";
 import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { Alert, AlertDescription, AlertTitle } from "@/features/shared/alert";
-import { cn } from "@/lib/utils";
+
+const PASSWORD_HINT =
+  "At least 8 characters with uppercase, lowercase, a number, and a special character (#@$%&*!?+-).";
+
+function validatePassword(password: string): string | null {
+  if (password.length < 8) return "Password must be at least 8 characters.";
+  if (!/[A-Z]/.test(password)) return "Password must include an uppercase letter.";
+  if (!/[a-z]/.test(password)) return "Password must include a lowercase letter.";
+  if (!/[0-9]/.test(password)) return "Password must include a number.";
+  if (!/[#@$%&*!?+-]/.test(password)) {
+    return "Password must include one of these special characters: # @ $ % & * ! ? + -";
+  }
+  return null;
+}
 
 export function SignupForm() {
   const [businessName, setBusinessName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [branchName, setBranchName] = useState("HQ");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const setSession = useAuthStore((s) => s.setSession);
 
   const passwordMismatch = useMemo(
     () => confirmPassword.length > 0 && password !== confirmPassword,
@@ -36,24 +53,37 @@ export function SignupForm() {
       return;
     }
 
-    if (!/^\+?[\d\s-]{8,15}$/.test(phone.trim())) {
-      setError("Enter a valid mobile number.");
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length < 10) {
+      setError("Enter a valid 10-digit mobile number.");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await signupPublic({
+      const result = await signupPublic({
         businessName: businessName.trim(),
         ownerName: ownerName.trim(),
         email: email.trim(),
-        phone: phone.trim(),
+        phone: phoneDigits.slice(-10),
         password,
+        branchName: branchName.trim() || "HQ",
       });
 
-      setSuccess(
-        "Trial signup received. Backend onboarding will be connected next."
+      setSession(result.user, result.accessToken);
+      setSuccess("Trial account created. Opening your Workshop App...");
+      window.location.assign(
+        workshopAppLoginUrl({
+          accessToken: result.accessToken,
+          next: result.user.mustChangePassword ? "/change-password" : "/dashboard",
+        })
       );
     } catch (err) {
       setError(mapApiError(err));
@@ -62,17 +92,13 @@ export function SignupForm() {
     }
   }
 
-  const inputClasses = "bg-white border-slate-300 text-slate-900 focus-visible:ring-teal-600 focus-visible:border-teal-600 rounded-lg h-11 shadow-sm";
-  const labelClasses = "text-sm font-semibold text-slate-900 mb-2 block";
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      
       <div className="grid gap-x-5 sm:grid-cols-2 text-left">
         <div>
           <FloatingInput
             id="ownerName"
-            label="Full Name"
+            label="Owner Name"
             value={ownerName}
             onChange={(e) => setOwnerName(e.target.value)}
             required
@@ -100,7 +126,7 @@ export function SignupForm() {
             <FloatingInput
               id="phone"
               type="tel"
-              label="Phone Number"
+              label="Mobile Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
@@ -112,7 +138,7 @@ export function SignupForm() {
         <div className="sm:col-span-2">
           <FloatingInput
             id="businessName"
-            label="Workshop / Company Name"
+            label="Workshop / Business Name"
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             required
@@ -120,7 +146,17 @@ export function SignupForm() {
             placeholder="My Workshop"
           />
         </div>
-        
+        <div className="sm:col-span-2">
+          <FloatingInput
+            id="branchName"
+            label="Branch Name"
+            value={branchName}
+            onChange={(e) => setBranchName(e.target.value)}
+            autoComplete="off"
+            placeholder="HQ"
+          />
+        </div>
+
         <div className="sm:col-span-2">
           <FloatingInput
             id="password"
@@ -130,10 +166,11 @@ export function SignupForm() {
             onChange={(e) => setPassword(e.target.value)}
             required
             autoComplete="new-password"
-            placeholder="Min 6 characters"
+            placeholder="Strong password"
           />
+          <p className="text-xs text-slate-500 -mt-2 mb-3">Password requirements: {PASSWORD_HINT}</p>
         </div>
-        
+
         <div className="sm:col-span-2">
           <FloatingInput
             id="confirmPassword"
@@ -145,13 +182,10 @@ export function SignupForm() {
             autoComplete="new-password"
             placeholder="Confirm password"
           />
-          {passwordMismatch && <p className="text-xs text-red-600 font-medium -mt-2 mb-4">Passwords do not match.</p>}
+          {passwordMismatch && (
+            <p className="text-xs text-red-600 font-medium -mt-2 mb-4">Passwords do not match.</p>
+          )}
         </div>
-      </div>
-
-      <div className="border border-dashed border-slate-300 rounded-xl p-4 flex items-center justify-center bg-slate-50 text-slate-600 text-sm cursor-pointer hover:bg-slate-100 transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-        Upload Logo (Optional)
       </div>
 
       <Button
@@ -189,8 +223,8 @@ export function SignupForm() {
       {success && (
         <div className="mt-6">
           <Alert tone="success">
-            <AlertTitle>Signup submitted</AlertTitle>
-            <AlertDescription>Account created successfully! Welcome to Prime Detailers.</AlertDescription>
+            <AlertTitle>Account created</AlertTitle>
+            <AlertDescription>{success}</AlertDescription>
           </Alert>
         </div>
       )}
