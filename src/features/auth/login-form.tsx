@@ -73,12 +73,11 @@ export function LoginForm() {
       }
 
       setRedirectHref(dest);
-      setSuccess("Login successful! Opening workshop…");
+      setSuccess(`Login successful! Opening ${destUrl.host}…`);
       setIsLoading(false);
-      // Full page navigation to a different origin.
-      window.setTimeout(() => {
-        window.location.assign(dest);
-      }, 50);
+      // Navigate immediately (before paint). Delayed assign can look "stuck" if the
+      // target host hangs (e.g. misconfigured default domain).
+      window.location.href = dest;
     } catch (err) {
       setError(mapApiError(err));
       setIsLoading(false);

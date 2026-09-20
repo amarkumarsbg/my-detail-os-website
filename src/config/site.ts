@@ -1,6 +1,7 @@
-const DEFAULT_WORKSHOP_APP_URL = "https://app.primedetailers.com";
+/** Live workshop app on Vercel (app.primedetailers.com is not wired yet). */
+const DEFAULT_WORKSHOP_APP_URL = "https://prime-detailer-fs-demo.vercel.app";
 const DEFAULT_API_URL = "https://prime-detailers-api.onrender.com";
-const DEFAULT_SITE_URL = "https://www.primedetailers.com";
+const DEFAULT_SITE_URL = "https://prime-detailers-website.vercel.app";
 
 /** Normalize a public app origin: trim, require absolute http(s), fix bare hostnames. */
 export function normalizePublicOrigin(
