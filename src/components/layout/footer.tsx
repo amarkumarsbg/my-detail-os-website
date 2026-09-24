@@ -126,7 +126,7 @@ function FooterColumn({
   children,
 }: {
   title: string;
-  links: { label: string; href: string }[];
+  links: readonly { readonly label: string; readonly href: string }[];
   children?: React.ReactNode;
 }) {
   return (
