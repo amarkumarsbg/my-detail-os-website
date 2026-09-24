@@ -5,8 +5,7 @@ type LoginResponse = AuthSession & {
   branch?: unknown;
 };
 
-export async function login(email: string, password: string): Promise<AuthSession> {
-  const session = await apiClient.post<LoginResponse>("/api/auth/login", { email, password });
+function toAuthSession(session: LoginResponse): AuthSession {
   if (session.accessToken) {
     setToken(session.accessToken);
   }
@@ -22,6 +21,46 @@ export async function login(email: string, password: string): Promise<AuthSessio
       mustChangePassword: session.user.mustChangePassword,
     },
   };
+}
+
+export async function login(email: string, password: string): Promise<AuthSession> {
+  const session = await apiClient.post<LoginResponse>("/api/auth/login", { email, password });
+  return toAuthSession(session);
+}
+
+export type OtpSendResult = {
+  ok: true;
+  delivery?: "sms" | "log_only";
+  hint?: string;
+  /** Present only when SMS is not configured (dev/demo). */
+  devDemoCode?: string;
+};
+
+/** Staff login OTP — phone SMS (10 digits). */
+export async function sendLoginOtp(phone: string): Promise<OtpSendResult> {
+  const digits = phone.replace(/\D/g, "");
+  const data = await apiClient.post<{
+    ok?: boolean;
+    delivery?: "sms" | "log_only";
+    hint?: string;
+    devDemoCode?: string;
+  }>("/api/auth/otp/send", { phone: digits });
+  return {
+    ok: true,
+    delivery: data?.delivery,
+    hint: typeof data?.hint === "string" ? data.hint : undefined,
+    devDemoCode: typeof data?.devDemoCode === "string" ? data.devDemoCode : undefined,
+  };
+}
+
+export async function verifyLoginOtp(phone: string, code: string): Promise<AuthSession> {
+  const digits = phone.replace(/\D/g, "");
+  const trimmed = code.replace(/\D/g, "");
+  const session = await apiClient.post<LoginResponse>("/api/auth/otp/verify", {
+    phone: digits,
+    code: trimmed,
+  });
+  return toAuthSession(session);
 }
 
 export async function getMe(): Promise<AuthUser> {
