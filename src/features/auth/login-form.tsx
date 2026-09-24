@@ -17,8 +17,26 @@ import { OtpInput } from "@/components/ui/otp-input";
 import { Alert, AlertDescription, AlertTitle } from "@/features/shared/alert";
 import { OpeningWorkshopOverlay } from "@/features/auth/opening-workshop-overlay";
 import type { LoginResponse } from "@/api/auth";
+import { apiClient } from "@/lib/api-client";
 
 type LoginMethod = "email" | "mobile";
+
+async function resolveOrgSlug(session: LoginResponse): Promise<string | null> {
+  const direct = (session.organization?.slug ?? "").trim().toLowerCase();
+  if (direct) return direct;
+
+  // Fallback: entitlement payload includes organization.slug after token is stored.
+  if (!session.user.organizationId) return null;
+  try {
+    const entitlement = await apiClient.get<{
+      organization?: { slug?: string | null };
+    }>("/api/organization/subscription");
+    const slug = (entitlement?.organization?.slug ?? "").trim().toLowerCase();
+    return slug || null;
+  } catch {
+    return null;
+  }
+}
 
 export function LoginForm() {
   const [loginMethod, setLoginMethod] = useState<LoginMethod>("email");
@@ -36,7 +54,7 @@ export function LoginForm() {
   const setSession = useAuthStore((s) => s.setSession);
   const verifyOtpLock = useRef(false);
 
-  function finishWithSession(session: LoginResponse): boolean {
+  async function finishWithSession(session: LoginResponse): Promise<boolean> {
     setSession(session.user, session.accessToken);
 
     if (session.user.role === "PLATFORM_OWNER") {
@@ -46,10 +64,12 @@ export function LoginForm() {
       return false;
     }
 
-    const orgSlug = session.organization?.slug ?? null;
+    const orgSlug = await resolveOrgSlug(session);
     if (!orgSlug) {
       setError(
-        "Your account is missing an organization slug. Contact support or complete signup again."
+        session.user.organizationId
+          ? "Your workshop is missing a URL slug. Ask support to set the organization slug, then try again."
+          : "Your account is not linked to a workshop organization. Contact support or complete signup again."
       );
       setIsLoading(false);
       setIsRedirecting(false);
@@ -110,7 +130,7 @@ export function LoginForm() {
 
     try {
       const session = await loginPublic(email.trim(), password);
-      finishWithSession(session);
+      await finishWithSession(session);
     } catch (err) {
       setError(mapApiError(err));
       setIsRedirecting(false);
@@ -157,7 +177,7 @@ export function LoginForm() {
     setIsRedirecting(true);
     try {
       const session = await verifyLoginOtpPublic(mobile, digits);
-      finishWithSession(session);
+      await finishWithSession(session);
     } catch (err) {
       setError(mapApiError(err));
       setIsRedirecting(false);

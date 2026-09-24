@@ -75,7 +75,7 @@ export function SignupForm() {
       });
 
       setSession(result.user, result.accessToken);
-      const orgSlug = result.organization?.slug ?? null;
+      const orgSlug = (result.organization?.slug ?? "").trim().toLowerCase() || null;
       if (!orgSlug) {
         setError("Organization slug was not returned. Please contact support.");
         setIsRedirecting(false);
