@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+
 type OpeningWorkshopOverlayProps = {
   /** Optional fallback link if redirect is blocked by the browser. */
   href?: string | null;
@@ -7,11 +10,20 @@ type OpeningWorkshopOverlayProps = {
 
 /**
  * Full-screen handoff state after login/signup — spinner only, no copy.
+ * Portaled to document.body so it covers the auth shell brand pill (z-20).
  */
 export function OpeningWorkshopOverlay({ href }: OpeningWorkshopOverlayProps) {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950"
       role="status"
       aria-live="polite"
       aria-busy="true"
@@ -27,12 +39,12 @@ export function OpeningWorkshopOverlay({ href }: OpeningWorkshopOverlayProps) {
         <span className="workshop-orbit__dot workshop-orbit__dot--b" />
         <span className="workshop-orbit__dot workshop-orbit__dot--c" />
       </div>
-      {/* Visually hidden fallback for accessibility / blocked redirects */}
       {href ? (
         <a href={href} className="sr-only">
           Continue
         </a>
       ) : null}
-    </div>
+    </div>,
+    document.body
   );
 }
