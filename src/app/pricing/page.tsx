@@ -6,7 +6,7 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "Pricing",
   description:
-    "Compare Starter, Growth, Business, and Enterprise plans for Prime Detailers workshop management software.",
+    "Compare Starter, Growth, Business, and Enterprise plans for MY DETAIL OS workshop management software.",
   path: "/pricing",
 });
 

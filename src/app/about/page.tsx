@@ -5,14 +5,14 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "About",
   description:
-    "Prime Detailers builds modern workshop management software for detailing studios, service centers, and auto businesses.",
+    "MY DETAIL OS builds modern workshop management software for detailing studios, service centers, and auto businesses.",
   path: "/about",
 });
 
 export default function AboutPage() {
   return (
     <PageShell
-      title="About Prime Detailers"
+      title="About MY DETAIL OS"
       description="We help automotive workshops replace manual follow-ups with a clearer, connected operating system."
     >
       <div className="grid gap-4 md:grid-cols-2">

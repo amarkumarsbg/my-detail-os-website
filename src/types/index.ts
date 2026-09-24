@@ -95,6 +95,19 @@ export interface SignupResult {
   accessToken: string;
   user: AuthUser;
   organizationId: string;
+  organization?: {
+    id: string;
+    name: string;
+    slug: string | null;
+    isActive?: boolean;
+  };
+  branch?: { id: string; name: string; organizationId: string };
+  subscription?: {
+    id: string;
+    planCode: string;
+    planName: string;
+    status: string;
+  };
 }
 
 // ─── Pricing Calculator Form ──────────────────────────────────────────────────

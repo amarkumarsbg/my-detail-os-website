@@ -10,7 +10,7 @@ export function ProductMockup({ kind = "hero" }: { kind?: MockupKind }) {
           <span className="size-2.5 rounded-full bg-green-400" />
         </div>
         <p className="text-[11px] font-medium text-slate-500">{titleFor(kind)}</p>
-        <span className="text-[11px] font-semibold text-slate-400">Prime Detailers</span>
+        <span className="text-[11px] font-semibold text-slate-400">MY DETAIL OS</span>
       </div>
       <div className="p-4 sm:p-5">{renderBody(kind)}</div>
     </div>

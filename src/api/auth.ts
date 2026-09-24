@@ -1,8 +1,13 @@
 import { apiClient, setToken, clearToken } from "@/lib/api-client";
 import type { AuthSession, AuthUser } from "@/types";
 
-type LoginResponse = AuthSession & {
+export type LoginResponse = AuthSession & {
   branch?: unknown;
+  organization?: {
+    id: string;
+    name: string;
+    slug: string | null;
+  } | null;
 };
 
 function toAuthSession(session: LoginResponse): AuthSession {
@@ -23,9 +28,10 @@ function toAuthSession(session: LoginResponse): AuthSession {
   };
 }
 
-export async function login(email: string, password: string): Promise<AuthSession> {
+export async function login(email: string, password: string): Promise<LoginResponse> {
   const session = await apiClient.post<LoginResponse>("/api/auth/login", { email, password });
-  return toAuthSession(session);
+  toAuthSession(session);
+  return session;
 }
 
 export type OtpSendResult = {
@@ -53,14 +59,15 @@ export async function sendLoginOtp(phone: string): Promise<OtpSendResult> {
   };
 }
 
-export async function verifyLoginOtp(phone: string, code: string): Promise<AuthSession> {
+export async function verifyLoginOtp(phone: string, code: string): Promise<LoginResponse> {
   const digits = phone.replace(/\D/g, "");
   const trimmed = code.replace(/\D/g, "");
   const session = await apiClient.post<LoginResponse>("/api/auth/otp/verify", {
     phone: digits,
     code: trimmed,
   });
-  return toAuthSession(session);
+  toAuthSession(session);
+  return session;
 }
 
 export async function getMe(): Promise<AuthUser> {

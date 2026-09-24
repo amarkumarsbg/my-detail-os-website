@@ -29,13 +29,15 @@ export function Footer() {
           
           {/* Column 1: Brand & Gen Links */}
           <div className="space-y-6 lg:pr-8">
-            <Link href="/" className="flex items-center gap-2 group mb-6">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-teal-600 shadow-md">
-                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-6">
-                  <path d="M16 6L18.5 13.5L26 16L18.5 18.5L16 26L13.5 18.5L6 16L13.5 13.5L16 6Z" fill="white" />
-                  <path d="M16 3L27 8V16C27 22 22.5 27 16 29C9.5 27 5 22 5 16V8L16 3Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="white" fillOpacity="0.2" />
-                </svg>
-              </div>
+            <Link href="/" className="flex items-center gap-3 group mb-6">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={siteConfig.logoMark}
+                alt=""
+                width={40}
+                height={40}
+                className="size-10 rounded-xl object-cover shadow-md"
+              />
               <span className="font-heading text-xl font-bold tracking-tight text-white">
                 {siteConfig.name}
               </span>
@@ -55,7 +57,7 @@ export function Footer() {
           {/* Column 2: Considering */}
           <div>
             <h3 className="mb-4 pb-2 text-xs font-bold text-white uppercase tracking-wider border-b border-slate-800 inline-block">
-              Considering Prime Detailers?
+              Considering MY DETAIL OS?
             </h3>
             <ul className="space-y-4 text-sm font-medium">
               {footerNav.considering.map((item, i) => (
@@ -64,7 +66,7 @@ export function Footer() {
             </ul>
             <div className="mt-6">
               <Link href="/login" className="text-sm font-bold text-teal-500 hover:text-teal-400 flex items-center group">
-                Why Prime Detailers <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
+                Why MY DETAIL OS <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </div>
@@ -150,12 +152,15 @@ export function Footer() {
 
           {/* Right: Logo */}
           <div className="flex items-center justify-center sm:justify-end order-1 sm:order-3">
-            <Link href="/" className="flex items-center gap-2 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all">
-              <div className="flex size-6 items-center justify-center rounded bg-teal-600">
-                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-4">
-                  <path d="M16 6L18.5 13.5L26 16L18.5 18.5L16 26L13.5 18.5L6 16L13.5 13.5L16 6Z" fill="white" />
-                </svg>
-              </div>
+            <Link href="/" className="opacity-80 hover:opacity-100 transition-opacity">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={siteConfig.logoMark}
+                alt={siteConfig.name}
+                width={28}
+                height={28}
+                className="size-7 rounded-md object-cover"
+              />
             </Link>
           </div>
         </div>

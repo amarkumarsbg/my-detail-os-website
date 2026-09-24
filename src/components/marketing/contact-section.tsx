@@ -42,7 +42,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <p className="font-semibold text-white">Email Support</p>
-                  <p className="mt-1">support@primedetailers.com</p>
+                  <p className="mt-1">support@mydetailos.com</p>
                   <p className="text-sm text-slate-500 mt-1">We usually respond within 24 hours.</p>
                 </div>
               </div>
@@ -53,7 +53,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <p className="font-semibold text-white">Headquarters</p>
-                  <p className="mt-1">Prime Detailers Tech</p>
+                  <p className="mt-1">MY DETAIL OS Tech</p>
                   <p className="text-sm text-slate-500 mt-1">Bengaluru, Karnataka, India</p>
                 </div>
               </div>

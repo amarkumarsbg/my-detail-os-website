@@ -73,7 +73,7 @@ export const specificFeatures: Record<string, FeaturePageData> = {
       badge: "Garage Finance Management",
       titleStart: "Real-Time Workshop Cash Flow &",
       titleHighlight: "Profit Tracker",
-      description: "Track daily counter cash, UPI digital payments, vendor credit dues, mechanics labor payouts, and net profit margins in real time with PrimeDetailers.",
+      description: "Track daily counter cash, UPI digital payments, vendor credit dues, mechanics labor payouts, and net profit margins in real time with MY DETAIL OS.",
     },
     benefits: {
       badge: "Financial Control System",
@@ -115,7 +115,7 @@ export const specificFeatures: Record<string, FeaturePageData> = {
     workflow: {
       badge: "Financial Workflow",
       titleStart: "How Finance Tracking Works In",
-      titleHighlight: "PrimeDetailers",
+      titleHighlight: "MY DETAIL OS",
       subtitle: "5 seamless steps to maintain 100% financial accuracy every single day.",
       steps: [
         { num: "01", title: "Customer Invoice Payment", desc: "When a job card bill is cleared via Cash, UPI, or Card, the payment is immediately tagged to daily collections." },
@@ -185,7 +185,7 @@ export const specificFeatures: Record<string, FeaturePageData> = {
     workflow: {
       badge: "Service Workflow",
       titleStart: "How Job Cards Work In",
-      titleHighlight: "PrimeDetailers",
+      titleHighlight: "MY DETAIL OS",
       subtitle: "5 seamless steps to process any vehicle in your workshop.",
       steps: [
         { num: "01", title: "Vehicle Entry", desc: "Enter vehicle number. The system auto-fetches past customer details and history instantly." },
@@ -237,7 +237,7 @@ export function getFeatureData(slug: string): FeaturePageData {
         titleStart: "Unlock the Power of",
         titleHighlight: formattedName,
         p1: `Our ${formattedName} solution provides complete clarity over your workshop's workforce. Track check-ins, manage leaves, and calculate performance incentives effortlessly.`,
-        p2: "Everything is perfectly integrated into the PrimeDetailers ecosystem, meaning your staff data flows seamlessly into payroll and mechanic commissions.",
+        p2: "Everything is perfectly integrated into the MY DETAIL OS ecosystem, meaning your staff data flows seamlessly into payroll and mechanic commissions.",
         cards: [
           { icon: <span className="text-lg">⏱️</span>, title: "Time Tracking", desc: "Monitor exact clock-in and clock-out times for all staff" },
           { icon: <span className="text-lg">📱</span>, title: "Digital Kiosk", desc: "Staff scan a QR code to securely log their daily attendance" },
@@ -247,7 +247,7 @@ export function getFeatureData(slug: string): FeaturePageData {
       },
       comparison: {
         titleStart: "Manual Registers vs",
-        titleHighlight: "PrimeDetailers",
+        titleHighlight: "MY DETAIL OS",
         subtitle: `Compare outdated manual methods with our modern ${formattedName} software.`,
         rows: [
           { label: "Attendance Tracking", falseText: "Paper registers prone to proxy attendance and errors", trueText: "Digital QR scanning and PIN-based verification" },
@@ -272,7 +272,7 @@ export function getFeatureData(slug: string): FeaturePageData {
       workflow: {
         badge: "Staff Workflow",
         titleStart: "How it Works In",
-        titleHighlight: "PrimeDetailers",
+        titleHighlight: "MY DETAIL OS",
         subtitle: "A seamless process to manage your workforce daily.",
         steps: [
           { num: "01", title: "Setup Profile", desc: "Add employee details, salary structure, and set their PIN." },
@@ -321,7 +321,7 @@ export function getFeatureData(slug: string): FeaturePageData {
       },
       comparison: {
         titleStart: "Manual Tracking vs",
-        titleHighlight: "PrimeDetailers",
+        titleHighlight: "MY DETAIL OS",
         subtitle: `Compare outdated manual methods with our modern ${formattedName} software.`,
         rows: [
           { label: "Service History", falseText: "Flipping through paper files to remember what was fixed last time", trueText: "Complete digital timeline of every past repair and invoice" },
@@ -337,7 +337,7 @@ export function getFeatureData(slug: string): FeaturePageData {
         cards: [
           { icon: <Users className="size-5 text-teal-600" />, title: "Customer Profiles", desc: "Detailed records including vehicle fleets and contact preferences." },
           { icon: <Bell className="size-5 text-teal-600" />, title: "Automated Reminders", desc: "Trigger alerts for insurance renewal, PUC, and general service." },
-          { icon: <MessageSquare className="size-5 text-teal-600" />, title: "Two-way WhatsApp", desc: "Chat with customers directly from the PrimeDetailers dashboard." },
+          { icon: <MessageSquare className="size-5 text-teal-600" />, title: "Two-way WhatsApp", desc: "Chat with customers directly from the MY DETAIL OS dashboard." },
           { icon: <CheckCircle2 className="size-5 text-teal-600" />, title: "Membership Plans", desc: "Sell and manage AMC (Annual Maintenance Contracts)." },
           { icon: <TrendingUp className="size-5 text-teal-600" />, title: "Lead Management", desc: "Track walk-in inquiries and convert them to loyal customers." },
           { icon: <CheckCircle2 className="size-5 text-teal-600" />, title: "Loyalty Points", desc: "Reward repeat customers to ensure they keep coming back." }
@@ -346,7 +346,7 @@ export function getFeatureData(slug: string): FeaturePageData {
       workflow: {
         badge: "CRM Workflow",
         titleStart: "How it Works In",
-        titleHighlight: "PrimeDetailers",
+        titleHighlight: "MY DETAIL OS",
         subtitle: "A seamless process to delight customers every single day.",
         steps: [
           { num: "01", title: "Capture", desc: "Log vehicle details during their first visit to build a profile." },
@@ -384,7 +384,7 @@ export function getFeatureData(slug: string): FeaturePageData {
       titleStart: "Unlock the Power of",
       titleHighlight: formattedName,
       p1: `Our ${formattedName} solution provides workshop owners with complete clarity and operational efficiency. Say goodbye to manual tasks and disorganized data.`,
-      p2: "Everything you need is perfectly integrated into the PrimeDetailers ecosystem, meaning your data flows seamlessly between job cards, billing, and reporting.",
+      p2: "Everything you need is perfectly integrated into the MY DETAIL OS ecosystem, meaning your data flows seamlessly between job cards, billing, and reporting.",
       cards: [
         { icon: <span className="text-lg">🚀</span>, title: "Increased Efficiency", desc: "Automate repetitive tasks and focus on growing your garage business" },
         { icon: <span className="text-lg">📱</span>, title: "Cloud Accessible", desc: "Access your workshop data from your phone, tablet, or PC anywhere" },
@@ -394,7 +394,7 @@ export function getFeatureData(slug: string): FeaturePageData {
     },
     comparison: {
       titleStart: "The Old Way vs",
-      titleHighlight: "PrimeDetailers",
+      titleHighlight: "MY DETAIL OS",
       subtitle: `Compare outdated manual methods with our modern ${formattedName} software.`,
       rows: [
         { label: "Efficiency", falseText: "Slow, manual data entry prone to human error", trueText: "Automated, instant processing with auto-fill" },
@@ -419,7 +419,7 @@ export function getFeatureData(slug: string): FeaturePageData {
     workflow: {
       badge: "Standard Workflow",
       titleStart: "How it Works In",
-      titleHighlight: "PrimeDetailers",
+      titleHighlight: "MY DETAIL OS",
       subtitle: "A seamless process to maintain accuracy every single day.",
       steps: [
         { num: "01", title: "Setup", desc: "Quickly configure your settings to match your specific workshop processes." },

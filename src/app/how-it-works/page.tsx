@@ -6,7 +6,7 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "How It Works",
   description:
-    "Start a free trial, set up your workshop, add your team, and begin managing operations with Prime Detailers.",
+    "Start a free trial, set up your workshop, add your team, and begin managing operations with MY DETAIL OS.",
   path: "/how-it-works",
 });
 
@@ -14,7 +14,7 @@ export default function HowItWorksPage() {
   return (
     <PageShell
       title="A simple path from signup to daily operations"
-      description="Prime Detailers is designed to get workshops live quickly without a complicated rollout."
+      description="MY DETAIL OS is designed to get workshops live quickly without a complicated rollout."
     >
       <ol className="grid gap-4 md:grid-cols-2">
         {howItWorksSteps.map((step) => (

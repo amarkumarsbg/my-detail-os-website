@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "Contact",
   description:
-    "Contact Prime Detailers for product questions, free trial help, pricing guidance, or sales conversations.",
+    "Contact MY DETAIL OS for product questions, free trial help, pricing guidance, or sales conversations.",
   path: "/contact",
 });
 

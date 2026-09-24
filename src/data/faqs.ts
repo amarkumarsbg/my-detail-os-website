@@ -5,9 +5,9 @@ export interface FaqItem {
 
 export const faqItems: FaqItem[] = [
   {
-    question: "What is Prime Detailers?",
+    question: "What is MY DETAIL OS?",
     answer:
-      "Prime Detailers is workshop management software for car detailing studios, service centers, auto spas, and car wash businesses. It helps you manage job cards, customers, vehicles, billing, inventory, staff, rewards, and customer communication from one platform.",
+      "MY DETAIL OS is workshop management software for car detailing studios, service centers, auto spas, and car wash businesses. It helps you manage job cards, customers, vehicles, billing, inventory, staff, rewards, and customer communication from one platform.",
   },
   {
     question: "Can I try it before purchasing?",

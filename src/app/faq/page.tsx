@@ -12,7 +12,7 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "FAQ",
   description:
-    "Answers about Prime Detailers trials, plans, branches, users, customer portal, billing, and inventory.",
+    "Answers about MY DETAIL OS trials, plans, branches, users, customer portal, billing, and inventory.",
   path: "/faq",
 });
 

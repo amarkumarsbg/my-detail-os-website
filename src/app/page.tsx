@@ -41,7 +41,7 @@ export default function Home() {
       
       <CtaSection
         title="Ready to modernize your workshop?"
-        description="Start a free trial and see how Prime Detailers centralizes workshop operations."
+        description="Start a free trial and see how MY DETAIL OS centralizes workshop operations."
         secondaryLabel="View Pricing"
         secondaryHref="/pricing"
       />

@@ -145,7 +145,7 @@ export const footerNav = {
     { label: "Sitemap", href: "#" },
   ],
   considering: [
-    { label: "About Prime Detailers", href: "/#about" },
+    { label: "About MY DETAIL OS", href: "/#about" },
     { label: "Customer Engagement", href: "/#features" },
     { label: "Communications", href: "/#features" },
     { label: "Customer Data Platform", href: "/#features" },

@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { OtpInput } from "@/components/ui/otp-input";
 import { Alert, AlertDescription, AlertTitle } from "@/features/shared/alert";
-import type { AuthSession } from "@/types";
+import { OpeningWorkshopOverlay } from "@/features/auth/opening-workshop-overlay";
+import type { LoginResponse } from "@/api/auth";
 
 type LoginMethod = "email" | "mobile";
 
@@ -28,17 +29,27 @@ export function LoginForm() {
   const [otpSent, setOtpSent] = useState(false);
   const [otpHint, setOtpHint] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
   const [redirectHref, setRedirectHref] = useState<string | null>(null);
   const setSession = useAuthStore((s) => s.setSession);
   const verifyOtpLock = useRef(false);
 
-  function finishWithSession(session: AuthSession): boolean {
+  function finishWithSession(session: LoginResponse): boolean {
     setSession(session.user, session.accessToken);
 
     if (session.user.role === "PLATFORM_OWNER") {
-      setSuccess("Platform owner accounts sign in via the Admin Portal.");
+      setInfo("Platform owner accounts sign in via the Admin Portal.");
+      setIsLoading(false);
+      return false;
+    }
+
+    const orgSlug = session.organization?.slug ?? null;
+    if (!orgSlug) {
+      setError(
+        "Your account is missing an organization slug. Contact support or complete signup again."
+      );
       setIsLoading(false);
       return false;
     }
@@ -46,6 +57,7 @@ export function LoginForm() {
     const dest = workshopAppLoginUrl({
       accessToken: session.accessToken,
       next: session.user.mustChangePassword ? "/change-password" : "/dashboard",
+      orgSlug,
     });
 
     let destUrl: URL;
@@ -70,14 +82,14 @@ export function LoginForm() {
 
     if (destUrl.origin === window.location.origin) {
       setError(
-        `Workshop app URL points at this marketing site (${destUrl.origin}). Set NEXT_PUBLIC_WORKSHOP_APP_URL to the workshop app (e.g. https://prime-detailer-fs-demo.vercel.app), then redeploy.`
+        `Workshop app URL points at this marketing site (${destUrl.origin}). Set NEXT_PUBLIC_WORKSHOP_APP_URL to the workshop app origin, then redeploy.`
       );
       setIsLoading(false);
       return false;
     }
 
     setRedirectHref(dest);
-    setSuccess(`Login successful! Opening ${destUrl.host}…`);
+    setIsRedirecting(true);
     setIsLoading(false);
     window.location.href = dest;
     return true;
@@ -86,7 +98,7 @@ export function LoginForm() {
   async function handleEmailSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setSuccess(null);
+    setInfo(null);
     setRedirectHref(null);
     setIsLoading(true);
 
@@ -134,7 +146,7 @@ export function LoginForm() {
     if (digits.length !== 4 || verifyOtpLock.current) return;
     verifyOtpLock.current = true;
     setError(null);
-    setSuccess(null);
+    setInfo(null);
     setRedirectHref(null);
     setIsLoading(true);
     try {
@@ -160,7 +172,7 @@ export function LoginForm() {
   function switchTo(method: LoginMethod) {
     setLoginMethod(method);
     setError(null);
-    setSuccess(null);
+    setInfo(null);
     setRedirectHref(null);
     setOtp("");
     setOtpSent(false);
@@ -169,6 +181,8 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
+      {isRedirecting ? <OpeningWorkshopOverlay href={redirectHref} /> : null}
+
       {loginMethod === "email" ? (
         <form onSubmit={handleEmailSubmit} className="space-y-6">
           <div className="text-left">
@@ -207,7 +221,7 @@ export function LoginForm() {
           <Button
             type="submit"
             size="lg"
-            disabled={isLoading}
+            disabled={isLoading || isRedirecting}
             className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm"
           >
             {isLoading ? (
@@ -252,7 +266,7 @@ export function LoginForm() {
             <Button
               type="submit"
               size="lg"
-              disabled={isLoading || mobile.length < 10}
+              disabled={isLoading || isRedirecting || mobile.length < 10}
               className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm"
             >
               {isLoading ? (
@@ -272,7 +286,7 @@ export function LoginForm() {
                   <button
                     type="button"
                     onClick={() => void handleSendOtp()}
-                    disabled={isLoading}
+                    disabled={isLoading || isRedirecting}
                     className="text-xs font-semibold text-teal-700 hover:text-teal-600 disabled:opacity-50"
                   >
                     Resend OTP
@@ -282,7 +296,7 @@ export function LoginForm() {
                   value={otp}
                   onChange={setOtp}
                   onComplete={(v) => void runMobileOtpVerify(v)}
-                  disabled={isLoading}
+                  disabled={isLoading || isRedirecting}
                 />
                 {otpHint && <p className="text-xs text-slate-500 text-center">{otpHint}</p>}
               </div>
@@ -290,7 +304,7 @@ export function LoginForm() {
               <Button
                 type="submit"
                 size="lg"
-                disabled={isLoading || otp.length < 4}
+                disabled={isLoading || isRedirecting || otp.length < 4}
                 className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm"
               >
                 {isLoading ? (
@@ -317,7 +331,8 @@ export function LoginForm() {
         <button
           type="button"
           onClick={() => switchTo("mobile")}
-          className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-slate-200 bg-white text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+          disabled={isRedirecting}
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-slate-200 bg-white text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50"
         >
           <Smartphone className="size-4 text-teal-600" />
           Login with Mobile OTP
@@ -326,7 +341,8 @@ export function LoginForm() {
         <button
           type="button"
           onClick={() => switchTo("email")}
-          className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-slate-200 bg-white text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+          disabled={isRedirecting}
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-slate-200 bg-white text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50"
         >
           Login with Email
         </button>
@@ -346,21 +362,11 @@ export function LoginForm() {
         </Alert>
       )}
 
-      {success && (
-        <div className="space-y-3">
-          <Alert tone="success">
-            <AlertTitle>Success</AlertTitle>
-            <AlertDescription>{success}</AlertDescription>
-          </Alert>
-          {redirectHref && (
-            <a
-              href={redirectHref}
-              className="inline-flex w-full h-11 items-center justify-center rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium shadow-sm"
-            >
-              Continue to Workshop App
-            </a>
-          )}
-        </div>
+      {info && (
+        <Alert tone="success">
+          <AlertTitle>Admin Portal</AlertTitle>
+          <AlertDescription>{info}</AlertDescription>
+        </Alert>
       )}
     </div>
   );

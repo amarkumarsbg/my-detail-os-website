@@ -18,7 +18,7 @@ export const testimonials: Testimonial[] = [
     workshop: "Northline Auto Spa",
     location: "Pune",
     quote:
-      "Prime Detailers helped us stop managing job cards across WhatsApp and paper. Everything now lives in one place.",
+      "MY DETAIL OS helped us stop managing job cards across WhatsApp and paper. Everything now lives in one place.",
   },
   {
     id: "t2",

@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "Solutions",
   description:
-    "See how Prime Detailers supports workshop owners, managers, staff, and customers across operations and self-service.",
+    "See how MY DETAIL OS supports workshop owners, managers, staff, and customers across operations and self-service.",
   path: "/solutions",
 });
 
@@ -42,7 +42,7 @@ export default function SolutionsPage() {
   return (
     <PageShell
       title="Solutions for workshops and the customers they serve"
-      description="Prime Detailers is built for automotive service businesses — and the people who keep them running every day."
+      description="MY DETAIL OS is built for automotive service businesses — and the people who keep them running every day."
     >
       <div className="grid gap-4 md:grid-cols-2">
         {solutionBlocks.map((block) => (

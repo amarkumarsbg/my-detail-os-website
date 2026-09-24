@@ -3,11 +3,11 @@ import Link from "next/link";
 import { ForgotPasswordForm } from "@/features/auth/forgot-password-form";
 import { buildMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/config/site";
-import { Car } from "lucide-react";
+import { BrandMark } from "@/components/brand/brand-mark";
 
 export const metadata: Metadata = buildMetadata({
   title: "Forgot Password",
-  description: "Reset your Prime Detailers account password.",
+  description: "Reset your MY DETAIL OS account password.",
   path: "/forgot-password",
 });
 
@@ -16,10 +16,8 @@ export default function ForgotPasswordPage() {
     <div className="bg-slate-50 min-h-screen flex items-center justify-center p-4 py-12">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sm:p-10">
         <div className="text-center mb-8 flex flex-col items-center">
-          <Link href="/">
-            <div className="flex size-14 items-center justify-center rounded-full bg-teal-600 text-white shadow-sm mb-4">
-              <Car className="size-7" />
-            </div>
+          <Link href="/" aria-label={siteConfig.name}>
+            <BrandMark size={56} className="mb-4 size-14 rounded-2xl shadow-sm" />
           </Link>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             Forgot Password

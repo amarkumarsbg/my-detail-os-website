@@ -8,7 +8,7 @@ export function WhySection() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeIn className="max-w-2xl">
           <p className="inline-flex items-center rounded-full bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-600 ring-1 ring-inset ring-teal-500/20">
-            Why Prime Detailers
+            Why MY DETAIL OS
           </p>
           <h2 className="mt-6 text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             Designed for workshops that want clarity as they grow.

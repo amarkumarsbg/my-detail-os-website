@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata: Metadata = buildMetadata({
   title: "Features",
   description:
-    "Explore workshop management, customer portal, billing, inventory, staff, rewards, and reporting features in Prime Detailers.",
+    "Explore workshop management, customer portal, billing, inventory, staff, rewards, and reporting features in MY DETAIL OS.",
   path: "/features",
 });
 
@@ -15,7 +15,7 @@ export default function FeaturesPage() {
   return (
     <PageShell
       title="Everything your workshop needs to run with clarity"
-      description="Prime Detailers connects the modules your team uses every day — from job cards and customers to billing, inventory, and the customer portal."
+      description="MY DETAIL OS connects the modules your team uses every day — from job cards and customers to billing, inventory, and the customer portal."
     >
       <div className="space-y-5">
         {featureGroups.map((group) => (

@@ -6,7 +6,7 @@ import { buildMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = buildMetadata({
   title: "Book a Demo",
-  description: "Talk to Prime Detailers about a workshop walkthrough, pricing, or multi-branch rollout.",
+  description: "Talk to MY DETAIL OS about a workshop walkthrough, pricing, or multi-branch rollout.",
   path: "/demo",
 });
 

@@ -121,14 +121,16 @@ export function Navbar() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="flex items-center gap-3 font-heading text-base font-semibold tracking-tight text-slate-900 group"
+            className="flex items-center gap-2.5 font-heading text-base font-semibold tracking-tight text-slate-900 group"
           >
-            <div className="flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-teal-700 shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
-              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-5">
-                <path d="M16 6L18.5 13.5L26 16L18.5 18.5L16 26L13.5 18.5L6 16L13.5 13.5L16 6Z" fill="white" />
-                <path d="M16 3L27 8V16C27 22 22.5 27 16 29C9.5 27 5 22 5 16V8L16 3Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="white" fillOpacity="0.2" />
-              </svg>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={siteConfig.logoMark}
+              alt=""
+              width={36}
+              height={36}
+              className="size-9 rounded-lg object-cover shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md"
+            />
             <span className="pr-3">{siteConfig.name}</span>
           </Link>
         </div>

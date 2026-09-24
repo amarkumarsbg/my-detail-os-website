@@ -15,7 +15,7 @@ export function PageShell({
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <header className="mb-10 max-w-3xl">
-        <p className="eyebrow">Prime Detailers</p>
+        <p className="eyebrow">MY DETAIL OS</p>
         <h1 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
           {title}
         </h1>

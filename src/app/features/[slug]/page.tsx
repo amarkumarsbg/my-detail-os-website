@@ -1245,7 +1245,7 @@ function HeroMembershipMockUI({ hash }: { hash: number }) {
         <span className="bg-amber-100 text-amber-700 border border-amber-200 px-2 py-1 rounded text-[10px] font-bold">GOLD</span>
       </div>
       <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-teal-900 p-5 text-white mb-4">
-        <p className="text-xs text-teal-200">Prime Detailers Rewards</p>
+        <p className="text-xs text-teal-200">MY DETAIL OS Rewards</p>
         <p className="font-bold text-lg mt-2">Arjun Kapoor</p>
         <p className="text-xs text-slate-300 mt-1">Member since Jan 2025</p>
         <div className="mt-5 flex justify-between items-end">
@@ -2078,7 +2078,7 @@ const data = getFeatureData(resolvedParams.slug);
                       <Check className="size-5 text-white" />
                     </div>
                     <div className="relative z-10">
-                      <p className="text-[10px] font-bold text-teal-700 uppercase tracking-wider mb-1">PrimeDetailers Way</p>
+                      <p className="text-[10px] font-bold text-teal-700 uppercase tracking-wider mb-1">MY DETAIL OS Way</p>
                       <p className="text-teal-950 font-medium text-sm leading-relaxed">{row.trueText}</p>
                     </div>
                   </div>
@@ -2235,7 +2235,7 @@ const data = getFeatureData(resolvedParams.slug);
       <section className="py-24 bg-teal-900 text-center">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">Ready to control your workshop operations?</h2>
-          <p className="text-teal-100 text-lg mb-8 max-w-2xl mx-auto">Join thousands of workshop owners using PrimeDetailers to automate billing, track expenses, and maximize net profits.</p>
+          <p className="text-teal-100 text-lg mb-8 max-w-2xl mx-auto">Join thousands of workshop owners using MY DETAIL OS to automate billing, track expenses, and maximize net profits.</p>
           <Link href="/signup">
             <Button size="lg" className="h-14 px-8 rounded-full bg-white text-teal-900 hover:bg-slate-100 font-bold text-lg">
               Start Your Free Trial

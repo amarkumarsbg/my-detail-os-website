@@ -10,6 +10,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { Alert, AlertDescription, AlertTitle } from "@/features/shared/alert";
+import { OpeningWorkshopOverlay } from "@/features/auth/opening-workshop-overlay";
 
 const PASSWORD_HINT =
   "At least 8 characters with uppercase, lowercase, a number, and a special character (#@$%&*!?+-).";
@@ -34,8 +35,9 @@ export function SignupForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [redirectHref, setRedirectHref] = useState<string | null>(null);
   const setSession = useAuthStore((s) => s.setSession);
 
   const passwordMismatch = useMemo(
@@ -46,7 +48,7 @@ export function SignupForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setSuccess(null);
+    setRedirectHref(null);
 
     if (passwordMismatch) {
       setError("Password and confirm password must match.");
@@ -78,9 +80,16 @@ export function SignupForm() {
       });
 
       setSession(result.user, result.accessToken);
+      const orgSlug = result.organization?.slug ?? null;
+      if (!orgSlug) {
+        setError("Organization slug was not returned. Please contact support.");
+        setIsLoading(false);
+        return;
+      }
       const dest = workshopAppLoginUrl({
         accessToken: result.accessToken,
         next: result.user.mustChangePassword ? "/change-password" : "/dashboard",
+        orgSlug,
       });
 
       let destUrl: URL;
@@ -110,7 +119,9 @@ export function SignupForm() {
         return;
       }
 
-      setSuccess("Trial account created. Opening your Workshop App...");
+      setRedirectHref(dest);
+      setIsRedirecting(true);
+      setIsLoading(false);
       window.location.assign(dest);
     } catch (err) {
       setError(mapApiError(err));
@@ -120,6 +131,7 @@ export function SignupForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {isRedirecting ? <OpeningWorkshopOverlay href={redirectHref} /> : null}
       <div className="grid gap-x-5 sm:grid-cols-2 text-left">
         <div>
           <FloatingInput
@@ -217,7 +229,7 @@ export function SignupForm() {
       <Button
         type="submit"
         size="lg"
-        disabled={isLoading || passwordMismatch}
+        disabled={isLoading || isRedirecting || passwordMismatch}
         className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm mt-6"
       >
         {isLoading ? (
@@ -242,15 +254,6 @@ export function SignupForm() {
           <Alert tone="error">
             <AlertTitle>Signup failed</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        </div>
-      )}
-
-      {success && (
-        <div className="mt-6">
-          <Alert tone="success">
-            <AlertTitle>Account created</AlertTitle>
-            <AlertDescription>{success}</AlertDescription>
           </Alert>
         </div>
       )}
