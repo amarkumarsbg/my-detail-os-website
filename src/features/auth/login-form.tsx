@@ -42,6 +42,7 @@ export function LoginForm() {
     if (session.user.role === "PLATFORM_OWNER") {
       setInfo("Platform owner accounts sign in via the Admin Portal.");
       setIsLoading(false);
+      setIsRedirecting(false);
       return false;
     }
 
@@ -51,6 +52,7 @@ export function LoginForm() {
         "Your account is missing an organization slug. Contact support or complete signup again."
       );
       setIsLoading(false);
+      setIsRedirecting(false);
       return false;
     }
 
@@ -68,6 +70,7 @@ export function LoginForm() {
         `Workshop app URL is invalid. Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel to your live workshop origin (include https://). Current: ${siteConfig.workshopAppUrl}`
       );
       setIsLoading(false);
+      setIsRedirecting(false);
       return false;
     }
 
@@ -77,6 +80,7 @@ export function LoginForm() {
         `Workshop app URL is misconfigured (points to localhost). Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel to your live workshop URL. Current target: ${siteConfig.workshopAppUrl}`
       );
       setIsLoading(false);
+      setIsRedirecting(false);
       return false;
     }
 
@@ -85,6 +89,7 @@ export function LoginForm() {
         `Workshop app URL points at this marketing site (${destUrl.origin}). Set NEXT_PUBLIC_WORKSHOP_APP_URL to the workshop app origin, then redeploy.`
       );
       setIsLoading(false);
+      setIsRedirecting(false);
       return false;
     }
 
@@ -100,14 +105,15 @@ export function LoginForm() {
     setError(null);
     setInfo(null);
     setRedirectHref(null);
-    setIsLoading(true);
+    // Single loader: diamond overlay for the whole handoff (no button spinner).
+    setIsRedirecting(true);
 
     try {
       const session = await loginPublic(email.trim(), password);
       finishWithSession(session);
     } catch (err) {
       setError(mapApiError(err));
-      setIsLoading(false);
+      setIsRedirecting(false);
     }
   }
 
@@ -148,13 +154,13 @@ export function LoginForm() {
     setError(null);
     setInfo(null);
     setRedirectHref(null);
-    setIsLoading(true);
+    setIsRedirecting(true);
     try {
       const session = await verifyLoginOtpPublic(mobile, digits);
       finishWithSession(session);
     } catch (err) {
       setError(mapApiError(err));
-      setIsLoading(false);
+      setIsRedirecting(false);
     } finally {
       verifyOtpLock.current = false;
     }
@@ -224,14 +230,7 @@ export function LoginForm() {
             disabled={isLoading || isRedirecting}
             className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm"
           >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
-                Signing in...
-              </>
-            ) : (
-              "Sign In"
-            )}
+            Sign In
           </Button>
         </form>
       ) : (
@@ -307,14 +306,7 @@ export function LoginForm() {
                 disabled={isLoading || isRedirecting || otp.length < 4}
                 className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm"
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 size-4 animate-spin" />
-                    Verifying...
-                  </>
-                ) : (
-                  "Verify & Sign In"
-                )}
+                Verify & Sign In
               </Button>
             </>
           )}

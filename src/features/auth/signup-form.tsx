@@ -2,7 +2,6 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
 import { signupPublic } from "@/services/signup";
 import { mapApiError } from "@/lib/error-messages";
 import { workshopAppLoginUrl } from "@/config/site";
@@ -34,7 +33,6 @@ export function SignupForm() {
   const [branchName, setBranchName] = useState("HQ");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [redirectHref, setRedirectHref] = useState<string | null>(null);
@@ -67,7 +65,7 @@ export function SignupForm() {
       return;
     }
 
-    setIsLoading(true);
+    setIsRedirecting(true);
 
     try {
       const result = await signupPublic({
@@ -83,7 +81,7 @@ export function SignupForm() {
       const orgSlug = result.organization?.slug ?? null;
       if (!orgSlug) {
         setError("Organization slug was not returned. Please contact support.");
-        setIsLoading(false);
+        setIsRedirecting(false);
         return;
       }
       const dest = workshopAppLoginUrl({
@@ -99,7 +97,7 @@ export function SignupForm() {
         setError(
           "Workshop app URL is invalid. Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel (include https://)."
         );
-        setIsLoading(false);
+        setIsRedirecting(false);
         return;
       }
 
@@ -108,24 +106,22 @@ export function SignupForm() {
         setError(
           "Workshop app URL is misconfigured (points to localhost). Set NEXT_PUBLIC_WORKSHOP_APP_URL on Vercel."
         );
-        setIsLoading(false);
+        setIsRedirecting(false);
         return;
       }
       if (destUrl.origin === window.location.origin) {
         setError(
           "Workshop app URL points at this marketing site. Set NEXT_PUBLIC_WORKSHOP_APP_URL to the workshop app, then redeploy."
         );
-        setIsLoading(false);
+        setIsRedirecting(false);
         return;
       }
 
       setRedirectHref(dest);
-      setIsRedirecting(true);
-      setIsLoading(false);
       window.location.assign(dest);
     } catch (err) {
       setError(mapApiError(err));
-      setIsLoading(false);
+      setIsRedirecting(false);
     }
   }
 
@@ -229,17 +225,10 @@ export function SignupForm() {
       <Button
         type="submit"
         size="lg"
-        disabled={isLoading || isRedirecting || passwordMismatch}
+        disabled={isRedirecting || passwordMismatch}
         className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm mt-6"
       >
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 size-4 animate-spin" />
-            Creating trial account...
-          </>
-        ) : (
-          "Sign Up & Start Free Trial"
-        )}
+        Sign Up & Start Free Trial
       </Button>
 
       <p className="text-center text-sm text-slate-600 mt-6">
