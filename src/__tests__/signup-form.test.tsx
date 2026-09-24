@@ -17,7 +17,7 @@ describe("signup form", () => {
     });
 
     expect(screen.getByText(/passwords do not match/i)).toBeInTheDocument();
-    expect(screen.getByText(/password requirements/i)).toBeInTheDocument();
+    expect(screen.getByText(/min\. 8 characters/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/branch name/i)).toBeInTheDocument();
   });
 });

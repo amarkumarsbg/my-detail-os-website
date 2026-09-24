@@ -11,9 +11,6 @@ import { FloatingInput } from "@/components/ui/floating-input";
 import { Alert, AlertDescription, AlertTitle } from "@/features/shared/alert";
 import { OpeningWorkshopOverlay } from "@/features/auth/opening-workshop-overlay";
 
-const PASSWORD_HINT =
-  "At least 8 characters with uppercase, lowercase, a number, and a special character (#@$%&*!?+-).";
-
 function validatePassword(password: string): string | null {
   if (password.length < 8) return "Password must be at least 8 characters.";
   if (!/[A-Z]/.test(password)) return "Password must include an uppercase letter.";
@@ -126,49 +123,56 @@ export function SignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {isRedirecting ? <OpeningWorkshopOverlay href={redirectHref} /> : null}
-      <div className="grid gap-x-5 sm:grid-cols-2 text-left">
-        <div>
-          <FloatingInput
-            id="ownerName"
-            label="Owner Name"
-            value={ownerName}
-            onChange={(e) => setOwnerName(e.target.value)}
-            required
-            autoComplete="name"
-            placeholder="John Doe"
-          />
-        </div>
-        <div>
-          <FloatingInput
-            id="email"
-            type="email"
-            label="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            placeholder="john@example.com"
-          />
-        </div>
-        <div className="sm:col-span-2 flex gap-2">
-          <div className="flex items-center justify-center px-4 mt-2 mb-4 border-2 border-slate-300 rounded-md bg-slate-50 text-sm h-[52px]">
-            🇮🇳 +91
-          </div>
-          <div className="flex-1">
-            <FloatingInput
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <FloatingInput
+          id="ownerName"
+          label="Owner Name"
+          value={ownerName}
+          onChange={(e) => setOwnerName(e.target.value)}
+          required
+          autoComplete="name"
+          placeholder="John Doe"
+        />
+        <FloatingInput
+          id="email"
+          type="email"
+          label="Email Address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+          placeholder="john@example.com"
+        />
+
+        <div className="sm:col-span-2">
+          <label
+            htmlFor="phone"
+            className="mb-2 block text-sm font-medium text-slate-600"
+          >
+            Mobile Number
+          </label>
+          <div className="flex gap-2">
+            <div className="flex h-12 shrink-0 items-center justify-center rounded-xl border-2 border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-500">
+              +91
+            </div>
+            <input
               id="phone"
               type="tel"
-              label="Mobile Number"
+              inputMode="numeric"
+              autoComplete="tel-national"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
               required
-              autoComplete="tel"
-              placeholder="Enter 10 digit phone number"
+              maxLength={10}
+              placeholder="10-digit mobile number"
+              className="block h-12 w-full rounded-xl border-2 border-slate-200 bg-white px-3.5 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:outline-none focus:ring-0 sm:text-sm"
             />
           </div>
         </div>
+
         <div className="sm:col-span-2">
           <FloatingInput
             id="businessName"
@@ -180,6 +184,7 @@ export function SignupForm() {
             placeholder="My Workshop"
           />
         </div>
+
         <div className="sm:col-span-2">
           <FloatingInput
             id="branchName"
@@ -191,7 +196,7 @@ export function SignupForm() {
           />
         </div>
 
-        <div className="sm:col-span-2">
+        <div className="space-y-2 sm:col-span-2">
           <FloatingInput
             id="password"
             type="password"
@@ -202,10 +207,13 @@ export function SignupForm() {
             autoComplete="new-password"
             placeholder="Strong password"
           />
-          <p className="text-xs text-slate-500 -mt-2 mb-3">Password requirements: {PASSWORD_HINT}</p>
+          <p className="text-xs leading-relaxed text-slate-500">
+            Min. 8 characters with uppercase, lowercase, a number, and a special character
+            (#@$%&*!?+-).
+          </p>
         </div>
 
-        <div className="sm:col-span-2">
+        <div className="space-y-2 sm:col-span-2">
           <FloatingInput
             id="confirmPassword"
             type="password"
@@ -217,7 +225,7 @@ export function SignupForm() {
             placeholder="Confirm password"
           />
           {passwordMismatch && (
-            <p className="text-xs text-red-600 font-medium -mt-2 mb-4">Passwords do not match.</p>
+            <p className="text-xs font-medium text-red-600">Passwords do not match.</p>
           )}
         </div>
       </div>
@@ -226,12 +234,13 @@ export function SignupForm() {
         type="submit"
         size="lg"
         disabled={isRedirecting || passwordMismatch}
-        className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm mt-6"
+        className="mt-1 h-12 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700"
       >
-        Sign Up & Start Free Trial
+        <span className="sm:hidden">Start Free Trial</span>
+        <span className="hidden sm:inline">Sign Up & Start Free Trial</span>
       </Button>
 
-      <p className="text-center text-sm text-slate-600 mt-6">
+      <p className="text-center text-sm text-slate-600">
         Already have an account?{" "}
         <Link href="/login" className="font-semibold text-teal-600 hover:underline">
           Sign In
@@ -239,12 +248,10 @@ export function SignupForm() {
       </p>
 
       {error && (
-        <div className="mt-6">
-          <Alert tone="error">
-            <AlertTitle>Signup failed</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        </div>
+        <Alert tone="error">
+          <AlertTitle>Signup failed</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
     </form>
   );

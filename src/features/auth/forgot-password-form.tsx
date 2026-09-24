@@ -33,8 +33,8 @@ export function ForgotPasswordForm() {
 
   if (success) {
     return (
-      <div className="space-y-6 text-center">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-green-100 mb-4">
+      <div className="space-y-5 text-center">
+        <div className="mx-auto mb-1 flex size-12 items-center justify-center rounded-full bg-green-100">
           <svg
             className="size-6 text-green-600"
             fill="none"
@@ -46,44 +46,42 @@ export function ForgotPasswordForm() {
           </svg>
         </div>
         <h3 className="text-lg font-semibold text-slate-900">Check your email</h3>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm leading-relaxed text-slate-600">
           If an account exists for <span className="font-semibold text-slate-900">{email}</span>,
           we sent a password reset link. Open it to choose a new password in the Workshop App.
         </p>
-        <div className="pt-4">
-          <Button
-            type="button"
-            className="w-full h-11 p-0 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm"
-          >
-            <Link href="/login" className="w-full h-full flex items-center justify-center">
+        <div className="pt-2">
+          <Link href="/login" className="block">
+            <Button
+              type="button"
+              className="h-12 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700"
+            >
               Return to Login
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="text-left">
-        <FloatingInput
-          id="email"
-          type="email"
-          label="Email Address"
-          placeholder="example@gmail.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <FloatingInput
+        id="email"
+        type="email"
+        label="Email Address"
+        placeholder="example@gmail.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        autoComplete="email"
+      />
 
       <Button
         type="submit"
         size="lg"
         disabled={isLoading}
-        className="w-full h-11 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-sm"
+        className="h-12 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700"
       >
         {isLoading ? (
           <>
@@ -95,25 +93,20 @@ export function ForgotPasswordForm() {
         )}
       </Button>
 
-      <div className="text-center mt-6">
-        <Button
-          type="button"
-          variant="ghost"
-          className="w-full text-teal-600 hover:text-teal-700 hover:bg-teal-50"
+      <div className="text-center">
+        <Link
+          href="/login"
+          className="inline-flex h-11 items-center justify-center text-sm font-semibold text-teal-600 hover:text-teal-700"
         >
-          <Link href="/login" className="w-full h-full flex items-center justify-center">
-            Back to Sign In
-          </Link>
-        </Button>
+          Back to Sign In
+        </Link>
       </div>
 
       {error && (
-        <div className="mt-6">
-          <Alert tone="error">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        </div>
+        <Alert tone="error">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
     </form>
   );

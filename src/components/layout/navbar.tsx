@@ -91,29 +91,78 @@ export function Navbar() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setMenuOpen(false);
     };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
+  const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: (typeof primaryNav)[number]) => {
+    setMenuOpen(false);
+
+    if (pathname !== "/") return;
+
+    const isHash = item.href.startsWith("/#");
+    const isHome = item.href === "/";
+
+    if (isHash) {
+      const id = item.href.replace("/#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        e.preventDefault();
+        isClickScrolling.current = true;
+        if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+        scrollTimeout.current = setTimeout(() => {
+          isClickScrolling.current = false;
+        }, 1000);
+        window.history.pushState(null, "", item.href);
+        setActiveHash(`#${id}`);
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    } else if (isHome) {
+      e.preventDefault();
+      isClickScrolling.current = true;
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+      scrollTimeout.current = setTimeout(() => {
+        isClickScrolling.current = false;
+      }, 1000);
+      window.history.pushState(null, "", "/");
+      setActiveHash("");
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 100);
+    }
+  };
 
   const pillClass = "pointer-events-auto flex items-center rounded-full border border-white/20 bg-white/70 shadow-lg backdrop-blur-xl transition-all duration-300";
 
   return (
+    <>
     <motion.header
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={cn(
-        "fixed inset-x-0 z-50 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300",
-        hasScrolled ? "top-4" : "top-6"
+        "fixed inset-x-0 z-50 mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300",
+        hasScrolled ? "top-3 sm:top-4" : "top-4 sm:top-6",
+        menuOpen && "z-[60]"
       )}
     >
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-2 sm:gap-4">
         
         {/* Left Segment: Logo */}
-        <div className={cn(pillClass, "h-14 px-3")}>
+        <div className={cn(pillClass, "h-11 shrink-0 px-2 sm:h-14 sm:px-3")}>
           <Link
             href="/"
             onClick={(e) => {
+              closeMenu();
               if (pathname === "/") {
                 e.preventDefault();
                 window.history.pushState(null, '', '/');
@@ -121,7 +170,7 @@ export function Navbar() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="flex items-center gap-2.5 font-heading text-base font-semibold tracking-tight text-slate-900 group"
+            className="flex items-center gap-2 font-heading text-sm font-semibold tracking-tight text-slate-900 group whitespace-nowrap sm:gap-2.5 sm:text-base"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -129,9 +178,9 @@ export function Navbar() {
               alt=""
               width={36}
               height={36}
-              className="size-9 rounded-lg object-cover shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md"
+              className="size-7 shrink-0 rounded-md object-cover shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md sm:size-9 sm:rounded-lg"
             />
-            <span className="pr-3">{siteConfig.name}</span>
+            <span className="pr-1.5 sm:pr-3">{siteConfig.name}</span>
           </Link>
         </div>
 
@@ -210,14 +259,14 @@ export function Navbar() {
         </nav>
 
         {/* Right Segment: Actions */}
-        <div className={cn(pillClass, "h-14 px-2 gap-2")}>
+        <div className={cn(pillClass, "h-11 shrink-0 gap-1 px-1.5 sm:h-14 sm:gap-2 sm:px-2")}>
           <Link href="/login" className="hidden lg:block">
             <Button variant="ghost" size="sm" className="h-10 rounded-full px-5 font-medium text-slate-700 hover:bg-slate-100/50 hover:text-slate-950">
               Login
             </Button>
           </Link>
-          <Link href="/signup">
-            <Button size="sm" className="h-10 rounded-full bg-teal-600 px-6 font-semibold text-white transition-colors hover:bg-teal-500 shadow-sm">
+          <Link href="/signup" className="hidden sm:block">
+            <Button size="sm" className="h-10 rounded-full bg-teal-600 px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-500">
               Start Free Trial
             </Button>
           </Link>
@@ -225,9 +274,9 @@ export function Navbar() {
           {/* Mobile Menu Toggle */}
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-full text-slate-600 transition-colors hover:bg-slate-100/50 hover:text-slate-950 lg:hidden"
+            className="inline-flex size-9 items-center justify-center rounded-full text-slate-700 transition-colors hover:bg-slate-100/60 hover:text-slate-950 sm:size-10 lg:hidden"
             onClick={() => setMenuOpen((open) => !open)}
-            aria-label="Toggle navigation menu"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={menuOpen}
             aria-controls={menuId}
           >
@@ -273,92 +322,81 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Mobile Menu Dropdown */}
-      <div
-        id={menuId}
-        className={cn(
-          "pointer-events-auto absolute inset-x-4 top-[calc(100%+1rem)] sm:inset-x-6 overflow-hidden rounded-3xl border border-white/20 bg-white/95 shadow-2xl backdrop-blur-2xl transition-all duration-300 lg:hidden",
-          menuOpen ? "max-h-[480px] opacity-100" : "max-h-0 border-transparent opacity-0"
-        )}
-      >
-        <nav className="flex flex-col gap-1 p-4" aria-label="Mobile">
-          {primaryNav.map((item) => {
-            const isHash = item.href.startsWith("/#");
-            const isHome = item.href === "/";
-            
-            let active = false;
-            if (pathname === "/") {
-              if (isHome && !activeHash) active = true;
-              if (isHash && activeHash === item.href.replace("/", "")) active = true;
-            } else {
-              active = pathname === item.href;
-            }
-
-            const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-              setMenuOpen(false);
-              
-              if (pathname !== "/") return;
-              
-              if (isHash) {
-                const id = item.href.replace("/#", "");
-                const element = document.getElementById(id);
-                if (element) {
-                  e.preventDefault();
-                  
-                  isClickScrolling.current = true;
-                  if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-                  scrollTimeout.current = setTimeout(() => {
-                    isClickScrolling.current = false;
-                  }, 1000);
-                  
-                  window.history.pushState(null, '', item.href);
-                  setActiveHash(`#${id}`);
-                  setTimeout(() => {
-                    element.scrollIntoView({ behavior: "smooth" });
-                  }, 100);
-                }
-              } else if (isHome) {
-                e.preventDefault();
-                
-                isClickScrolling.current = true;
-                if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-                scrollTimeout.current = setTimeout(() => {
-                  isClickScrolling.current = false;
-                }, 1000);
-                
-                window.history.pushState(null, '', '/');
-                setActiveHash("");
-                setTimeout(() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }, 100);
-              }
-            };
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={handleClick}
-                className={cn(
-                  "rounded-xl px-4 py-3 text-sm font-medium transition-colors hover:bg-slate-50",
-                  active ? "text-teal-700 bg-teal-50/50" : "text-slate-600 hover:text-slate-900"
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-          <div className="mt-4 flex flex-col gap-3 border-t border-slate-100 pt-4">
-            <Link href="/login" onClick={() => setMenuOpen(false)}>
-              <Button variant="outline" className="h-11 w-full rounded-xl border-slate-200 bg-transparent text-slate-700 hover:bg-slate-50 hover:text-slate-900" size="sm">
-                Login
-              </Button>
-            </Link>
-          </div>
-        </nav>
-      </div>
     </motion.header>
+
+    {/* Mobile full-screen menu */}
+    <AnimatePresence>
+      {menuOpen && (
+        <motion.div
+          id={menuId}
+          className="fixed inset-0 z-[55] flex flex-col bg-white pt-[4.75rem] lg:hidden"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.22, ease: [0.21, 0.47, 0.32, 0.98] }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
+        >
+          <nav
+            className="flex min-h-0 flex-1 flex-col px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]"
+            aria-label="Mobile"
+          >
+            <div className="flex-1 space-y-1 overflow-y-auto">
+              {primaryNav.map((item) => {
+                const isHash = item.href.startsWith("/#");
+                const isHome = item.href === "/";
+
+                let active = false;
+                if (pathname === "/") {
+                  if (isHome && !activeHash) active = true;
+                  if (isHash && activeHash === item.href.replace("/", "")) active = true;
+                } else {
+                  active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                }
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => handleMobileNavClick(e, item)}
+                    className={cn(
+                      "flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold transition-colors",
+                      active
+                        ? "bg-teal-50 text-teal-700"
+                        : "text-slate-800 active:bg-slate-50"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="mt-4 flex shrink-0 flex-col gap-3 border-t border-slate-100 pt-5">
+              <Link href="/login" onClick={closeMenu}>
+                <Button
+                  variant="outline"
+                  className="h-12 w-full rounded-2xl border-slate-200 text-base font-semibold text-slate-800 hover:bg-slate-50"
+                  size="lg"
+                >
+                  Login
+                </Button>
+              </Link>
+              <Link href="/signup" onClick={closeMenu}>
+                <Button
+                  className="h-12 w-full rounded-2xl bg-teal-600 text-base font-semibold text-white hover:bg-teal-500"
+                  size="lg"
+                >
+                  Start Free Trial
+                </Button>
+              </Link>
+            </div>
+          </nav>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
 

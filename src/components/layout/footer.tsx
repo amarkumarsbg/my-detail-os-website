@@ -2,170 +2,149 @@
 
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { ArrowRight, Phone, Mail, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { footerNav } from "@/data/navigation";
 
 export function Footer() {
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 400);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
-    <footer className="bg-slate-950 pt-16 pb-8 border-t border-slate-900 text-slate-300">
-      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-5 mb-16">
-          
-          {/* Column 1: Brand & Gen Links */}
-          <div className="space-y-6 lg:pr-8">
-            <Link href="/" className="flex items-center gap-3 group mb-6">
+    <footer className="border-t border-slate-900 bg-slate-950 pt-12 pb-8 text-slate-300 sm:pt-16">
+      <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-6 lg:px-8">
+        <div className="mb-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 sm:gap-y-12 lg:mb-16 lg:grid-cols-5 lg:gap-8">
+          {/* Brand — full width on mobile, first column on desktop */}
+          <div className="col-span-2 space-y-5 lg:col-span-1 lg:space-y-6 lg:pr-8">
+            <Link href="/" className="mb-2 flex items-center gap-2.5 sm:gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={siteConfig.logoMark}
                 alt=""
                 width={40}
                 height={40}
-                className="size-10 rounded-xl object-cover shadow-md"
+                className="size-9 shrink-0 rounded-xl object-cover shadow-md sm:size-10"
               />
-              <span className="font-heading text-xl font-bold tracking-tight text-white">
+              <span className="font-heading text-lg font-bold tracking-tight text-white sm:text-xl">
                 {siteConfig.name}
               </span>
             </Link>
-            
-            <p className="text-sm leading-relaxed text-slate-400">
-              Get an AI summary of your workshop operations. Manage Job Cards, GST Billing, and Inventory from one intelligent platform.
+
+            <p className="max-w-md text-sm leading-relaxed text-slate-400">
+              Get an AI summary of your workshop operations. Manage Job Cards, GST Billing, and
+              Inventory from one intelligent platform.
             </p>
-            
-            <ul className="space-y-3 text-sm font-medium pt-4 border-t border-slate-800">
+
+            <ul className="space-y-2.5 border-t border-slate-800 pt-4 text-sm font-medium sm:space-y-3">
               {footerNav.column1.map((item, i) => (
-                <li key={i}><Link href={item.href} className="hover:text-white transition-colors">{item.label}</Link></li>
+                <li key={i}>
+                  <Link href={item.href} className="transition-colors hover:text-white">
+                    {item.label}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 2: Considering */}
-          <div>
-            <h3 className="mb-4 pb-2 text-xs font-bold text-white uppercase tracking-wider border-b border-slate-800 inline-block">
-              Considering MY DETAIL OS?
-            </h3>
-            <ul className="space-y-4 text-sm font-medium">
-              {footerNav.considering.map((item, i) => (
-                <li key={i}><Link href={item.href} className="hover:text-white transition-colors">{item.label}</Link></li>
-              ))}
-            </ul>
-            <div className="mt-6">
-              <Link href="/login" className="text-sm font-bold text-teal-500 hover:text-teal-400 flex items-center group">
-                Why MY DETAIL OS <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
-          </div>
+          <FooterColumn title="Considering MY DETAIL OS?" links={footerNav.considering}>
+            <Link
+              href="/login"
+              className="group mt-5 flex items-center text-sm font-bold text-teal-500 hover:text-teal-400"
+            >
+              Why MY DETAIL OS
+              <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </FooterColumn>
 
-          {/* Column 3: Products */}
-          <div>
-            <h3 className="mb-4 pb-2 text-xs font-bold text-white uppercase tracking-wider border-b border-slate-800 inline-block">
-              Products and Features
-            </h3>
-            <ul className="space-y-4 text-sm font-medium">
-              {footerNav.products.map((item, i) => (
-                <li key={i}><Link href={item.href} className="hover:text-white transition-colors">{item.label}</Link></li>
-              ))}
-            </ul>
-            <div className="mt-6">
-              <Link href="/features" className="text-sm font-bold text-teal-500 hover:text-teal-400 flex items-center group">
-                All products <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
-          </div>
+          <FooterColumn title="Products and Features" links={footerNav.products}>
+            <Link
+              href="/features"
+              className="group mt-5 flex items-center text-sm font-bold text-teal-500 hover:text-teal-400"
+            >
+              All products
+              <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </FooterColumn>
 
-          {/* Column 4: Use Cases */}
-          <div>
-            <h3 className="mb-4 pb-2 text-xs font-bold text-white uppercase tracking-wider border-b border-slate-800 inline-block">
-              Use Cases
-            </h3>
-            <ul className="space-y-4 text-sm font-medium">
-              {footerNav.useCases.map((item, i) => (
-                <li key={i}><Link href={item.href} className="hover:text-white transition-colors">{item.label}</Link></li>
-              ))}
-            </ul>
-            <div className="mt-6">
-              <Link href="/solutions" className="text-sm font-bold text-teal-500 hover:text-teal-400 flex items-center group">
-                All use cases <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
-          </div>
+          <FooterColumn title="Use Cases" links={footerNav.useCases}>
+            <Link
+              href="/solutions"
+              className="group mt-5 flex items-center text-sm font-bold text-teal-500 hover:text-teal-400"
+            >
+              All use cases
+              <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </FooterColumn>
 
-          {/* Column 5: Resources */}
-          <div>
-            <h3 className="mb-4 pb-2 text-xs font-bold text-white uppercase tracking-wider border-b border-slate-800 inline-block">
-              Resources
-            </h3>
-            <ul className="space-y-4 text-sm font-medium">
-              {footerNav.resources.map((item, i) => (
-                <li key={i}><Link href={item.href} className="hover:text-white transition-colors">{item.label}</Link></li>
-              ))}
-            </ul>
-            <div className="mt-6">
-              <Link href="/contact" className="text-sm font-bold text-teal-500 hover:text-teal-400 flex items-center group">
-                All docs <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
-          </div>
-          
+          <FooterColumn title="Resources" links={footerNav.resources}>
+            <Link
+              href="/contact"
+              className="group mt-5 flex items-center text-sm font-bold text-teal-500 hover:text-teal-400"
+            >
+              All docs
+              <ArrowRight className="ml-1 size-3 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </FooterColumn>
         </div>
 
-        {/* Bottom Section */}
-        <div className="grid grid-cols-1 gap-6 border-t border-slate-800 pt-8 sm:grid-cols-3 sm:items-center">
-          
-          {/* Left: Social Media */}
-          <div className="flex items-center justify-center sm:justify-start gap-4 order-2 sm:order-1">
-            <a href="#" className="text-slate-500 hover:text-white transition-colors">
+        {/* Bottom bar */}
+        <div className="flex flex-col items-center gap-5 border-t border-slate-800 pt-6 sm:flex-row sm:justify-between sm:gap-4 sm:pt-8">
+          <div className="flex items-center gap-5">
+            <a href="#" aria-label="Facebook" className="text-slate-500 transition-colors hover:text-white">
               <FacebookIcon className="size-5" />
             </a>
-            <a href="#" className="text-slate-500 hover:text-white transition-colors">
+            <a href="#" aria-label="Instagram" className="text-slate-500 transition-colors hover:text-white">
               <InstagramIcon className="size-5" />
             </a>
-            <a href="#" className="text-slate-500 hover:text-white transition-colors">
+            <a href="#" aria-label="YouTube" className="text-slate-500 transition-colors hover:text-white">
               <YoutubeIcon className="size-5" />
             </a>
-            <a href="#" className="text-slate-500 hover:text-white transition-colors">
+            <a href="#" aria-label="LinkedIn" className="text-slate-500 transition-colors hover:text-white">
               <LinkedinIcon className="size-5" />
             </a>
           </div>
 
-          {/* Center: Copyright */}
-          <div className="flex items-center justify-center order-3 sm:order-2">
-            <p className="text-xs text-slate-500 text-center">
-              © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-            </p>
-          </div>
+          <p className="text-center text-xs leading-relaxed text-slate-500">
+            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+          </p>
 
-          {/* Right: Logo */}
-          <div className="flex items-center justify-center sm:justify-end order-1 sm:order-3">
-            <Link href="/" className="opacity-80 hover:opacity-100 transition-opacity">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={siteConfig.logoMark}
-                alt={siteConfig.name}
-                width={28}
-                height={28}
-                className="size-7 rounded-md object-cover"
-              />
-            </Link>
-          </div>
+          <Link href="/" className="hidden opacity-80 transition-opacity hover:opacity-100 sm:block">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={siteConfig.logoMark}
+              alt={siteConfig.name}
+              width={28}
+              height={28}
+              className="size-7 rounded-md object-cover"
+            />
+          </Link>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({
+  title,
+  links,
+  children,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="min-w-0">
+      <h3 className="mb-3 border-b border-slate-800 pb-2 text-[11px] font-bold uppercase tracking-wider text-white sm:mb-4 sm:text-xs">
+        {title}
+      </h3>
+      <ul className="space-y-2.5 text-sm font-medium sm:space-y-3.5">
+        {links.map((item, i) => (
+          <li key={i}>
+            <Link href={item.href} className="transition-colors hover:text-white">
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      {children}
+    </div>
   );
 }
 

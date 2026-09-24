@@ -5,16 +5,16 @@ import { ArrowRight } from "lucide-react";
 
 export function TrustStrip() {
   return (
-    <section className="border-b border-slate-200 bg-slate-50 pt-16 pb-24 sm:pt-20 sm:pb-32">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <FadeIn className="mx-auto mb-12 max-w-2xl text-center">
+    <section className="border-b border-slate-200 bg-slate-50 pt-12 pb-16 sm:pt-20 sm:pb-32">
+      <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+        <FadeIn className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
           <p className="inline-flex items-center rounded-full bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-600 ring-1 ring-inset ring-teal-500/20">
             Platform Features
           </p>
-          <h2 className="mt-6 text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="mt-5 text-balance font-heading text-2xl font-bold tracking-tight text-slate-900 sm:mt-6 sm:text-4xl">
             Everything you need to run your workshop
           </h2>
-          <p className="mt-4 text-lg text-slate-600">
+          <p className="mt-3 text-base leading-relaxed text-slate-600 sm:mt-4 sm:text-lg">
             A complete suite of tools designed specifically for modern auto detailing and repair businesses.
           </p>
         </FadeIn>
