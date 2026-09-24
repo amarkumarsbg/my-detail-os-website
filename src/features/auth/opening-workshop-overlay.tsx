@@ -23,7 +23,7 @@ export function OpeningWorkshopOverlay({ href }: OpeningWorkshopOverlayProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-white"
       role="status"
       aria-live="polite"
       aria-busy="true"
