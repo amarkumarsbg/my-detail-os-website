@@ -12,6 +12,8 @@ export type PublicPlansResponse = {
     currency: string;
     gstPercent: number;
   }>;
+  /** From admin Platform Settings → Trial days default. */
+  trialDaysDefault?: number;
   pricing: {
     currency: string;
     gstPercent: number;
