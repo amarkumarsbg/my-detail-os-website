@@ -252,7 +252,11 @@ export const showcaseSections = [
     description:
       "Track check-in, progress, assignments, and delivery without chasing status across paper notes or chat threads.",
     points: ["Live job status", "Vehicle and customer context", "Team assignment visibility"],
-    mockup: "jobs" as const,
+    image: {
+      src: "/images/features/auto-repair.jpg",
+      alt: "Mechanic inspecting a vehicle in a professional garage",
+      label: "Live workshop floor",
+    },
   },
   {
     id: "communication",
@@ -261,7 +265,11 @@ export const showcaseSections = [
     description:
       "Give customers clearer visibility into job status, invoices, and service history through the customer portal.",
     points: ["Job tracking", "Invoice visibility", "Service history access"],
-    mockup: "portal" as const,
+    image: {
+      src: "/images/features/detail-ready-car.png",
+      alt: "Detail-ready luxury car after professional service",
+      label: "Detailing-ready results",
+    },
   },
   {
     id: "billing",
@@ -270,7 +278,11 @@ export const showcaseSections = [
     description:
       "Connect jobs to invoices, payments, and reporting so workshop performance is easier to understand every day.",
     points: ["Invoice lifecycle", "Payment tracking", "Revenue visibility"],
-    mockup: "billing" as const,
+    image: {
+      src: "/images/features/premium-car.jpg",
+      alt: "Premium vehicle after professional auto care",
+      label: "Built for premium garages",
+    },
   },
   {
     id: "inventory",
@@ -279,6 +291,10 @@ export const showcaseSections = [
     description:
       "Keep parts, purchases, and stock levels connected to workshop demand instead of scattered spreadsheets.",
     points: ["Stock levels", "Purchase tracking", "Low-stock awareness"],
-    mockup: "inventory" as const,
+    image: {
+      src: "/images/features/garage-bay.jpg",
+      alt: "Technician working in a service bay",
+      label: "Daily service bay",
+    },
   },
 ];
