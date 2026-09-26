@@ -13,7 +13,6 @@ import { motion, AnimatePresence } from "framer-motion";
 export function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
   const [activeHash, setActiveHash] = useState("");
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const menuId = useId();
@@ -33,11 +32,17 @@ export function Navbar() {
   };
 
   useEffect(() => {
+    let ticking = false;
+
     const onScroll = () => {
-      setHasScrolled(window.scrollY > 20);
-      if (window.scrollY < 100 && pathname === "/") {
-        if (!isClickScrolling.current) setActiveHash("");
-      }
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        if (window.scrollY < 100 && pathname === "/" && !isClickScrolling.current) {
+          setActiveHash((prev) => (prev ? "" : prev));
+        }
+        ticking = false;
+      });
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -55,16 +60,14 @@ export function Navbar() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (isClickScrolling.current) return;
-        
-        // Find intersecting entries
-        const visible = entries.filter(entry => entry.isIntersecting);
+        const visible = entries.filter((entry) => entry.isIntersecting);
         if (visible.length > 0) {
-          // Sort by intersection ratio to get the most prominent one
           visible.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-          setActiveHash(`#${visible[0].target.id}`);
+          const next = `#${visible[0].target.id}`;
+          setActiveHash((prev) => (prev === next ? prev : next));
         }
       },
-      { rootMargin: "-100px 0px -40% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+      { rootMargin: "-20% 0px -55% 0px", threshold: [0, 0.5, 1] }
     );
 
     sections.forEach((id) => {
@@ -141,7 +144,8 @@ export function Navbar() {
     }
   };
 
-  const pillClass = "pointer-events-auto flex items-center rounded-full border border-white/20 bg-white/70 shadow-lg backdrop-blur-xl transition-all duration-300";
+  const pillClass =
+    "pointer-events-auto flex items-center rounded-full border border-slate-200/80 bg-white/95 shadow-lg transition-[box-shadow,background-color] duration-200";
 
   return (
     <>
@@ -150,8 +154,7 @@ export function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={cn(
-        "fixed inset-x-0 z-50 mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300",
-        hasScrolled ? "top-3 sm:top-4" : "top-4 sm:top-6",
+        "fixed inset-x-0 top-4 z-50 mx-auto w-full max-w-7xl px-3 pointer-events-none sm:top-5 sm:px-6 lg:px-8",
         menuOpen && "z-[60]"
       )}
     >

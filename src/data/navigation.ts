@@ -25,6 +25,7 @@ import {
   MessageSquare,
   Settings,
   MapPin,
+  Smartphone,
 } from "lucide-react";
 
 export interface MegaMenuItem {
@@ -140,6 +141,12 @@ export const primaryNav: NavItem[] = [
             href: "/features/settings",
             description: "Configure branding, preferences, and workshop rules.",
             icon: Settings,
+          },
+          {
+            label: "Mobile Experience",
+            href: "/mobile",
+            description: "Workshop app and customer portal that work on phone and tablet.",
+            icon: Smartphone,
           },
         ],
       },

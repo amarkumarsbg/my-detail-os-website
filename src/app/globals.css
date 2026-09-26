@@ -121,11 +121,15 @@ select:-webkit-autofill {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    /* Keep native wheel/trackpad inertia — smooth only via JS scrollTo/anchors */
+    scroll-behavior: auto;
+    overflow-x: clip;
+  }
   body {
     @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans scroll-smooth;
+    overflow-x: clip;
   }
   h1,
   h2,
@@ -179,11 +183,18 @@ select:-webkit-autofill {
   }
 
   .animate-float {
-    animation: float 4s ease-in-out infinite;
+    animation: float 5s ease-in-out infinite;
   }
 
   .animate-float-delayed {
-    animation: float 4s ease-in-out 2s infinite;
+    animation: float 5s ease-in-out 2.5s infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float,
+    .animate-float-delayed {
+      animation: none;
+    }
   }
 }
 
@@ -196,9 +207,68 @@ select:-webkit-autofill {
   }
 }
 
+/* Workshop type icons — 3D flip + color change on hover */
+.workshop-type-scene {
+  perspective: 1400px;
+  perspective-origin: center center;
+}
+
+.workshop-type-flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.4, 0.0, 0.2, 1);
+  will-change: transform;
+}
+
+.group:hover .workshop-type-flip,
+.group:focus-within .workshop-type-flip {
+  transform: rotateY(180deg);
+}
+
+.workshop-type-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(1px);
+}
+
+.workshop-type-face--back {
+  transform: rotateY(180deg) translateZ(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workshop-type-flip {
+    transition: none;
+    will-change: auto;
+  }
+
+  .group:hover .workshop-type-flip,
+  .group:focus-within .workshop-type-flip {
+    transform: none;
+  }
+
+  .group:hover .workshop-type-face--front,
+  .group:focus-within .workshop-type-face--front {
+    opacity: 0;
+  }
+
+  .group:hover .workshop-type-face--back,
+  .group:focus-within .workshop-type-face--back {
+    opacity: 1;
+  }
+
+  .workshop-type-face--back {
+    opacity: 0;
+    transform: none;
+  }
+}
+
 /* Home feature ticker — seamless loop (two identical tracks) */
 .feature-marquee__viewport {
-  animation: feature-marquee 42s linear infinite;
+  animation: feature-marquee 48s linear infinite;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .feature-marquee:hover .feature-marquee__viewport {
@@ -239,62 +309,21 @@ select:-webkit-autofill {
   }
 }
 
-/* Hero headline accents + soft ambient orbs */
+/* Hero headline accents */
 .hero-accent-word__text {
   background-image: linear-gradient(
     110deg,
     #5eead4 0%,
-    #99f6e4 28%,
-    #ffffff 50%,
-    #5eead4 72%,
+    #99f6e4 35%,
+    #ccfbf1 50%,
+    #5eead4 75%,
     #2dd4bf 100%
   );
-  background-size: 220% 100%;
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: hero-accent-shift 5.5s ease-in-out infinite;
-}
-
-.hero-accent-word__shine {
-  pointer-events: none;
-  position: absolute;
-  inset: -8% -4%;
-  background: linear-gradient(
-    105deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 65%
-  );
-  background-size: 220% 100%;
-  mix-blend-mode: soft-light;
-  animation: hero-accent-shine 4.2s ease-in-out infinite;
-  border-radius: 0.25em;
-}
-
-.hero-orb {
-  width: 18rem;
-  height: 18rem;
-  border-radius: 9999px;
-  filter: blur(64px);
-  opacity: 0.35;
-  animation: hero-orb-drift 14s ease-in-out infinite;
-}
-
-.hero-orb--a {
-  top: 12%;
-  left: 8%;
-  background: rgba(45, 212, 191, 0.45);
-}
-
-.hero-orb--b {
-  right: 6%;
-  bottom: 18%;
-  width: 14rem;
-  height: 14rem;
-  background: rgba(34, 211, 238, 0.28);
-  animation-delay: -6s;
-  animation-direction: reverse;
+  animation: hero-accent-shift 8s ease-in-out infinite;
 }
 
 @keyframes hero-accent-shift {
@@ -307,33 +336,12 @@ select:-webkit-autofill {
   }
 }
 
-@keyframes hero-accent-shine {
-  0%,
-  100% {
-    background-position: 120% 0;
-    opacity: 0.15;
-  }
-  50% {
-    background-position: -20% 0;
-    opacity: 0.55;
-  }
-}
-
-@keyframes hero-orb-drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(24px, -18px, 0) scale(1.08);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hero-accent-word__text,
-  .hero-accent-word__shine,
-  .hero-orb {
-    animation: none;
+  .animate-float,
+  .animate-float-delayed,
+  .feature-marquee__viewport {
+    animation: none !important;
   }
 
   .hero-accent-word__text {
@@ -341,6 +349,7 @@ select:-webkit-autofill {
     background: none;
     -webkit-background-clip: unset;
     background-clip: unset;
+    will-change: auto;
   }
 }
 

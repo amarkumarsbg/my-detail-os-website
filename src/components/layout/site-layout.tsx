@@ -17,7 +17,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
   const hasNoTopPadding = isAuthPage || isFeaturePage;
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden">
+    <div className="relative flex min-h-screen flex-col overflow-x-clip">
       {!isAuthPage && <Navbar />}
       <main className={hasNoTopPadding ? "flex-1" : "flex-1 pt-14 sm:pt-16"}>
         {children}

@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+const EASE_OUT = [0.21, 0.47, 0.32, 0.98] as const;
+
 interface FadeInProps {
   children: ReactNode;
   className?: string;
@@ -18,14 +20,14 @@ export function FadeIn({
   className,
   delay = 0,
   direction = "up",
-  duration = 0.5,
+  duration = 0.45,
   viewPortOnce = true,
 }: FadeInProps) {
   const directions = {
-    up: { y: 24, x: 0 },
-    down: { y: -24, x: 0 },
-    left: { x: 24, y: 0 },
-    right: { x: -24, y: 0 },
+    up: { y: 18, x: 0 },
+    down: { y: -18, x: 0 },
+    left: { x: 18, y: 0 },
+    right: { x: -18, y: 0 },
     none: { x: 0, y: 0 },
   };
 
@@ -40,11 +42,11 @@ export function FadeIn({
         x: 0,
         y: 0,
       }}
-      viewport={{ once: viewPortOnce, margin: "-50px" }}
+      viewport={{ once: viewPortOnce, margin: "0px 0px -12% 0px", amount: 0.2 }}
       transition={{
-        duration: duration,
-        delay: delay,
-        ease: [0.21, 0.47, 0.32, 0.98], // Custom ease-out cubic
+        duration,
+        delay,
+        ease: EASE_OUT,
       }}
       className={cn(className)}
     >

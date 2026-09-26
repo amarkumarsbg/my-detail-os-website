@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+const EASE_OUT = [0.21, 0.47, 0.32, 0.98] as const;
+
 interface StaggerContainerProps {
   children: ReactNode;
   className?: string;
@@ -23,13 +25,13 @@ export function StaggerContainer({
     <motion.div
       initial="hidden"
       whileInView="show"
-      viewport={{ once: viewPortOnce, margin: "-50px" }}
+      viewport={{ once: viewPortOnce, margin: "0px 0px -8% 0px", amount: 0.12 }}
       variants={{
         hidden: {},
         show: {
           transition: {
-            staggerChildren: staggerChildren,
-            delayChildren: delayChildren,
+            staggerChildren,
+            delayChildren,
           },
         },
       }}
@@ -50,8 +52,8 @@ interface StaggerItemProps {
 export function StaggerItem({
   children,
   className,
-  yOffset = 24,
-  duration = 0.5,
+  yOffset = 18,
+  duration = 0.4,
 }: StaggerItemProps) {
   return (
     <motion.div
@@ -61,8 +63,8 @@ export function StaggerItem({
           opacity: 1,
           y: 0,
           transition: {
-            duration: duration,
-            ease: [0.21, 0.47, 0.32, 0.98],
+            duration,
+            ease: EASE_OUT,
           },
         },
       }}

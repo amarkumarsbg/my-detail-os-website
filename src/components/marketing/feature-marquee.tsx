@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   Package,
@@ -48,8 +51,29 @@ function MarqueeTrack({ ariaHidden }: { ariaHidden?: boolean }) {
 
 /** Infinite horizontal feature ticker — sits under the hero. */
 export function FeatureMarquee() {
+  const rootRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const viewport = root.querySelector<HTMLElement>(".feature-marquee__viewport");
+    if (!viewport) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        viewport.style.animationPlayState = entry.isIntersecting ? "running" : "paused";
+      },
+      { rootMargin: "80px 0px", threshold: 0 }
+    );
+
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
+      ref={rootRef}
       aria-label="Platform highlights"
       className="overflow-hidden border-b border-slate-200 bg-white py-4 sm:py-5"
     >
