@@ -31,27 +31,29 @@ const MARQUEE_ITEMS: { label: string; icon: LucideIcon }[] = [
 function MarqueeTrack({ ariaHidden }: { ariaHidden?: boolean }) {
   return (
     <ul
-      className="feature-marquee__track flex shrink-0 items-center gap-10 pe-10 sm:gap-14 sm:pe-14"
+      className="feature-marquee__track flex shrink-0 items-center pe-8 sm:pe-12"
       aria-hidden={ariaHidden || undefined}
     >
       {MARQUEE_ITEMS.map(({ label, icon: Icon }) => (
-        <li
-          key={label}
-          className="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-sm font-medium text-slate-700 sm:text-[15px]"
-        >
-          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-teal-50 text-teal-600 ring-1 ring-teal-500/15">
-            <Icon className="size-3.5" aria-hidden />
+        <li key={label} className="feature-marquee__item group flex shrink-0 items-center">
+          <span className="flex items-center gap-3 whitespace-nowrap px-5 py-0.5 sm:px-7">
+            <span className="feature-marquee__icon flex size-8 shrink-0 items-center justify-center text-teal-400/90 transition-colors duration-300 group-hover:text-teal-300">
+              <Icon className="size-4" strokeWidth={1.75} aria-hidden />
+            </span>
+            <span className="text-[13px] leading-5 font-medium tracking-wide text-white/75 transition-colors duration-300 group-hover:text-white sm:text-sm sm:leading-5">
+              {label}
+            </span>
           </span>
-          {label}
+          <span className="feature-marquee__sep" aria-hidden />
         </li>
       ))}
     </ul>
   );
 }
 
-/** Infinite horizontal feature ticker — sits under the hero. */
+/** Infinite feature ticker — glass strip matched to dark hero. */
 export function FeatureMarquee() {
-  const rootRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -72,12 +74,13 @@ export function FeatureMarquee() {
   }, []);
 
   return (
-    <section
+    <div
       ref={rootRef}
+      role="region"
       aria-label="Platform highlights"
-      className="overflow-hidden border-b border-slate-200 bg-white py-4 sm:py-5"
+      className="feature-marquee-bar"
     >
-      <div className="feature-marquee relative flex w-full overflow-hidden">
+      <div className="feature-marquee relative flex w-full overflow-hidden py-4 sm:py-5">
         <div className="feature-marquee__fade feature-marquee__fade--left" aria-hidden />
         <div className="feature-marquee__fade feature-marquee__fade--right" aria-hidden />
         <div className="feature-marquee__viewport flex w-max">
@@ -89,6 +92,6 @@ export function FeatureMarquee() {
         Includes inventory management, hassle-free setup, automated service alerts, WhatsApp
         integration, job cards, billing, customer portal, staff tools, rewards, and reports.
       </p>
-    </section>
+    </div>
   );
 }

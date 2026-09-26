@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Play, X } from "lucide-react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/ui/fade-in";
+import { FeatureMarquee } from "@/components/marketing/feature-marquee";
 import { cn } from "@/lib/utils";
 
 const HERO_SLIDES = [
@@ -56,94 +57,102 @@ const HERO_SLIDES = [
 
 const SLIDE_MS = 5000;
 
-const line1 = ["Run", "Your", "Workshop"];
-const line2Accent = "Smarter.";
-const line3 = ["Grow", "Your", "Business"];
-const line3Accent = "Faster.";
-
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
-const wordVariants: Variants = {
-  hidden: { opacity: 0, y: 28, filter: "blur(8px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.55, ease: EASE_OUT },
-  },
-};
-
-const lineVariants: Variants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.15 },
-  },
-};
-
-const line2Variants: Variants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.55 },
-  },
-};
-
-function AccentWord({ children, underlineDelay }: { children: string; underlineDelay: number }) {
-  return (
-    <motion.span variants={wordVariants} className="hero-accent-word relative inline-block whitespace-nowrap">
-      <span className="hero-accent-word__text">{children}</span>
-      <motion.span
-        aria-hidden
-        className="absolute -bottom-1 left-0 h-[3px] w-full origin-left rounded-full bg-teal-400/90"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 0.55, delay: underlineDelay, ease: EASE_OUT }}
-      />
-    </motion.span>
-  );
-}
+const line1 = ["Run", "Your", "Workshop"];
+const line3 = ["Grow", "Your", "Business"];
 
 function AnimatedHeadline() {
   const reduceMotion = useReducedMotion();
+  const [active, setActive] = useState<0 | 1>(0);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const id = window.setInterval(() => {
+      setActive((prev) => (prev === 0 ? 1 : 0));
+    }, 2600);
+    return () => window.clearInterval(id);
+  }, [reduceMotion]);
 
   if (reduceMotion) {
     return (
-      <h1 className="mt-4 max-w-xl text-balance text-left font-heading text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-5xl sm:leading-tight lg:text-[3.75rem] lg:leading-[1.1]">
-        Run Your Workshop <span className="text-teal-300">Smarter.</span>
-        <span className="mt-1.5 block text-slate-300 sm:mt-2">
-          Grow Your Business <span className="text-teal-300">Faster.</span>
+      <h1 className="mt-4 max-w-xl text-left font-heading text-[1.75rem] font-semibold leading-[1.2] tracking-tight text-white sm:text-5xl sm:leading-[1.15] lg:text-[3.5rem] lg:leading-[1.15]">
+        <span className="block">
+          Run Your Workshop{" "}
+          <span className="inline-block rounded-md bg-teal-300 px-[0.35em] pt-[0.12em] pb-[0.18em] leading-none text-slate-950">
+            Smarter.
+          </span>
+        </span>
+        <span className="mt-2 block text-slate-200 sm:mt-2.5">
+          Grow Your Business <span className="text-teal-200">Faster.</span>
         </span>
       </h1>
     );
   }
 
   return (
-    <h1 className="mt-4 max-w-xl text-left font-heading text-[1.75rem] font-semibold leading-snug tracking-tight text-white sm:text-5xl sm:leading-tight lg:text-[3.75rem] lg:leading-[1.1]">
-      <motion.span
-        className="inline-flex flex-wrap items-baseline justify-start gap-x-[0.28em]"
-        variants={lineVariants}
-        initial="hidden"
-        animate="show"
-      >
-        {line1.map((word) => (
-          <motion.span key={word} variants={wordVariants} className="inline-block">
+    <h1 className="mt-4 max-w-xl text-left font-heading text-[1.75rem] font-semibold leading-[1.2] tracking-tight text-white sm:text-5xl sm:leading-[1.15] lg:text-[3.5rem] lg:leading-[1.15]">
+      <span className="flex flex-wrap items-baseline gap-x-[0.28em]">
+        {line1.map((word, i) => (
+          <motion.span
+            key={word}
+            className="inline-block"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 + i * 0.07, ease: EASE_OUT }}
+          >
             {word}
           </motion.span>
         ))}
-        <AccentWord underlineDelay={0.72}>{line2Accent}</AccentWord>
-      </motion.span>
-      <motion.span
-        className="mt-1.5 flex flex-wrap items-baseline justify-start gap-x-[0.28em] text-slate-300 sm:mt-2"
-        variants={line2Variants}
-        initial="hidden"
-        animate="show"
-      >
-        {line3.map((word) => (
-          <motion.span key={word} variants={wordVariants} className="inline-block">
+        <motion.span
+          className="inline-block"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.35, ease: EASE_OUT }}
+        >
+          <span
+            className={cn(
+              "inline-block rounded-md px-[0.35em] pt-[0.12em] pb-[0.18em] leading-none transition-[background-color,color,box-shadow] duration-500",
+              active === 0
+                ? "bg-teal-300 text-slate-950 shadow-[0_0_28px_rgba(94,234,212,0.4)]"
+                : "bg-teal-300/20 text-teal-100/75"
+            )}
+          >
+            Smarter.
+          </span>
+        </motion.span>
+      </span>
+
+      <span className="mt-2 flex flex-wrap items-baseline gap-x-[0.28em] text-slate-200 sm:mt-2.5">
+        {line3.map((word, i) => (
+          <motion.span
+            key={word}
+            className="inline-block"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.45 + i * 0.07, ease: EASE_OUT }}
+          >
             {word}
           </motion.span>
         ))}
-        <AccentWord underlineDelay={1.15}>{line3Accent}</AccentWord>
-      </motion.span>
+        <motion.span
+          className="inline-block"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7, ease: EASE_OUT }}
+        >
+          <span
+            className={cn(
+              "inline-block rounded-md px-[0.35em] pt-[0.12em] pb-[0.18em] leading-none transition-[background-color,color,box-shadow] duration-500",
+              active === 1
+                ? "bg-teal-300 text-slate-950 shadow-[0_0_28px_rgba(94,234,212,0.4)]"
+                : "bg-transparent text-teal-200/75"
+            )}
+          >
+            Faster.
+          </span>
+        </motion.span>
+      </span>
     </h1>
   );
 }
@@ -170,9 +179,9 @@ function HeroBackgroundCarousel({ active }: { active: number }) {
         </div>
       ))}
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-transparent sm:from-black sm:via-black/60 sm:to-transparent lg:via-black/40" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/35" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_left,rgba(15,118,110,0.18),transparent_50%)]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/45 to-transparent sm:from-slate-950/70 sm:via-slate-950/35 sm:to-transparent lg:via-slate-950/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-slate-950/25" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_left,rgba(45,212,191,0.12),transparent_55%)]" />
     </div>
   );
 }
@@ -193,51 +202,73 @@ export function HeroSection() {
 
   return (
     <>
-      <section className="relative isolate -mt-14 overflow-hidden border-b border-white/5 bg-black sm:-mt-16">
-        <HeroBackgroundCarousel active={activeSlide} />
+      <section className="relative isolate -mt-14 flex min-h-[100svh] flex-col overflow-x-clip bg-slate-950 sm:-mt-16">
+        <div className="relative flex min-h-0 flex-1 flex-col">
+          <HeroBackgroundCarousel active={activeSlide} />
 
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:min-h-[560px] lg:px-8 lg:pt-36 lg:pb-28">
-          <div className="max-w-xl text-left lg:max-w-2xl">
-            <FadeIn direction="none" duration={0.4}>
-              <p className="text-[11px] font-semibold tracking-[0.14em] text-teal-400 uppercase drop-shadow-sm sm:text-xs">
-                Built for modern auto workshops
-              </p>
-            </FadeIn>
+          <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-5 pt-28 pb-8 sm:px-6 sm:pt-32 sm:pb-10 lg:px-8 lg:pt-36 lg:pb-12">
+            <div className="max-w-xl text-left lg:max-w-2xl">
+              <FadeIn direction="none" duration={0.4}>
+                <p className="text-[11px] font-semibold tracking-[0.14em] text-teal-400 uppercase drop-shadow-sm sm:text-xs">
+                  Built for modern auto workshops
+                </p>
+              </FadeIn>
 
-            <AnimatedHeadline />
+              <AnimatedHeadline />
 
-            <div className="mt-5 max-w-lg sm:mt-6" aria-live="polite">
-              <p key={slide.feature} className="text-sm font-semibold text-teal-300 sm:text-base">
-                {slide.feature}
-              </p>
-              <p key={slide.blurb} className="mt-1.5 text-pretty text-[15px] leading-6 text-slate-300 sm:text-lg sm:leading-7">
-                {slide.blurb}
-              </p>
-            </div>
-
-            <FadeIn delay={0.9} className="mt-8 sm:mt-10">
-              <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
-                <Link href="/signup" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    className="btn-marketing group h-12 w-full rounded-full px-6 text-base font-semibold shadow-xl transition-all hover:scale-105 sm:h-14 sm:px-8 sm:text-lg"
-                  >
-                    Start Free Trial
-                    <ArrowRight className="ml-2 size-5 transition-transform duration-300 group-hover:translate-x-1.5" />
-                  </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => setIsVideoOpen(true)}
-                  className="btn-marketing group h-12 w-full rounded-full border-white/30 bg-white/5 px-6 text-base font-semibold text-white shadow-lg backdrop-blur-md transition-all hover:scale-105 hover:bg-white/10 hover:text-white sm:h-14 sm:w-auto sm:px-8 sm:text-lg"
-                >
-                  <Play className="mr-2 size-5 fill-white/80 transition-transform group-hover:scale-110" />
-                  Watch Demo
-                </Button>
+              <div className="mt-5 max-w-lg sm:mt-6" aria-live="polite">
+                <p key={slide.feature} className="text-sm font-semibold text-teal-300 sm:text-base">
+                  {slide.feature}
+                </p>
+                <p key={slide.blurb} className="mt-1.5 text-pretty text-[15px] leading-6 text-slate-300 sm:text-lg sm:leading-7">
+                  {slide.blurb}
+                </p>
               </div>
-            </FadeIn>
+
+              <FadeIn delay={0.9} className="mt-8 sm:mt-10">
+                <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+                  <motion.div
+                    className="hero-cta-float w-full sm:w-auto"
+                    initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.05, duration: 0.5, ease: EASE_OUT }}
+                  >
+                    <Link href="/signup" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-auto">
+                      <Button
+                        size="lg"
+                        className="hero-cta hero-cta--primary btn-marketing group relative h-12 w-full overflow-hidden rounded-full px-6 text-base font-semibold shadow-xl transition-transform duration-300 hover:scale-[1.04] sm:h-14 sm:px-8 sm:text-lg"
+                      >
+                        <span className="relative z-10 inline-flex items-center">
+                          Start Free Trial
+                          <ArrowRight className="ml-2 size-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                        </span>
+                      </Button>
+                    </Link>
+                  </motion.div>
+                  <motion.div
+                    className="hero-cta-float hero-cta-float--delayed w-full sm:w-auto"
+                    initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.18, duration: 0.5, ease: EASE_OUT }}
+                  >
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => setIsVideoOpen(true)}
+                      className="hero-cta hero-cta--ghost btn-marketing group h-12 w-full rounded-full border-white/30 bg-white/5 px-6 text-base font-semibold text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-[1.04] hover:border-white/50 hover:bg-white/10 hover:text-white sm:h-14 sm:w-auto sm:px-8 sm:text-lg"
+                    >
+                      <Play className="mr-2 size-5 fill-white/80 transition-transform duration-300 group-hover:scale-125" />
+                      Watch Demo
+                    </Button>
+                  </motion.div>
+                </div>
+              </FadeIn>
+            </div>
           </div>
+        </div>
+
+        <div className="relative z-10 shrink-0 bg-slate-950">
+          <FeatureMarquee />
         </div>
       </section>
 

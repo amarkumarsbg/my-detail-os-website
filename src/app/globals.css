@@ -198,6 +198,59 @@ select:-webkit-autofill {
   }
 }
 
+/* Hero CTA — idle float + shine sweep */
+.hero-cta-float {
+  animation: hero-cta-float 4.5s ease-in-out infinite;
+}
+
+.hero-cta-float--delayed {
+  animation-delay: 1.4s;
+}
+
+.hero-cta--primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.28) 48%,
+    transparent 62%
+  );
+  transform: translateX(-120%);
+  animation: hero-cta-shine 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hero-cta-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes hero-cta-shine {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  75%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta-float,
+  .hero-cta-float--delayed,
+  .hero-cta--primary::after {
+    animation: none !important;
+  }
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0);
@@ -261,6 +314,51 @@ select:-webkit-autofill {
   .workshop-type-face--back {
     opacity: 0;
     transform: none;
+  }
+}
+
+/* Site navbar — studio glass rail + LED strip */
+.site-nav__led {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(45, 212, 191, 0.15) 12%,
+    rgba(45, 212, 191, 0.95) 48%,
+    rgba(94, 234, 212, 0.55) 62%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: site-nav-led 7s ease-in-out infinite;
+}
+
+.site-nav__led--light {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(13, 148, 136, 0.12) 18%,
+    rgba(13, 148, 136, 0.7) 50%,
+    rgba(20, 184, 166, 0.35) 68%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes site-nav-led {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav__led {
+    animation: none;
+    background-position: 50% 50%;
   }
 }
 
@@ -396,7 +494,13 @@ select:-webkit-autofill {
   }
 }
 
-/* Home feature ticker — seamless loop (two identical tracks) */
+/* Home feature ticker — dark glass strip matched to hero */
+.feature-marquee-bar {
+  background: rgba(2, 6, 23, 0.45);
+  backdrop-filter: blur(16px) saturate(1.15);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+}
+
 .feature-marquee__viewport {
   animation: feature-marquee 48s linear infinite;
   transform: translate3d(0, 0, 0);
@@ -407,23 +511,40 @@ select:-webkit-autofill {
   animation-play-state: paused;
 }
 
+.feature-marquee__icon {
+  border-radius: 0.55rem;
+  background: linear-gradient(145deg, rgba(45, 212, 191, 0.14), rgba(45, 212, 191, 0.04));
+  box-shadow:
+    inset 0 0 0 1px rgba(45, 212, 191, 0.22),
+    0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.feature-marquee__sep {
+  display: block;
+  width: 3px;
+  height: 3px;
+  rotate: 45deg;
+  background: rgba(45, 212, 191, 0.45);
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.35);
+}
+
 .feature-marquee__fade {
   pointer-events: none;
   position: absolute;
   top: 0;
   bottom: 0;
   z-index: 1;
-  width: 2.5rem;
+  width: 4rem;
 }
 
 .feature-marquee__fade--left {
   left: 0;
-  background: linear-gradient(to right, #fff, transparent);
+  background: linear-gradient(to right, rgba(2, 6, 23, 0.85), transparent);
 }
 
 .feature-marquee__fade--right {
   right: 0;
-  background: linear-gradient(to left, #fff, transparent);
+  background: linear-gradient(to left, rgba(2, 6, 23, 0.85), transparent);
 }
 
 @keyframes feature-marquee {
@@ -441,47 +562,12 @@ select:-webkit-autofill {
   }
 }
 
-/* Hero headline accents */
-.hero-accent-word__text {
-  background-image: linear-gradient(
-    110deg,
-    #5eead4 0%,
-    #99f6e4 35%,
-    #ccfbf1 50%,
-    #5eead4 75%,
-    #2dd4bf 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: hero-accent-shift 8s ease-in-out infinite;
-}
-
-@keyframes hero-accent-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
+/* Hero headline accents — kept minimal; accents styled in component */
 @media (prefers-reduced-motion: reduce) {
-  .hero-accent-word__text,
   .animate-float,
   .animate-float-delayed,
   .feature-marquee__viewport {
     animation: none !important;
-  }
-
-  .hero-accent-word__text {
-    color: #5eead4;
-    background: none;
-    -webkit-background-clip: unset;
-    background-clip: unset;
-    will-change: auto;
   }
 }
 

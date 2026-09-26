@@ -15,10 +15,14 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHash, setActiveHash] = useState("");
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const menuId = useId();
   const isClickScrolling = useRef(false);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const hasDarkHero = pathname === "/" || pathname.startsWith("/features/");
+  const light = !hasDarkHero || scrolled || menuOpen;
 
   const handleMouseEnter = (label: string) => {
     if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
@@ -33,11 +37,17 @@ export function Navbar() {
 
   useEffect(() => {
     let ticking = false;
+    let lastScrolled = false;
 
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
+        const next = window.scrollY > 48;
+        if (next !== lastScrolled) {
+          lastScrolled = next;
+          setScrolled(next);
+        }
         if (window.scrollY < 100 && pathname === "/" && !isClickScrolling.current) {
           setActiveHash((prev) => (prev ? "" : prev));
         }
@@ -87,6 +97,7 @@ export function Navbar() {
 
   useEffect(() => {
     setMenuOpen(false);
+    setScrolled(window.scrollY > 48);
   }, [pathname]);
 
   useEffect(() => {
@@ -105,75 +116,42 @@ export function Navbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: (typeof primaryNav)[number]) => {
-    setMenuOpen(false);
-
-    if (pathname !== "/") return;
-
-    const isHash = item.href.startsWith("/#");
-    const isHome = item.href === "/";
-
-    if (isHash) {
-      const id = item.href.replace("/#", "");
-      const element = document.getElementById(id);
-      if (element) {
-        e.preventDefault();
-        isClickScrolling.current = true;
-        if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-        scrollTimeout.current = setTimeout(() => {
-          isClickScrolling.current = false;
-        }, 1000);
-        window.history.pushState(null, "", item.href);
-        setActiveHash(`#${id}`);
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
-    } else if (isHome) {
-      e.preventDefault();
-      isClickScrolling.current = true;
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-      scrollTimeout.current = setTimeout(() => {
-        isClickScrolling.current = false;
-      }, 1000);
-      window.history.pushState(null, "", "/");
-      setActiveHash("");
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }, 100);
-    }
-  };
-
-  const pillClass =
-    "pointer-events-auto flex items-center rounded-full border border-slate-200/80 bg-white/95 shadow-lg transition-[box-shadow,background-color] duration-200";
-
   return (
     <>
     <motion.header
-      initial={{ y: -100, opacity: 0 }}
+      initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+      transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={cn(
-        "fixed inset-x-0 top-4 z-50 mx-auto w-full max-w-7xl px-3 pointer-events-none sm:top-5 sm:px-6 lg:px-8",
+        "site-nav pointer-events-none fixed inset-x-0 top-0 z-50",
         menuOpen && "z-[60]"
       )}
     >
-      <div className="flex items-center justify-between gap-2 sm:gap-4">
-        
-        {/* Left Segment: Logo */}
-        <div className={cn(pillClass, "h-11 shrink-0 px-2 sm:h-14 sm:px-3")}>
+      <div
+        className={cn(
+          "pointer-events-auto border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
+          light
+            ? "border-slate-200/80 bg-white/90 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.25)]"
+            : "border-white/10 bg-slate-950/55 shadow-[0_12px_40px_-20px_rgba(0,0,0,0.65)]"
+        )}
+      >
+        <div className="site-nav__rail mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:h-16 sm:px-6 lg:px-8">
+          {/* Brand */}
           <Link
             href="/"
             onClick={(e) => {
               closeMenu();
               if (pathname === "/") {
                 e.preventDefault();
-                window.history.pushState(null, '', '/');
+                window.history.pushState(null, "", "/");
                 setActiveHash("");
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="flex items-center gap-2 font-heading text-sm font-semibold tracking-tight text-slate-900 group whitespace-nowrap sm:gap-2.5 sm:text-base"
+            className={cn(
+              "group flex shrink-0 items-center gap-2.5 font-heading text-sm font-semibold tracking-tight transition-colors sm:text-base",
+              light ? "text-slate-900" : "text-white"
+            )}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -181,137 +159,162 @@ export function Navbar() {
               alt=""
               width={36}
               height={36}
-              className="size-7 shrink-0 rounded-md object-cover shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md sm:size-9 sm:rounded-lg"
+              className={cn(
+                "size-8 rounded-md object-cover transition-transform duration-300 group-hover:scale-105 sm:size-9",
+                light ? "ring-1 ring-slate-200" : "ring-1 ring-white/20"
+              )}
             />
-            <span className="pr-1.5 sm:pr-3">{siteConfig.name}</span>
+            <span className="whitespace-nowrap">{siteConfig.name}</span>
           </Link>
-        </div>
 
-        {/* Center Segment: Navigation (Desktop) */}
-        <nav className={cn(pillClass, "hidden lg:flex h-14 px-8 gap-8")} aria-label="Primary">
-          {primaryNav.map((item) => {
-            const isHash = item.href.startsWith("/#");
-            const isHome = item.href === "/";
-            
-            let active = false;
-            if (pathname === "/") {
-              if (isHome && !activeHash) active = true;
-              if (isHash && activeHash === item.href.replace("/", "")) active = true;
-            } else {
-              active = pathname === item.href;
-            }
-            
-            const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-              if (pathname !== "/") return;
-              
-              if (isHash) {
-                const id = item.href.replace("/#", "");
-                const element = document.getElementById(id);
-                if (element) {
+          {/* Desktop nav */}
+          <nav
+            className="hidden items-center gap-1 lg:flex"
+            aria-label="Primary"
+          >
+            {primaryNav.map((item) => {
+              const isHash = item.href.startsWith("/#");
+              const isHome = item.href === "/";
+
+              let active = false;
+              if (pathname === "/") {
+                if (isHome && !activeHash) active = true;
+                if (isHash && activeHash === item.href.replace("/", "")) active = true;
+              } else {
+                active = pathname === item.href;
+              }
+
+              const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+                if (pathname !== "/") return;
+
+                if (isHash) {
+                  const id = item.href.replace("/#", "");
+                  const element = document.getElementById(id);
+                  if (element) {
+                    e.preventDefault();
+                    isClickScrolling.current = true;
+                    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+                    scrollTimeout.current = setTimeout(() => {
+                      isClickScrolling.current = false;
+                    }, 1000);
+                    window.history.pushState(null, "", item.href);
+                    setActiveHash(`#${id}`);
+                    element.scrollIntoView({ behavior: "smooth" });
+                  }
+                } else if (isHome) {
                   e.preventDefault();
-                  
                   isClickScrolling.current = true;
                   if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
                   scrollTimeout.current = setTimeout(() => {
                     isClickScrolling.current = false;
                   }, 1000);
-                  
-                  window.history.pushState(null, '', item.href);
-                  setActiveHash(`#${id}`);
-                  element.scrollIntoView({ behavior: "smooth" });
+                  window.history.pushState(null, "", "/");
+                  setActiveHash("");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }
-              } else if (isHome) {
-                e.preventDefault();
-                
-                isClickScrolling.current = true;
-                if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-                scrollTimeout.current = setTimeout(() => {
-                  isClickScrolling.current = false;
-                }, 1000);
-                
-                window.history.pushState(null, '', '/');
-                setActiveHash("");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }
-            };
+              };
 
-            return (
-              <div
-                key={item.href}
-                className="relative flex h-full items-center"
-                onMouseEnter={() =>
-                  item.megaMenu ? handleMouseEnter(item.label) : handleMouseEnter("")
-                }
-                onMouseLeave={handleMouseLeave}
-              >
-                <Link
-                  href={item.href}
-                  onClick={handleClick}
-                  className={cn(
-                    "relative flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200",
-                    hoveredNav === item.label && item.megaMenu
-                      ? "bg-slate-100 text-slate-950"
-                      : active
-                        ? "text-teal-700"
-                        : "text-slate-600 hover:text-slate-950"
-                  )}
+              return (
+                <div
+                  key={item.href}
+                  className="relative flex h-10 items-center"
+                  onMouseEnter={() =>
+                    item.megaMenu ? handleMouseEnter(item.label) : handleMouseEnter("")
+                  }
+                  onMouseLeave={handleMouseLeave}
                 >
-                  {item.label}
-                  {item.megaMenu && (
-                    <ChevronDown
-                      className={cn(
-                        "size-3.5 opacity-60 transition-transform duration-200",
-                        hoveredNav === item.label && "rotate-180"
-                      )}
-                    />
-                  )}
-                  {active && hoveredNav !== item.label && (
-                    <motion.div
-                      layoutId="navbar-indicator"
-                      className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-teal-600"
-                    />
-                  )}
-                </Link>
-              </div>
-            );
-          })}
-        </nav>
+                  <Link
+                    href={item.href}
+                    onClick={handleClick}
+                    className={cn(
+                      "relative flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium tracking-wide transition-colors duration-200",
+                      light
+                        ? hoveredNav === item.label && item.megaMenu
+                          ? "text-slate-950"
+                          : active
+                            ? "text-teal-700"
+                            : "text-slate-600 hover:text-slate-950"
+                        : hoveredNav === item.label && item.megaMenu
+                          ? "text-white"
+                          : active
+                            ? "text-teal-300"
+                            : "text-white/70 hover:text-white"
+                    )}
+                  >
+                    {item.label}
+                    {item.megaMenu && (
+                      <ChevronDown
+                        className={cn(
+                          "size-3.5 opacity-60 transition-transform duration-200",
+                          hoveredNav === item.label && "rotate-180"
+                        )}
+                      />
+                    )}
+                    {active && hoveredNav !== item.label && (
+                      <motion.div
+                        layoutId="navbar-indicator"
+                        className={cn(
+                          "absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full",
+                          light ? "bg-teal-600" : "bg-teal-400"
+                        )}
+                      />
+                    )}
+                  </Link>
+                </div>
+              );
+            })}
+          </nav>
 
-        {/* Right Segment: Actions */}
-        <div className={cn(pillClass, "h-11 shrink-0 gap-1 px-1.5 sm:h-14 sm:gap-2 sm:px-2")}>
-          <Link
-            href="/login"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden lg:block"
-          >
-            <Button variant="ghost" size="sm" className="h-10 rounded-full px-5 font-medium text-slate-700 hover:bg-slate-100/50 hover:text-slate-950">
+          {/* Actions */}
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <Link
+              href="/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "hidden text-[13px] font-medium transition-colors lg:inline",
+                light
+                  ? "text-slate-600 hover:text-slate-950"
+                  : "text-white/75 hover:text-white"
+              )}
+            >
               Login
-            </Button>
-          </Link>
-          <Link
-            href="/signup"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:block"
-          >
-            <Button size="sm" className="h-10 rounded-full bg-teal-600 px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-500">
-              Start Free Trial
-            </Button>
-          </Link>
-          
-          {/* Mobile Menu Toggle */}
-          <button
-            type="button"
-            className="inline-flex size-9 items-center justify-center rounded-full text-slate-700 transition-colors hover:bg-slate-100/60 hover:text-slate-950 sm:size-10 lg:hidden"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
-            aria-expanded={menuOpen}
-            aria-controls={menuId}
-          >
-            {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
+            </Link>
+            <Link href="/signup" target="_blank" rel="noopener noreferrer" className="hidden sm:block">
+              <Button
+                size="sm"
+                className={cn(
+                  "h-9 rounded-md px-4 text-[13px] font-semibold transition-colors",
+                  light
+                    ? "bg-teal-600 text-white hover:bg-teal-500"
+                    : "bg-teal-500 text-slate-950 shadow-[0_0_0_1px_rgba(45,212,191,0.35)] hover:bg-teal-400"
+                )}
+              >
+                Start Free Trial
+              </Button>
+            </Link>
+
+            <button
+              type="button"
+              className={cn(
+                "inline-flex size-9 items-center justify-center rounded-md border transition-colors lg:hidden",
+                light
+                  ? "border-slate-200 text-slate-800 hover:bg-slate-100"
+                  : "border-white/15 text-white hover:bg-white/10"
+              )}
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={menuOpen}
+              aria-controls={menuId}
+            >
+              {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
+          </div>
         </div>
+        <div
+          aria-hidden
+          className={cn("site-nav__led", light && "site-nav__led--light")}
+        />
       </div>
 
       {/* Mega Menu Dropdown */}
@@ -322,7 +325,12 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ duration: 0.18, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="pointer-events-auto absolute left-0 right-0 top-[calc(100%+0.65rem)] hidden overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)] lg:block"
+            className={cn(
+              "pointer-events-auto absolute inset-x-0 top-full mx-auto hidden max-w-7xl overflow-hidden rounded-b-2xl border border-t-0 shadow-[0_28px_60px_-24px_rgba(0,0,0,0.35)] backdrop-blur-xl lg:block",
+              light
+                ? "border-slate-200/80 bg-white/95"
+                : "border-white/10 bg-slate-950/95 shadow-[0_28px_60px_-24px_rgba(0,0,0,0.7)]"
+            )}
             onMouseEnter={() => handleMouseEnter(hoveredNav)}
             onMouseLeave={handleMouseLeave}
           >
@@ -336,7 +344,7 @@ export function Navbar() {
               if (isRich) {
                 const links = columns.flatMap((col) => col.items);
                 return (
-                  <div className="mx-auto max-w-7xl p-5 sm:p-6">
+                  <div className="p-5 sm:p-6">
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                       {links.map((link) => {
                         const Icon = link.icon;
@@ -345,9 +353,19 @@ export function Navbar() {
                             key={`${link.href}-${link.label}`}
                             href={link.href}
                             onClick={() => setHoveredNav(null)}
-                            className="group flex items-start gap-3 rounded-2xl p-3 transition-colors hover:bg-slate-50"
+                            className={cn(
+                              "group flex items-start gap-3 rounded-xl p-3 transition-colors",
+                              light ? "hover:bg-slate-50" : "hover:bg-white/5"
+                            )}
                           >
-                            <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700 ring-1 ring-teal-600/10 transition-colors group-hover:bg-teal-100">
+                            <span
+                              className={cn(
+                                "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-lg ring-1 transition-colors",
+                                light
+                                  ? "bg-teal-50 text-teal-700 ring-teal-600/10 group-hover:bg-teal-100"
+                                  : "bg-teal-500/15 text-teal-300 ring-teal-400/20 group-hover:bg-teal-500/25"
+                              )}
+                            >
                               {Icon ? (
                                 <Icon className="size-5" aria-hidden />
                               ) : (
@@ -355,11 +373,23 @@ export function Navbar() {
                               )}
                             </span>
                             <span className="min-w-0">
-                              <span className="block text-sm font-semibold text-slate-900 group-hover:text-teal-800">
+                              <span
+                                className={cn(
+                                  "block text-sm font-semibold",
+                                  light
+                                    ? "text-slate-900 group-hover:text-teal-800"
+                                    : "text-white group-hover:text-teal-200"
+                                )}
+                              >
                                 {link.label}
                               </span>
                               {link.description ? (
-                                <span className="mt-0.5 block text-[13px] leading-snug text-slate-500 line-clamp-2">
+                                <span
+                                  className={cn(
+                                    "mt-0.5 block text-[13px] leading-snug line-clamp-2",
+                                    light ? "text-slate-500" : "text-slate-400"
+                                  )}
+                                >
                                   {link.description}
                                 </span>
                               ) : null}
@@ -373,10 +403,17 @@ export function Navbar() {
               }
 
               return (
-                <div className="mx-auto flex max-w-7xl justify-between gap-8 p-8">
+                <div className="flex justify-between gap-8 p-8">
                   {columns.map((column) => (
                     <div key={column.title} className="flex-1">
-                      <h4 className="mb-4 border-b border-slate-100 pb-2 text-[12px] font-bold tracking-wider text-slate-900 uppercase">
+                      <h4
+                        className={cn(
+                          "mb-4 border-b pb-2 text-[12px] font-bold tracking-wider uppercase",
+                          light
+                            ? "border-slate-100 text-slate-900"
+                            : "border-white/10 text-white"
+                        )}
+                      >
                         {column.title}
                       </h4>
                       <ul className="space-y-3">
@@ -384,7 +421,12 @@ export function Navbar() {
                           <li key={link.label}>
                             <Link
                               href={link.href}
-                              className="flex items-center text-[13px] font-medium text-slate-500 transition-all hover:translate-x-1 hover:text-teal-600"
+                              className={cn(
+                                "flex items-center text-[13px] font-medium transition-all hover:translate-x-1",
+                                light
+                                  ? "text-slate-500 hover:text-teal-600"
+                                  : "text-slate-400 hover:text-teal-300"
+                              )}
                               onClick={() => setHoveredNav(null)}
                             >
                               {link.label}
@@ -407,7 +449,7 @@ export function Navbar() {
       {menuOpen && (
         <motion.div
           id={menuId}
-          className="fixed inset-0 z-[55] flex flex-col bg-white pt-[4.75rem] lg:hidden"
+          className="fixed inset-0 z-[55] flex flex-col bg-slate-950 pt-16 lg:hidden"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
@@ -417,124 +459,90 @@ export function Navbar() {
           aria-label="Navigation menu"
         >
           <nav
-            className="flex min-h-0 flex-1 flex-col px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]"
-            aria-label="Mobile"
+            className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-6"
+            aria-label="Mobile primary"
           >
-            <div className="flex-1 space-y-1 overflow-y-auto">
-              {primaryNav.map((item) => {
-                const isHash = item.href.startsWith("/#");
-                const isHome = item.href === "/";
+            {primaryNav.map((item) => {
+              const isHash = item.href.startsWith("/#");
+              const isHome = item.href === "/";
+              let active = false;
+              if (pathname === "/") {
+                if (isHome && !activeHash) active = true;
+                if (isHash && activeHash === item.href.replace("/", "")) active = true;
+              } else {
+                active = pathname === item.href;
+              }
 
-                let active = false;
-                if (pathname === "/") {
-                  if (isHome && !activeHash) active = true;
-                  if (isHash && activeHash === item.href.replace("/", "")) active = true;
-                } else {
-                  active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                }
-
-                if (item.megaMenu?.length) {
-                  const links = item.megaMenu.flatMap((col) => col.items);
-                  const isRich =
-                    item.megaMenuLayout === "rich" ||
-                    links.some((link) => link.description);
-                  return (
-                    <details key={item.href} className="group rounded-2xl">
-                      <summary
-                        className={cn(
-                          "flex min-h-12 cursor-pointer list-none items-center justify-between rounded-2xl px-4 text-base font-semibold transition-colors marker:content-none [&::-webkit-details-marker]:hidden",
-                          active
-                            ? "bg-teal-50 text-teal-700"
-                            : "text-slate-800 active:bg-slate-50"
-                        )}
-                      >
-                        {item.label}
-                        <ChevronDown className="size-4 opacity-50 transition-transform group-open:rotate-180" />
-                      </summary>
-                      <div className="mt-1 space-y-1 pb-2 pl-2">
-                        {links.map((link) => {
-                          const Icon = link.icon;
-                          return (
-                            <Link
-                              key={`${link.href}-${link.label}`}
-                              href={link.href}
-                              onClick={closeMenu}
-                              className={cn(
-                                "flex rounded-xl px-3 py-2.5 transition-colors active:bg-slate-50",
-                                isRich ? "items-start gap-3" : "items-center"
-                              )}
-                            >
-                              {isRich && (
-                                <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
-                                  {Icon ? <Icon className="size-4" aria-hidden /> : null}
-                                </span>
-                              )}
-                              <span>
-                                <span className="block text-sm font-semibold text-slate-800">
-                                  {link.label}
-                                </span>
-                                {link.description ? (
-                                  <span className="mt-0.5 block text-xs leading-snug text-slate-500">
-                                    {link.description}
-                                  </span>
-                                ) : null}
-                              </span>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </details>
-                  );
-                }
-
-                return (
+              return (
+                <div key={item.href}>
                   <Link
-                    key={item.href}
                     href={item.href}
-                    onClick={(e) => handleMobileNavClick(e, item)}
+                    onClick={(e) => {
+                      if (pathname === "/" && isHash) {
+                        const id = item.href.replace("/#", "");
+                        const element = document.getElementById(id);
+                        if (element) {
+                          e.preventDefault();
+                          closeMenu();
+                          setActiveHash(`#${id}`);
+                          window.history.pushState(null, "", item.href);
+                          setTimeout(() => element.scrollIntoView({ behavior: "smooth" }), 50);
+                          return;
+                        }
+                      }
+                      if (pathname === "/" && isHome) {
+                        e.preventDefault();
+                        closeMenu();
+                        setActiveHash("");
+                        window.history.pushState(null, "", "/");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        return;
+                      }
+                      closeMenu();
+                    }}
                     className={cn(
-                      "flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold transition-colors",
-                      active
-                        ? "bg-teal-50 text-teal-700"
-                        : "text-slate-800 active:bg-slate-50"
+                      "flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-semibold transition-colors",
+                      active ? "bg-teal-500/15 text-teal-300" : "text-white hover:bg-white/5"
                     )}
                   >
                     {item.label}
+                    {item.megaMenu ? <ChevronDown className="size-4 opacity-50" /> : null}
                   </Link>
-                );
-              })}
-            </div>
-
-            <div className="mt-4 flex shrink-0 flex-col gap-3 border-t border-slate-100 pt-5">
-              <Link
-                href="/login"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={closeMenu}
-              >
-                <Button
-                  variant="outline"
-                  className="h-12 w-full rounded-2xl border-slate-200 text-base font-semibold text-slate-800 hover:bg-slate-50"
-                  size="lg"
-                >
-                  Login
-                </Button>
-              </Link>
-              <Link
-                href="/signup"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={closeMenu}
-              >
-                <Button
-                  className="h-12 w-full rounded-2xl bg-teal-600 text-base font-semibold text-white hover:bg-teal-500"
-                  size="lg"
-                >
-                  Start Free Trial
-                </Button>
-              </Link>
-            </div>
+                  {item.megaMenu ? (
+                    <div className="mb-2 ml-3 space-y-1 border-l border-white/10 pl-3">
+                      {item.megaMenu.flatMap((col) =>
+                        col.items.map((link) => (
+                          <Link
+                            key={`${link.href}-${link.label}`}
+                            href={link.href}
+                            onClick={closeMenu}
+                            className="block rounded-lg px-3 py-2 text-sm text-slate-400 hover:bg-white/5 hover:text-teal-300"
+                          >
+                            {link.label}
+                          </Link>
+                        ))
+                      )}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
           </nav>
+          <div className="space-y-3 border-t border-white/10 p-4">
+            <Link href="/login" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
+              <Button
+                variant="outline"
+                className="h-12 w-full rounded-xl border-white/20 bg-transparent text-white hover:bg-white/10"
+              >
+                Login
+              </Button>
+            </Link>
+            <Link href="/signup" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
+              <Button className="h-12 w-full rounded-xl bg-teal-500 font-semibold text-slate-950 hover:bg-teal-400">
+                Start Free Trial
+              </Button>
+            </Link>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
