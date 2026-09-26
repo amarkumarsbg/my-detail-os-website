@@ -4,7 +4,6 @@ import { WorkshopTypes } from "@/components/marketing/workshop-types";
 import { ProblemSection } from "@/components/marketing/problem-section";
 import { SolutionSection } from "@/components/marketing/solution-section";
 import { ProductShowcase } from "@/components/marketing/product-showcase";
-import { PortalSection } from "@/components/marketing/portal-section";
 import { MobileSection } from "@/components/marketing/mobile-section";
 import { WhySection } from "@/components/marketing/why-section";
 import { HowItWorksSection } from "@/components/marketing/how-it-works";
@@ -28,7 +27,6 @@ export default function Home() {
 
       <div id="features">
         <ProductShowcase />
-        <PortalSection />
       </div>
 
       <MobileSection />
