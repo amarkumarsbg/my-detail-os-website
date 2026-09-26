@@ -1,64 +1,77 @@
+import { Mail, MapPin, Phone } from "lucide-react";
 import { ContactForm } from "@/features/contact/contact-form";
+import { FadeIn } from "@/components/ui/fade-in";
+
+const contactChannels = [
+  {
+    icon: Phone,
+    title: "Call Sales",
+    primary: "+91 (800) 123-4567",
+    note: "Mon–Fri from 9am to 6pm IST.",
+  },
+  {
+    icon: Mail,
+    title: "Email Support",
+    primary: "support@mydetailos.com",
+    note: "We usually respond within 24 hours.",
+  },
+  {
+    icon: MapPin,
+    title: "Headquarters",
+    primary: "MY DETAIL OS Tech",
+    note: "Bengaluru, Karnataka, India",
+  },
+] as const;
 
 export function ContactSection() {
   return (
-    <section className="relative overflow-hidden bg-slate-950 py-20 sm:py-24">
-      {/* Background styling to match the site's dark aesthetic */}
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_bottom,rgba(15,118,110,0.15),transparent_70%)] pointer-events-none" />
-      
+    <section className="contact-panel relative overflow-hidden py-20 sm:py-24">
+      <div aria-hidden className="contact-panel__glow" />
+      <div aria-hidden className="contact-panel__streaks" />
+
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+        <FadeIn className="max-w-2xl">
+          <p className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-teal-700 uppercase">
+            <span aria-hidden className="inline-flex gap-1">
+              <span className="h-px w-4 self-center bg-teal-600" />
+              <span className="h-px w-2 self-center bg-teal-600/50" />
+            </span>
+            Contact
+          </p>
+          <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             Talk to our team
           </h2>
-          <p className="mt-4 text-lg leading-8 text-slate-300">
-            Share your workshop details and we will follow up about product fit, pricing, or onboarding.
+          <p className="mt-4 text-lg leading-8 text-slate-600">
+            Share your workshop details and we will follow up about product fit, pricing, or
+            onboarding.
           </p>
-        </div>
-        
-        <div className="mx-auto mt-16 max-w-xl sm:mt-20 lg:mx-0 lg:max-w-none lg:grid lg:grid-cols-2 lg:gap-16">
-          <div>
+        </FadeIn>
+
+        <div className="mx-auto mt-12 max-w-xl sm:mt-16 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-12">
+          <FadeIn>
             <ContactForm />
-          </div>
-          
-          <div className="mt-10 lg:mt-0 pt-8 lg:pt-0 border-t border-white/10 lg:border-t-0 text-slate-300">
-            <h3 className="text-xl font-semibold text-white mb-6">Other ways to reach us</h3>
-            
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-teal-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-white">Call Sales</p>
-                  <p className="mt-1">+91 (800) 123-4567</p>
-                  <p className="text-sm text-slate-500 mt-1">Mon-Fri from 9am to 6pm IST.</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-teal-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-white">Email Support</p>
-                  <p className="mt-1">support@mydetailos.com</p>
-                  <p className="text-sm text-slate-500 mt-1">We usually respond within 24 hours.</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-teal-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-white">Headquarters</p>
-                  <p className="mt-1">MY DETAIL OS Tech</p>
-                  <p className="text-sm text-slate-500 mt-1">Bengaluru, Karnataka, India</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          </FadeIn>
+
+          <FadeIn delay={0.08} className="mt-10 space-y-4 lg:mt-0">
+            <h3 className="text-lg font-semibold text-slate-900">Other ways to reach us</h3>
+            <ul className="space-y-3">
+              {contactChannels.map(({ icon: Icon, title, primary, note }) => (
+                <li
+                  key={title}
+                  className="flex gap-4 rounded-2xl border border-teal-900/8 bg-white/80 p-4 shadow-sm shadow-teal-900/5 backdrop-blur-sm transition-colors hover:border-teal-500/25 hover:bg-white"
+                >
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700 ring-1 ring-teal-500/15">
+                    <Icon className="size-5" aria-hidden />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-slate-900">{title}</p>
+                    <p className="mt-1 text-sm text-slate-700">{primary}</p>
+                    <p className="mt-0.5 text-sm text-slate-500">{note}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </FadeIn>
         </div>
       </div>
     </section>

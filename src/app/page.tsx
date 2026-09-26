@@ -45,10 +45,10 @@ export default function Home() {
       </div>
 
       <CtaSection
-        title="Ready to modernize your workshop?"
+        title="Get premium workshop software. Feel free to contact us."
         description="Start a free trial and see how MY DETAIL OS centralizes workshop operations."
-        secondaryLabel="View Pricing"
-        secondaryHref="/pricing"
+        secondaryLabel="Contact Us"
+        secondaryHref="/#contact"
       />
       <TestimonialsSection />
       <FaqSection />

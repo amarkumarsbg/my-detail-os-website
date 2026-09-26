@@ -264,6 +264,138 @@ select:-webkit-autofill {
   }
 }
 
+/* Why Choose Us — light studio panel with paint-reflection streaks */
+.why-panel {
+  background:
+    linear-gradient(145deg, #f4fbfa 0%, #eef6f8 42%, #f8fafc 78%, #ecfeff 100%);
+}
+
+.why-panel__glow {
+  pointer-events: none;
+  position: absolute;
+  inset: -20% -10% auto auto;
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(circle at center, rgba(45, 212, 191, 0.16), transparent 65%);
+}
+
+.why-panel__streaks {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(255, 255, 255, 0.7) 46%,
+      transparent 52%,
+      transparent 100%
+    ),
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 58%,
+      rgba(15, 118, 110, 0.07) 64%,
+      transparent 70%,
+      transparent 100%
+    ),
+    repeating-linear-gradient(
+      -18deg,
+      transparent,
+      transparent 28px,
+      rgba(15, 23, 42, 0.025) 28px,
+      rgba(15, 23, 42, 0.025) 29px
+    );
+}
+
+/* Contact — same studio wash language as Why panel */
+.contact-panel {
+  background:
+    linear-gradient(160deg, #f8fafc 0%, #f0fdfa 38%, #eef6f8 72%, #f8fafc 100%);
+}
+
+.contact-panel__glow {
+  pointer-events: none;
+  position: absolute;
+  inset: auto -15% -25% auto;
+  width: 55%;
+  height: 65%;
+  background: radial-gradient(circle at center, rgba(45, 212, 191, 0.18), transparent 68%);
+}
+
+.contact-panel__streaks {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.45;
+  background-image:
+    linear-gradient(
+      112deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(255, 255, 255, 0.75) 49%,
+      transparent 56%,
+      transparent 100%
+    ),
+    repeating-linear-gradient(
+      -22deg,
+      transparent,
+      transparent 32px,
+      rgba(15, 23, 42, 0.02) 32px,
+      rgba(15, 23, 42, 0.02) 33px
+    );
+}
+
+/* Why Choose Us — numbered circle flip */
+.why-number-scene {
+  perspective: 900px;
+}
+
+.why-number-flip {
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.why-number-flip--active {
+  transform: rotateY(180deg);
+}
+
+.why-number-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(1px);
+}
+
+.why-number-face--back {
+  transform: rotateY(180deg) translateZ(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-number-flip {
+    transition: none;
+  }
+
+  .why-number-flip--active {
+    transform: none;
+  }
+
+  .why-number-flip--active .why-number-face--front {
+    opacity: 0;
+  }
+
+  .why-number-flip--active .why-number-face--back {
+    opacity: 1;
+    transform: none;
+  }
+
+  .why-number-face--back {
+    opacity: 0;
+    transform: none;
+  }
+}
+
 /* Home feature ticker — seamless loop (two identical tracks) */
 .feature-marquee__viewport {
   animation: feature-marquee 48s linear infinite;

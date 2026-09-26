@@ -42,7 +42,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-border bg-white p-6 sm:p-8">
+    <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-teal-900/10 bg-white/90 p-6 shadow-lg shadow-teal-900/5 backdrop-blur-sm sm:p-8">
       <div className="grid gap-x-4 sm:grid-cols-2">
         <div>
           <FloatingInput id="name" label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
