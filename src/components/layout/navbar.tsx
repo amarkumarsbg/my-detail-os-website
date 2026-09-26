@@ -287,7 +287,7 @@ export function Navbar() {
                   "h-9 rounded-md px-4 text-[13px] font-semibold transition-colors",
                   light
                     ? "bg-teal-600 text-white hover:bg-teal-500"
-                    : "bg-teal-500 text-slate-950 shadow-[0_0_0_1px_rgba(45,212,191,0.35)] hover:bg-teal-400"
+                    : "bg-teal-500 text-slate-950 shadow-[0_0_0_1px_rgba(251,134,18,0.35)] hover:bg-teal-400"
                 )}
               >
                 Start Free Trial

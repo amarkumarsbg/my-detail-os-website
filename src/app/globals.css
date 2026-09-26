@@ -39,6 +39,18 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  /* Brand accents → logo orange (#FB8612) */
+  --color-teal-50: #fff4e8;
+  --color-teal-100: #ffe4c4;
+  --color-teal-200: #ffc888;
+  --color-teal-300: #ffa94a;
+  --color-teal-400: #fc9528;
+  --color-teal-500: #fb8612;
+  --color-teal-600: #e0720a;
+  --color-teal-700: #b85a08;
+  --color-teal-800: #8f460a;
+  --color-teal-900: #70380c;
+  --color-teal-950: #3d1e06;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -55,19 +67,19 @@
   --card-foreground: #0b1220;
   --popover: #ffffff;
   --popover-foreground: #0b1220;
-  --primary: #0f766e;
-  --primary-foreground: #f0fdfa;
+  --primary: #fb8612;
+  --primary-foreground: #1a0e00;
   --secondary: #eef2f6;
   --secondary-foreground: #1e293b;
   --muted: #eef2f6;
   --muted-foreground: #64748b;
-  --accent: #ecfeff;
-  --accent-foreground: #134e4a;
+  --accent: #fff4e8;
+  --accent-foreground: #70380c;
   --destructive: #dc2626;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #0f766e;
-  --chart-1: #0f766e;
+  --ring: #fb8612;
+  --chart-1: #fb8612;
   --chart-2: #0369a1;
   --chart-3: #ca8a04;
   --chart-4: #4f46e5;
@@ -75,12 +87,12 @@
   --radius: 0.75rem;
   --sidebar: #ffffff;
   --sidebar-foreground: #0b1220;
-  --sidebar-primary: #0f766e;
-  --sidebar-primary-foreground: #f0fdfa;
-  --sidebar-accent: #ecfeff;
-  --sidebar-accent-foreground: #134e4a;
+  --sidebar-primary: #fb8612;
+  --sidebar-primary-foreground: #1a0e00;
+  --sidebar-accent: #fff4e8;
+  --sidebar-accent-foreground: #70380c;
   --sidebar-border: #e2e8f0;
-  --sidebar-ring: #0f766e;
+  --sidebar-ring: #fb8612;
 }
 
 /* Chrome/Safari autofill paints a pale blue/yellow fill — neutralize it. */
@@ -103,8 +115,8 @@ select:-webkit-autofill {
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.72 0.1 180);
-  --primary-foreground: oklch(0.2 0.04 180);
+  --primary: #fb8612;
+  --primary-foreground: #1a0e00;
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -114,7 +126,7 @@ select:-webkit-autofill {
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: #fb8612;
 }
 
 @layer base {
@@ -336,8 +348,8 @@ select:-webkit-autofill {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(45, 212, 191, 0.15) 12%,
-    rgba(45, 212, 191, 0.95) 48%,
+    rgba(251, 134, 18, 0.15) 12%,
+    rgba(251, 134, 18, 0.95) 48%,
     rgba(94, 234, 212, 0.55) 62%,
     transparent 100%
   );
@@ -386,7 +398,7 @@ select:-webkit-autofill {
   inset: -20% -10% auto auto;
   width: 70%;
   height: 70%;
-  background: radial-gradient(circle at center, rgba(45, 212, 191, 0.16), transparent 65%);
+  background: radial-gradient(circle at center, rgba(251, 134, 18, 0.16), transparent 65%);
 }
 
 .why-panel__streaks {
@@ -432,7 +444,7 @@ select:-webkit-autofill {
   inset: auto -15% -25% auto;
   width: 55%;
   height: 65%;
-  background: radial-gradient(circle at center, rgba(45, 212, 191, 0.18), transparent 68%);
+  background: radial-gradient(circle at center, rgba(251, 134, 18, 0.18), transparent 68%);
 }
 
 .contact-panel__streaks {
@@ -525,9 +537,9 @@ select:-webkit-autofill {
 
 .feature-marquee__icon {
   border-radius: 0.55rem;
-  background: linear-gradient(145deg, rgba(45, 212, 191, 0.14), rgba(45, 212, 191, 0.04));
+  background: linear-gradient(145deg, rgba(251, 134, 18, 0.14), rgba(251, 134, 18, 0.04));
   box-shadow:
-    inset 0 0 0 1px rgba(45, 212, 191, 0.22),
+    inset 0 0 0 1px rgba(251, 134, 18, 0.22),
     0 0 0 1px rgba(0, 0, 0, 0.25);
 }
 
@@ -536,8 +548,8 @@ select:-webkit-autofill {
   width: 3px;
   height: 3px;
   rotate: 45deg;
-  background: rgba(45, 212, 191, 0.45);
-  box-shadow: 0 0 10px rgba(45, 212, 191, 0.35);
+  background: rgba(251, 134, 18, 0.45);
+  box-shadow: 0 0 10px rgba(251, 134, 18, 0.35);
 }
 
 .feature-marquee__fade {

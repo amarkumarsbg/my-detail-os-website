@@ -181,7 +181,7 @@ function HeroBackgroundCarousel({ active }: { active: number }) {
 
       <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/45 to-transparent sm:from-slate-950/70 sm:via-slate-950/35 sm:to-transparent lg:via-slate-950/20" />
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-slate-950/25" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_left,rgba(45,212,191,0.12),transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_left,rgba(251,134,18,0.12),transparent_55%)]" />
     </div>
   );
 }

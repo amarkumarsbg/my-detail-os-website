@@ -279,7 +279,7 @@ function WorkflowCard({
       className={cn(
         "relative rounded-2xl border bg-slate-950/90 p-3.5 backdrop-blur-sm sm:p-4",
         active
-          ? "border-teal-400/45 shadow-[0_0_32px_-10px_rgba(45,212,191,0.55)]"
+          ? "border-teal-400/45 shadow-[0_0_32px_-10px_rgba(251,134,18,0.55)]"
           : "border-white/10 shadow-none",
         className
       )}
@@ -289,7 +289,7 @@ function WorkflowCard({
         className={cn(
           "pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-500",
           active ? "opacity-100" : "opacity-0",
-          "bg-[radial-gradient(ellipse_at_top,_rgba(45,212,191,0.12),_transparent_65%)]"
+          "bg-[radial-gradient(ellipse_at_top,_rgba(251,134,18,0.12),_transparent_65%)]"
         )}
       />
 
@@ -425,7 +425,7 @@ function WorkflowLink({
         {state === "active" && !reduceMotion && (
           <motion.span
             key="dot"
-            className="absolute z-10 size-2 rounded-full bg-teal-300 shadow-[0_0_10px_2px_rgba(45,212,191,0.85)]"
+            className="absolute z-10 size-2 rounded-full bg-teal-300 shadow-[0_0_10px_2px_rgba(251,134,18,0.85)]"
             initial={
               horizontal
                 ? { left: forward ? "4%" : "96%", top: "50%", x: "-50%", y: "-50%", opacity: 0 }
@@ -479,8 +479,8 @@ function MobileLoopLink({
         className="flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/80 px-3 py-1.5"
         animate={{
           borderColor:
-            state === "active" ? "rgba(45,212,191,0.45)" : lit ? "rgba(45,212,191,0.2)" : "rgba(255,255,255,0.1)",
-          boxShadow: state === "active" ? "0 0 20px -6px rgba(45,212,191,0.5)" : "0 0 0 transparent",
+            state === "active" ? "rgba(251,134,18,0.45)" : lit ? "rgba(251,134,18,0.2)" : "rgba(255,255,255,0.1)",
+          boxShadow: state === "active" ? "0 0 20px -6px rgba(251,134,18,0.5)" : "0 0 0 transparent",
         }}
         transition={{ duration: 0.35 }}
       >
@@ -488,7 +488,7 @@ function MobileLoopLink({
           {state === "active" && !reduceMotion && (
             <motion.span
               key="loop-dot"
-              className="size-1.5 rounded-full bg-teal-300 shadow-[0_0_8px_rgba(45,212,191,0.9)]"
+              className="size-1.5 rounded-full bg-teal-300 shadow-[0_0_8px_rgba(251,134,18,0.9)]"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: [0.4, 1, 0.4], scale: [0.9, 1.15, 0.9] }}
               exit={{ opacity: 0 }}

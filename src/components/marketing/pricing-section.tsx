@@ -99,7 +99,7 @@ export function PricingSection({ compact = false }: { compact?: boolean }) {
                   <>
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[radial-gradient(ellipse_at_top,rgba(45,212,191,0.28),transparent_70%)]"
+                      className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[radial-gradient(ellipse_at_top,rgba(251,134,18,0.28),transparent_70%)]"
                     />
                     <p className="relative mb-4 inline-flex w-fit items-center rounded-full bg-teal-400/15 px-2.5 py-1 text-[11px] font-bold tracking-[0.14em] text-teal-300 uppercase ring-1 ring-teal-400/25">
                       Most popular
