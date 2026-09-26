@@ -297,7 +297,7 @@ export function Navbar() {
             <button
               type="button"
               className={cn(
-                "inline-flex size-9 items-center justify-center rounded-md border transition-colors lg:hidden",
+                "inline-flex size-9 cursor-pointer items-center justify-center rounded-md border transition-colors lg:hidden",
                 light
                   ? "border-slate-200 text-slate-800 hover:bg-slate-100"
                   : "border-white/15 text-white hover:bg-white/10"

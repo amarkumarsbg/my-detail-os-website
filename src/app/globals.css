@@ -131,6 +131,18 @@ select:-webkit-autofill {
     @apply bg-background text-foreground;
     overflow-x: clip;
   }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  input[type="submit"]:not(:disabled),
+  input[type="button"]:not(:disabled),
+  input[type="reset"]:not(:disabled) {
+    cursor: pointer;
+  }
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  input:disabled {
+    cursor: not-allowed;
+  }
   h1,
   h2,
   h3,
