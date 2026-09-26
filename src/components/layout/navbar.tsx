@@ -260,12 +260,22 @@ export function Navbar() {
 
         {/* Right Segment: Actions */}
         <div className={cn(pillClass, "h-11 shrink-0 gap-1 px-1.5 sm:h-14 sm:gap-2 sm:px-2")}>
-          <Link href="/login" className="hidden lg:block">
+          <Link
+            href="/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden lg:block"
+          >
             <Button variant="ghost" size="sm" className="h-10 rounded-full px-5 font-medium text-slate-700 hover:bg-slate-100/50 hover:text-slate-950">
               Login
             </Button>
           </Link>
-          <Link href="/signup" className="hidden sm:block">
+          <Link
+            href="/signup"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:block"
+          >
             <Button size="sm" className="h-10 rounded-full bg-teal-600 px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-500">
               Start Free Trial
             </Button>
@@ -374,7 +384,12 @@ export function Navbar() {
             </div>
 
             <div className="mt-4 flex shrink-0 flex-col gap-3 border-t border-slate-100 pt-5">
-              <Link href="/login" onClick={closeMenu}>
+              <Link
+                href="/login"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={closeMenu}
+              >
                 <Button
                   variant="outline"
                   className="h-12 w-full rounded-2xl border-slate-200 text-base font-semibold text-slate-800 hover:bg-slate-50"
@@ -383,7 +398,12 @@ export function Navbar() {
                   Login
                 </Button>
               </Link>
-              <Link href="/signup" onClick={closeMenu}>
+              <Link
+                href="/signup"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={closeMenu}
+              >
                 <Button
                   className="h-12 w-full rounded-2xl bg-teal-600 text-base font-semibold text-white hover:bg-teal-500"
                   size="lg"

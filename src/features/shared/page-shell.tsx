@@ -29,7 +29,7 @@ export function PageShell({
             Start a free trial or review plans for your workshop size.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/signup">
+            <Link href="/signup" target="_blank" rel="noopener noreferrer">
               <Button className="btn-marketing">Start Free Trial</Button>
             </Link>
             <Link href="/pricing">

@@ -83,7 +83,13 @@ export function PricingSection({ compact = false }: { compact?: boolean }) {
                     </li>
                   ))}
                 </ul>
-                <Link href={plan.ctaHref} className="mt-6">
+                <Link
+                  href={plan.ctaHref}
+                  className="mt-6"
+                  {...(plan.ctaHref === "/signup" || plan.ctaHref === "/login"
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
                   <Button
                     variant={plan.highlighted ? "default" : "outline"}
                     className="btn-marketing w-full"

@@ -49,7 +49,12 @@ export function HeroSection() {
             
             <StaggerItem>
               <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 px-1 sm:mt-10 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-5 sm:px-0">
-                <Link href="/signup" className="w-full sm:w-auto">
+                <Link
+                  href="/signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto"
+                >
                   <Button size="lg" className="btn-marketing group h-12 w-full rounded-full px-6 text-base font-semibold shadow-xl transition-all hover:scale-105 animate-float sm:h-14 sm:px-8 sm:text-lg">
                     Start Free Trial
                     <ArrowRight className="ml-2 size-5 transition-transform duration-300 group-hover:translate-x-1.5" />

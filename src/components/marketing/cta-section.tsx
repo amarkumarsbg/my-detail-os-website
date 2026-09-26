@@ -48,7 +48,12 @@ export function CtaSection({
           {description}
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4 relative z-10">
-          <Link href={primaryHref}>
+          <Link
+            href={primaryHref}
+            {...(primaryHref === "/signup" || primaryHref === "/login"
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
+          >
             <Button size="lg" className="rounded-full bg-teal-500 px-8 py-6 text-base font-semibold text-white transition-all hover:bg-teal-400 hover:shadow-[0_0_20px_rgba(20,184,166,0.4)] border border-teal-400/50">
               {primaryLabel}
               <ArrowRight className="ml-2 size-5" />
