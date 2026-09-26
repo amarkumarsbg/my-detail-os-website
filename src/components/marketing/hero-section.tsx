@@ -288,15 +288,16 @@ export function HeroSection() {
             >
               <X className="size-5" />
             </button>
-            <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+            <video
+              className="size-full object-contain bg-black"
+              src="/videos/demo.mp4"
+              controls
+              autoPlay
+              playsInline
+              preload="metadata"
+            >
+              Your browser does not support the demo video.
+            </video>
           </div>
         </div>
       )}

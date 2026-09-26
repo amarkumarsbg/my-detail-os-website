@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { submitContactPublic } from "@/services/contact";
 import { mapApiError } from "@/lib/error-messages";
@@ -19,6 +19,12 @@ export function ContactForm() {
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!status) return;
+    const id = window.setTimeout(() => setStatus(null), 4000);
+    return () => window.clearTimeout(id);
+  }, [status]);
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
@@ -34,6 +40,11 @@ export function ContactForm() {
         message: message.trim(),
       });
       setStatus(result.message);
+      setName("");
+      setBusinessName("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
     } catch (err) {
       setError(mapApiError(err));
     } finally {
@@ -41,50 +52,98 @@ export function ContactForm() {
     }
   }
 
+  function clearFeedback() {
+    if (status) setStatus(null);
+    if (error) setError(null);
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-teal-900/10 bg-white/90 p-6 shadow-lg shadow-teal-900/5 backdrop-blur-sm sm:p-8">
-      <div className="grid gap-x-4 sm:grid-cols-2">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 rounded-2xl border border-teal-900/10 bg-white/90 p-7 shadow-lg shadow-teal-900/5 backdrop-blur-sm sm:space-y-7 sm:p-9"
+    >
+      <div className="grid gap-x-5 gap-y-5 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-6">
         <div>
-          <FloatingInput id="name" label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <FloatingInput
+            id="name"
+            label="Name"
+            value={name}
+            onChange={(e) => {
+              clearFeedback();
+              setName(e.target.value);
+            }}
+            required
+            className="rounded-md"
+          />
         </div>
         <div>
           <FloatingInput
             id="businessName"
             label="Business Name"
             value={businessName}
-            onChange={(e) => setBusinessName(e.target.value)}
+            onChange={(e) => {
+              clearFeedback();
+              setBusinessName(e.target.value);
+            }}
             required
+            className="rounded-md"
           />
         </div>
         <div>
-          <FloatingInput id="email" type="email" label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <FloatingInput
+            id="email"
+            type="email"
+            label="Email"
+            value={email}
+            onChange={(e) => {
+              clearFeedback();
+              setEmail(e.target.value);
+            }}
+            required
+            className="rounded-md"
+          />
         </div>
         <div>
-          <FloatingInput id="phone" label="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+          <FloatingInput
+            id="phone"
+            label="Phone"
+            value={phone}
+            onChange={(e) => {
+              clearFeedback();
+              setPhone(e.target.value);
+            }}
+            required
+            className="rounded-md"
+          />
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2.5 pt-1">
         <Label htmlFor="message">Message</Label>
         <textarea
           id="message"
-          className="min-h-28 w-full rounded-xl border border-input bg-white px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="min-h-32 w-full rounded-md border border-input bg-white px-3.5 py-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => {
+            clearFeedback();
+            setMessage(e.target.value);
+          }}
           required
         />
       </div>
 
-      <Button type="submit" size="lg" disabled={isLoading} className="w-full sm:w-auto">
-        {isLoading ? (
-          <>
-            <Loader2 className="size-4 animate-spin" />
-            Sending message...
-          </>
-        ) : (
-          "Submit"
-        )}
-      </Button>
+      <div className="pt-1">
+        <Button type="submit" size="lg" disabled={isLoading} className="w-full rounded-md sm:w-auto">
+          {isLoading ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              Sending message...
+            </>
+          ) : (
+            "Submit"
+          )}
+        </Button>
+      </div>
 
       {error && (
         <Alert tone="error">
