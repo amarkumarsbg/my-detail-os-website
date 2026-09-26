@@ -233,23 +233,39 @@ export function Navbar() {
             };
 
             return (
-              <div key={item.href} className="relative flex items-center h-full">
+              <div
+                key={item.href}
+                className="relative flex h-full items-center"
+                onMouseEnter={() =>
+                  item.megaMenu ? handleMouseEnter(item.label) : handleMouseEnter("")
+                }
+                onMouseLeave={handleMouseLeave}
+              >
                 <Link
                   href={item.href}
                   onClick={handleClick}
-                  onMouseEnter={() => item.megaMenu ? handleMouseEnter(item.label) : handleMouseEnter('')}
-                  onMouseLeave={handleMouseLeave}
                   className={cn(
-                    "text-sm font-medium transition-all duration-200 relative py-2 flex items-center gap-1",
-                    active ? "text-teal-700" : "text-slate-600 hover:text-slate-950"
+                    "relative flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200",
+                    hoveredNav === item.label && item.megaMenu
+                      ? "bg-slate-100 text-slate-950"
+                      : active
+                        ? "text-teal-700"
+                        : "text-slate-600 hover:text-slate-950"
                   )}
                 >
                   {item.label}
-                  {item.megaMenu && <ChevronDown className="size-3.5 opacity-60" />}
-                  {active && (
-                    <motion.div 
+                  {item.megaMenu && (
+                    <ChevronDown
+                      className={cn(
+                        "size-3.5 opacity-60 transition-transform duration-200",
+                        hoveredNav === item.label && "rotate-180"
+                      )}
+                    />
+                  )}
+                  {active && hoveredNav !== item.label && (
+                    <motion.div
                       layoutId="navbar-indicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600 rounded-full" 
+                      className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-teal-600"
                     />
                   )}
                 </Link>
@@ -297,38 +313,87 @@ export function Navbar() {
 
       {/* Mega Menu Dropdown */}
       <AnimatePresence>
-        {hoveredNav && primaryNav.find(i => i.label === hoveredNav)?.megaMenu && (
+        {hoveredNav && primaryNav.find((i) => i.label === hoveredNav)?.megaMenu && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute left-0 right-0 top-[calc(100%+0.5rem)] pointer-events-auto shadow-xl rounded-3xl bg-white border border-slate-200 overflow-hidden hidden lg:block"
+            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={{ duration: 0.18, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="pointer-events-auto absolute left-0 right-0 top-[calc(100%+0.65rem)] hidden overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)] lg:block"
             onMouseEnter={() => handleMouseEnter(hoveredNav)}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="p-8 flex gap-8 justify-between max-w-7xl mx-auto">
-              {primaryNav.find(i => i.label === hoveredNav)!.megaMenu!.map(column => (
-                <div key={column.title} className="flex-1">
-                  <h4 className="text-[12px] font-bold tracking-wider text-slate-900 uppercase mb-4 pb-2 border-b border-slate-100">
-                    {column.title}
-                  </h4>
-                  <ul className="space-y-3">
-                    {column.items.map(link => (
-                      <li key={link.label}>
-                         <Link 
-                           href={link.href} 
-                           className="text-[13px] text-slate-500 font-medium hover:text-teal-600 transition-all hover:translate-x-1 flex items-center"
-                           onClick={() => setHoveredNav(null)}
-                         >
-                           {link.label}
-                         </Link>
-                      </li>
-                    ))}
-                  </ul>
+            {(() => {
+              const activeItem = primaryNav.find((i) => i.label === hoveredNav)!;
+              const columns = activeItem.megaMenu!;
+              const isRich =
+                activeItem.megaMenuLayout === "rich" ||
+                columns.some((col) => col.items.some((link) => link.description));
+
+              if (isRich) {
+                const links = columns.flatMap((col) => col.items);
+                return (
+                  <div className="mx-auto max-w-7xl p-5 sm:p-6">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                      {links.map((link) => {
+                        const Icon = link.icon;
+                        return (
+                          <Link
+                            key={`${link.href}-${link.label}`}
+                            href={link.href}
+                            onClick={() => setHoveredNav(null)}
+                            className="group flex items-start gap-3 rounded-2xl p-3 transition-colors hover:bg-slate-50"
+                          >
+                            <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700 ring-1 ring-teal-600/10 transition-colors group-hover:bg-teal-100">
+                              {Icon ? (
+                                <Icon className="size-5" aria-hidden />
+                              ) : (
+                                <span className="size-2 rounded-full bg-teal-500" />
+                              )}
+                            </span>
+                            <span className="min-w-0">
+                              <span className="block text-sm font-semibold text-slate-900 group-hover:text-teal-800">
+                                {link.label}
+                              </span>
+                              {link.description ? (
+                                <span className="mt-0.5 block text-[13px] leading-snug text-slate-500 line-clamp-2">
+                                  {link.description}
+                                </span>
+                              ) : null}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <div className="mx-auto flex max-w-7xl justify-between gap-8 p-8">
+                  {columns.map((column) => (
+                    <div key={column.title} className="flex-1">
+                      <h4 className="mb-4 border-b border-slate-100 pb-2 text-[12px] font-bold tracking-wider text-slate-900 uppercase">
+                        {column.title}
+                      </h4>
+                      <ul className="space-y-3">
+                        {column.items.map((link) => (
+                          <li key={link.label}>
+                            <Link
+                              href={link.href}
+                              className="flex items-center text-[13px] font-medium text-slate-500 transition-all hover:translate-x-1 hover:text-teal-600"
+                              onClick={() => setHoveredNav(null)}
+                            >
+                              {link.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              );
+            })()}
           </motion.div>
         )}
       </AnimatePresence>
@@ -363,6 +428,60 @@ export function Navbar() {
                   if (isHash && activeHash === item.href.replace("/", "")) active = true;
                 } else {
                   active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                }
+
+                if (item.megaMenu?.length) {
+                  const links = item.megaMenu.flatMap((col) => col.items);
+                  const isRich =
+                    item.megaMenuLayout === "rich" ||
+                    links.some((link) => link.description);
+                  return (
+                    <details key={item.href} className="group rounded-2xl">
+                      <summary
+                        className={cn(
+                          "flex min-h-12 cursor-pointer list-none items-center justify-between rounded-2xl px-4 text-base font-semibold transition-colors marker:content-none [&::-webkit-details-marker]:hidden",
+                          active
+                            ? "bg-teal-50 text-teal-700"
+                            : "text-slate-800 active:bg-slate-50"
+                        )}
+                      >
+                        {item.label}
+                        <ChevronDown className="size-4 opacity-50 transition-transform group-open:rotate-180" />
+                      </summary>
+                      <div className="mt-1 space-y-1 pb-2 pl-2">
+                        {links.map((link) => {
+                          const Icon = link.icon;
+                          return (
+                            <Link
+                              key={`${link.href}-${link.label}`}
+                              href={link.href}
+                              onClick={closeMenu}
+                              className={cn(
+                                "flex rounded-xl px-3 py-2.5 transition-colors active:bg-slate-50",
+                                isRich ? "items-start gap-3" : "items-center"
+                              )}
+                            >
+                              {isRich && (
+                                <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
+                                  {Icon ? <Icon className="size-4" aria-hidden /> : null}
+                                </span>
+                              )}
+                              <span>
+                                <span className="block text-sm font-semibold text-slate-800">
+                                  {link.label}
+                                </span>
+                                {link.description ? (
+                                  <span className="mt-0.5 block text-xs leading-snug text-slate-500">
+                                    {link.description}
+                                  </span>
+                                ) : null}
+                              </span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </details>
+                  );
                 }
 
                 return (

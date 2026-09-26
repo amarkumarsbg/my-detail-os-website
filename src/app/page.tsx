@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/marketing/hero-section";
+import { FeatureMarquee } from "@/components/marketing/feature-marquee";
 import { TrustStrip } from "@/components/marketing/trust-strip";
 import { WorkshopTypes } from "@/components/marketing/workshop-types";
 import { ProblemSection } from "@/components/marketing/problem-section";
@@ -17,6 +18,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+      <FeatureMarquee />
       <TrustStrip />
       <WorkshopTypes />
       <ProblemSection />

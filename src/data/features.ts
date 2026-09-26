@@ -114,14 +114,42 @@ export const featureGroups: FeatureGroup[] = [
 ];
 
 export const problemItems = [
-  "Paper-based job tracking",
-  "Scattered customer data",
-  "Manual billing",
-  "Inventory confusion",
-  "No service history visibility",
-  "Poor customer communication",
-  "Difficult staff tracking",
-];
+  {
+    title: "Paper-based job tracking",
+    description: "Job status lives in notebooks and sticky notes that never stay current.",
+    icon: "clipboard",
+  },
+  {
+    title: "Scattered customer data",
+    description: "Phone numbers, vehicles, and history spread across chats and spreadsheets.",
+    icon: "users",
+  },
+  {
+    title: "Manual billing",
+    description: "Invoices take too long and payment follow-ups get missed.",
+    icon: "receipt",
+  },
+  {
+    title: "Inventory confusion",
+    description: "Parts stock, purchases, and counter sales stay disconnected from jobs.",
+    icon: "package",
+  },
+  {
+    title: "No service history visibility",
+    description: "Teams guess past work instead of seeing a clear vehicle timeline.",
+    icon: "history",
+  },
+  {
+    title: "Poor customer communication",
+    description: "Updates rely on ad-hoc calls and WhatsApp threads that get lost.",
+    icon: "message",
+  },
+  {
+    title: "Difficult staff tracking",
+    description: "Attendance, roles, and ownership of jobs stay hard to manage.",
+    icon: "staff",
+  },
+] as const;
 
 export const whyPoints: FeatureItem[] = [
   {
