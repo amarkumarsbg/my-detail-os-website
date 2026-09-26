@@ -71,7 +71,7 @@ export function CtaSection({
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-none border-white/35 bg-transparent px-8 py-6 text-sm font-semibold tracking-wide text-white uppercase hover:bg-white/10"
+                className="rounded-none border-white/35 bg-transparent px-8 py-6 text-sm font-semibold tracking-wide text-white uppercase hover:border-white/55 hover:bg-white/10 hover:text-white"
               >
                 {secondaryLabel}
               </Button>
