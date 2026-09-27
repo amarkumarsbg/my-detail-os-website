@@ -1,6 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { SignupForm } from "@/features/auth/signup-form";
 
+jest.mock("next/navigation", () => ({
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 describe("signup form", () => {
   it("validates password confirmation and shows requirements", async () => {
     render(<SignupForm />);

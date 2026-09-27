@@ -2,6 +2,7 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { signupPublic } from "@/services/signup";
 import { mapApiError } from "@/lib/error-messages";
 import { workshopAppLoginUrl } from "@/config/site";
@@ -22,7 +23,19 @@ function validatePassword(password: string): string | null {
   return null;
 }
 
+function normalizePlanCode(raw: string | null): string | undefined {
+  if (!raw) return undefined;
+  const code = raw.trim().toUpperCase().replace(/[\s-]+/g, "_");
+  if (!code || code.length < 2 || code.length > 24) return undefined;
+  return code;
+}
+
 export function SignupForm() {
+  const searchParams = useSearchParams();
+  const planCode = useMemo(
+    () => normalizePlanCode(searchParams.get("plan") ?? searchParams.get("planCode")),
+    [searchParams]
+  );
   const [businessName, setBusinessName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [email, setEmail] = useState("");
@@ -72,6 +85,7 @@ export function SignupForm() {
         phone: phoneDigits.slice(-10),
         password,
         branchName: branchName.trim() || "HQ",
+        ...(planCode ? { planCode } : {}),
       });
 
       setSession(result.user, result.accessToken);

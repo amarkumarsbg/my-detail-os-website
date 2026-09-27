@@ -113,7 +113,7 @@ export function mapPublicPlansToCards(res: PublicPlansResponse): PricingPlan[] {
         ],
         highlighted: p.planCode === "GROWTH" || index === 1,
         ctaLabel: isCustomPriced ? "Contact Sales" : "Start Free Trial",
-        ctaHref: isCustomPriced ? "/contact" : "/signup",
+        ctaHref: isCustomPriced ? "/contact" : `/signup?plan=${encodeURIComponent(p.planCode)}`,
         planCode: p.planCode,
       };
     });

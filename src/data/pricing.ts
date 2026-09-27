@@ -40,7 +40,8 @@ export const pricingPlans: PricingPlan[] = [
       "Email support",
     ],
     ctaLabel: "Start Free Trial",
-    ctaHref: "/signup",
+    ctaHref: "/signup?plan=STARTER",
+    planCode: "STARTER",
   },
   {
     id: "growth",
@@ -61,7 +62,8 @@ export const pricingPlans: PricingPlan[] = [
     ],
     highlighted: true,
     ctaLabel: "Start Free Trial",
-    ctaHref: "/signup",
+    ctaHref: "/signup?plan=GROWTH",
+    planCode: "GROWTH",
   },
   {
     id: "business",
@@ -81,7 +83,8 @@ export const pricingPlans: PricingPlan[] = [
       "Activity tracking",
     ],
     ctaLabel: "Start Free Trial",
-    ctaHref: "/signup",
+    ctaHref: "/signup?plan=BUSINESS",
+    planCode: "BUSINESS",
   },
   {
     id: "enterprise",

@@ -89,6 +89,8 @@ export interface SignupInput {
   password: string;
   branchName?: string;
   referralCode?: string;
+  /** Optional plan from pricing CTA (?plan=GROWTH). Defaults to STARTER on API. */
+  planCode?: string;
 }
 
 export interface SignupResult {

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SignupForm } from "@/features/auth/signup-form";
 import { AuthPageShell } from "@/features/auth/auth-page-shell";
@@ -45,7 +46,9 @@ export default async function SignupPage() {
       description={`Get started with a ${trialDays}-day premium trial`}
       wide
     >
-      <SignupForm />
+      <Suspense fallback={<div className="h-40 animate-pulse rounded-xl bg-slate-100" />}>
+        <SignupForm />
+      </Suspense>
     </AuthPageShell>
   );
 }

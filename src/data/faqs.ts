@@ -12,7 +12,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Can I try it before purchasing?",
     answer:
-      "Yes. You can start a free trial from the website. Trial access and entitlement rules will be finalized when backend onboarding is connected.",
+      "Yes. Click Start Free Trial on the website to create your workshop organization. You get a time-limited trial on your chosen plan’s limits, then convert to a paid subscription when you’re ready.",
   },
   {
     question: "How many staff members can use it?",
