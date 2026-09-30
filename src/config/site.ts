@@ -98,7 +98,8 @@ export function tenantWorkshopPath(orgSlug: string | null | undefined, path: str
 
 /**
  * Redirect target after successful workshop owner login/signup.
- * Prefer tenant-aware URLs: /{slug}/login#accessToken=…&next=/{slug}/dashboard
+ * Lands on the destination route with a hash token (one workshop page load):
+ * `/{slug}/dashboard#accessToken=…`
  */
 export function workshopAppLoginUrl(opts?: {
   accessToken?: string;
@@ -116,9 +117,9 @@ export function workshopAppLoginUrl(opts?: {
     return `${base}${loginPath}`;
   }
   // Put token in the hash so it is not sent to the workshop host in request logs.
+  // Land on the destination page directly (skip /login hop).
   const params = new URLSearchParams({
     accessToken: opts.accessToken,
-    next,
   });
-  return `${base}${loginPath}#${params.toString()}`;
+  return `${base}${next}#${params.toString()}`;
 }

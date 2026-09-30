@@ -20,12 +20,12 @@ describe("normalizePublicOrigin", () => {
 });
 
 describe("workshopAppLoginUrl", () => {
-  it("builds an absolute handoff URL with hash token", () => {
+  it("builds an absolute handoff URL onto the destination with hash token", () => {
     const url = workshopAppLoginUrl({ accessToken: "tok", next: "/dashboard" });
     expect(url).toMatch(/^https?:\/\//);
-    expect(url).toContain("/login#");
+    expect(url).toContain("/dashboard#");
     expect(url).toContain("accessToken=tok");
-    expect(url).toContain("next=%2Fdashboard");
+    expect(url).not.toContain("/login#");
   });
 
   it("prefixes organization slug for tenant handoff", () => {
@@ -34,7 +34,8 @@ describe("workshopAppLoginUrl", () => {
       next: "/dashboard",
       orgSlug: "abcd-detailers",
     });
-    expect(url).toContain("/abcd-detailers/login#");
-    expect(url).toContain("next=%2Fabcd-detailers%2Fdashboard");
+    expect(url).toContain("/abcd-detailers/dashboard#");
+    expect(url).toContain("accessToken=tok");
+    expect(url).not.toContain("/login#");
   });
 });
