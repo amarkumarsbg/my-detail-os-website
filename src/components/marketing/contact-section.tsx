@@ -25,7 +25,7 @@ const contactChannels = [
 
 export function ContactSection() {
   return (
-    <section className="contact-panel relative overflow-hidden py-20 sm:py-24">
+    <section className="contact-panel relative overflow-hidden py-10 sm:py-14 lg:py-16">
       <div aria-hidden className="contact-panel__glow" />
       <div aria-hidden className="contact-panel__streaks" />
 
@@ -47,7 +47,7 @@ export function ContactSection() {
           </p>
         </FadeIn>
 
-        <div className="mx-auto mt-12 max-w-xl sm:mt-16 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-12">
+        <div className="mx-auto mt-10 max-w-xl sm:mt-12 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-12">
           <FadeIn>
             <ContactForm />
           </FadeIn>

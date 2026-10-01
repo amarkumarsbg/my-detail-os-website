@@ -19,7 +19,13 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden">
       <Navbar />
-      <main className={hasNoTopPadding ? "flex-1" : "flex-1 pt-14 sm:pt-16"}>
+      <main
+        className={
+          hasNoTopPadding
+            ? "flex-1"
+            : "flex-1 pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-[calc(4rem+env(safe-area-inset-top))]"
+        }
+      >
         {children}
       </main>
       {!isAuthPage && <Footer />}

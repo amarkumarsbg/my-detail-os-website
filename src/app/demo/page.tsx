@@ -25,9 +25,14 @@ export default function DemoPage() {
           <Link href="/contact">
             <Button className="btn-marketing">Talk to Sales</Button>
           </Link>
-          <Link href="/signup">
-            <Button variant="outline" className="btn-marketing">
-              Start Free Trial
+          <Link href="/signup" target="_blank" rel="noopener noreferrer">
+            <Button className="trial-cta btn-marketing group bg-teal-600 text-white hover:bg-teal-500">
+              <span className="inline-flex items-center gap-1.5">
+                Start Free Trial
+                <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">
+                  →
+                </span>
+              </span>
             </Button>
           </Link>
         </div>

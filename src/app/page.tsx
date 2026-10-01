@@ -13,6 +13,9 @@ import { FaqSection } from "@/components/marketing/faq-section";
 import { CtaSection } from "@/components/marketing/cta-section";
 import { ContactSection } from "@/components/marketing/contact-section";
 
+const sectionAnchor =
+  "scroll-mt-[calc(3.5rem+env(safe-area-inset-top)+0.5rem)] sm:scroll-mt-[calc(4rem+env(safe-area-inset-top)+0.5rem)]";
+
 export default function Home() {
   return (
     <>
@@ -21,22 +24,22 @@ export default function Home() {
       <WorkshopTypes />
       <ProblemSection />
 
-      <div id="solutions">
+      <div id="solutions" className={sectionAnchor}>
         <SolutionSection />
       </div>
 
-      <div id="features">
+      <div id="features" className={sectionAnchor}>
         <ProductShowcase />
       </div>
 
       <MobileSection />
 
-      <div id="about">
+      <div id="about" className={sectionAnchor}>
         <WhySection />
         <HowItWorksSection />
       </div>
 
-      <div id="pricing">
+      <div id="pricing" className={sectionAnchor}>
         <PricingSection />
       </div>
 
@@ -49,7 +52,7 @@ export default function Home() {
       <TestimonialsSection />
       <FaqSection />
 
-      <div id="contact">
+      <div id="contact" className={sectionAnchor}>
         <ContactSection />
       </div>
     </>

@@ -66,7 +66,7 @@ function WorkshopIconFace({
 
 export function WorkshopTypes() {
   return (
-    <section className="bg-white py-24 sm:py-32">
+    <section className="bg-white py-14 sm:py-20 lg:py-24">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeIn className="mx-auto max-w-3xl text-center">
           <h2 className="text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
@@ -76,12 +76,12 @@ export function WorkshopTypes() {
               <span className="absolute -bottom-1 right-0 left-0 h-1 bg-teal-500" />
             </span>
           </h2>
-          <p className="mt-4 text-lg text-slate-600">
+          <p className="mt-3 text-base text-slate-600 sm:mt-4 sm:text-lg">
             Choose the solution designed specifically for your garage business model.
           </p>
         </FadeIn>
 
-        <div className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 md:grid-cols-5 md:gap-y-12">
+        <div className="mx-auto mt-10 grid max-w-5xl grid-cols-2 gap-x-4 gap-y-8 sm:mt-12 sm:grid-cols-3 sm:gap-y-10 md:grid-cols-5 md:gap-y-12">
           {workshopTypes.map((type) => {
             const Icon = type.icon;
             return (

@@ -225,7 +225,7 @@ export function LoginForm() {
             <div className="flex justify-end">
               <Link
                 href="/forgot-password"
-                className="text-xs font-semibold text-teal-700 hover:text-teal-600"
+                className="inline-flex min-h-10 items-center text-sm font-semibold text-teal-700 hover:text-teal-600"
               >
                 Forgot Password?
               </Link>
@@ -304,7 +304,7 @@ export function LoginForm() {
                     type="button"
                     onClick={() => void handleSendOtp()}
                     disabled={isLoading || isRedirecting}
-                    className="text-xs font-semibold text-teal-700 hover:text-teal-600 disabled:opacity-50"
+                    className="inline-flex min-h-10 items-center text-sm font-semibold text-teal-700 hover:text-teal-600 disabled:opacity-50"
                   >
                     Resend OTP
                   </button>

@@ -20,6 +20,7 @@ export interface FeatureItem {
   title: string;
   description: string;
   icon: LucideIcon;
+  href?: string;
 }
 
 export interface FeatureGroup {
@@ -42,41 +43,49 @@ export const solutionFeatures: FeatureItem[] = [
     title: "Workshop Management",
     description: "Run job cards, inspections, assignments, and delivery from one operational workflow.",
     icon: ClipboardList,
+    href: "/features/workshop-management",
   },
   {
     title: "Customer Portal",
     description: "Give customers self-service access to job status, history, invoices, and rewards.",
     icon: LayoutDashboard,
+    href: "/features/customers",
   },
   {
     title: "Billing",
     description: "Create invoices, track payments, and keep workshop finances connected to jobs.",
     icon: Receipt,
+    href: "/features/billing",
   },
   {
     title: "Inventory",
     description: "Control parts, purchases, stock levels, and counter sales without spreadsheet chaos.",
     icon: Package,
+    href: "/features/inventory-hub",
   },
   {
     title: "Staff",
     description: "Manage team access, roles, and day-to-day staff operations across your workshop.",
     icon: UserCog,
+    href: "/features/users-staff",
   },
   {
     title: "Rewards",
     description: "Support membership and rewards programs where enabled for returning customers.",
     icon: Gift,
+    href: "/features/membership",
   },
   {
     title: "Reports",
     description: "See revenue, operations, and performance signals that help you run the business.",
     icon: BarChart3,
+    href: "/features/analytics",
   },
   {
     title: "Messaging",
     description: "Keep customers informed with status updates and clearer service communication.",
     icon: MessageSquare,
+    href: "/features/messages-log",
   },
 ];
 

@@ -202,11 +202,11 @@ export function HeroSection() {
 
   return (
     <>
-      <section className="relative isolate -mt-14 flex min-h-[100svh] flex-col overflow-x-hidden bg-slate-950 sm:-mt-16">
+      <section className="relative isolate -mt-[calc(3.5rem+env(safe-area-inset-top))] flex min-h-[100svh] flex-col overflow-x-hidden bg-slate-950 sm:-mt-[calc(4rem+env(safe-area-inset-top))]">
         <div className="relative flex min-h-0 flex-1 flex-col">
           <HeroBackgroundCarousel active={activeSlide} />
 
-          <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-5 pt-28 pb-8 sm:px-6 sm:pt-32 sm:pb-10 lg:px-8 lg:pt-36 lg:pb-12">
+          <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-5 pt-20 pb-5 sm:justify-center sm:px-6 sm:pt-28 sm:pb-10 lg:px-8 lg:pt-36 lg:pb-12">
             <div className="max-w-xl text-left lg:max-w-2xl">
               <FadeIn direction="none" duration={0.4}>
                 <p className="text-[11px] font-semibold tracking-[0.14em] text-teal-400 uppercase drop-shadow-sm sm:text-xs">
@@ -216,21 +216,21 @@ export function HeroSection() {
 
               <AnimatedHeadline />
 
-              <div className="mt-5 max-w-lg sm:mt-6" aria-live="polite">
+              <div className="mt-4 max-w-lg sm:mt-6" aria-live="polite">
                 <p key={slide.feature} className="text-sm font-semibold text-teal-300 sm:text-base">
                   {slide.feature}
                 </p>
-                <p key={slide.blurb} className="mt-1.5 text-pretty text-[15px] leading-6 text-slate-300 sm:text-lg sm:leading-7">
+                <p key={slide.blurb} className="mt-1 text-pretty text-[15px] leading-6 text-slate-300 sm:mt-1.5 sm:text-lg sm:leading-7">
                   {slide.blurb}
                 </p>
               </div>
 
-              <FadeIn delay={0.15} className="mt-8 sm:mt-10">
-                <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+              <FadeIn delay={0.15} className="mt-5 sm:mt-10">
+                <div className="flex w-full flex-col items-stretch gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
                   <Link href="/signup" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-auto">
                     <Button
                       size="lg"
-                      className="hero-cta hero-cta--primary btn-marketing group relative h-12 w-full overflow-hidden rounded-full px-6 text-base font-semibold shadow-xl transition-transform duration-300 hover:scale-[1.04] sm:h-14 sm:px-8 sm:text-lg"
+                      className="hero-cta hero-cta--primary trial-cta btn-marketing group relative h-12 w-full overflow-hidden rounded-full px-6 text-base font-semibold shadow-xl transition-transform duration-300 hover:scale-[1.04] sm:h-14 sm:px-8 sm:text-lg"
                     >
                       <span className="relative z-10 inline-flex items-center">
                         Start Free Trial

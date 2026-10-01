@@ -1,6 +1,22 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { Navbar } from "@/components/layout/navbar";
 
+beforeAll(() => {
+  class IntersectionObserverMock {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return [];
+    }
+  }
+  Object.defineProperty(window, "IntersectionObserver", {
+    writable: true,
+    configurable: true,
+    value: IntersectionObserverMock,
+  });
+});
+
 describe("mobile navigation", () => {
   it("opens menu when hamburger is clicked", () => {
     render(<Navbar />);
@@ -9,6 +25,7 @@ describe("mobile navigation", () => {
     fireEvent.click(toggle);
 
     expect(screen.getByRole("button", { name: /^features$/i })).toBeTruthy();
+    // Trial CTA lives in the drawer on phones (header CTA is lg+)
     expect(screen.getAllByRole("link", { name: /start free trial/i }).length).toBeGreaterThan(0);
   });
 

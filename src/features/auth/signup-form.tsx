@@ -248,10 +248,12 @@ export function SignupForm() {
         type="submit"
         size="lg"
         disabled={isRedirecting || passwordMismatch}
-        className="mt-0.5 h-11 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700 sm:mt-1 sm:h-12"
+        className="trial-cta mt-0.5 h-11 w-full rounded-xl bg-teal-600 text-base font-semibold text-white hover:bg-teal-500 sm:mt-1 sm:h-12"
       >
-        <span className="sm:hidden">Start Free Trial</span>
-        <span className="hidden sm:inline">Sign Up & Start Free Trial</span>
+        <span className="inline-flex items-center justify-center gap-2">
+          <span className="sm:hidden">Start Free Trial</span>
+          <span className="hidden sm:inline">Sign Up & Start Free Trial</span>
+        </span>
       </Button>
 
       <p className="text-center text-sm text-slate-600">

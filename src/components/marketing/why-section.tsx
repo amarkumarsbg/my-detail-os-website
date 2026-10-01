@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const GALLERY = [
@@ -53,32 +53,73 @@ const REASONS = [
   },
 ] as const;
 
-const INTERVAL_MS = 4200;
+const GALLERY_MS = 4200;
+const REASON_MS = 3400;
+const ENTRANCE_MS = 1100;
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
+const listVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.32,
+      delayChildren: 0.12,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: EASE_OUT },
+  },
+};
 
 /** Split “Why Choose Us” — auto-scrolling studio gallery + numbered reasons. */
 export function WhySection() {
   const reduceMotion = useReducedMotion();
   const [active, setActive] = useState(0);
+  const [activeReason, setActiveReason] = useState(0);
   const [hovered, setHovered] = useState<number | null>(null);
+  const [cycleReady, setCycleReady] = useState(false);
 
   useEffect(() => {
     if (reduceMotion) return;
     const id = window.setInterval(() => {
       setActive((prev) => (prev + 1) % GALLERY.length);
-    }, INTERVAL_MS);
+    }, GALLERY_MS);
     return () => window.clearInterval(id);
   }, [reduceMotion]);
+
+  // Wait for 01 → 02 → 03 entrance, then start highlight cycle
+  useEffect(() => {
+    if (reduceMotion) {
+      setCycleReady(true);
+      return;
+    }
+    const id = window.setTimeout(() => setCycleReady(true), ENTRANCE_MS);
+    return () => window.clearTimeout(id);
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    if (reduceMotion || hovered !== null || !cycleReady) return;
+    const id = window.setInterval(() => {
+      setActiveReason((prev) => (prev + 1) % REASONS.length);
+    }, REASON_MS);
+    return () => window.clearInterval(id);
+  }, [reduceMotion, hovered, cycleReady]);
 
   return (
     <section className="overflow-hidden bg-white">
       <div className="grid lg:grid-cols-2">
-        {/* Auto-scrolling studio gallery */}
         <div className="relative min-h-[320px] overflow-hidden sm:min-h-[420px] lg:min-h-[560px]">
           {GALLERY.map((image, index) => (
             <div
               key={image.src}
               className={cn(
-                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+                "absolute inset-0 transition-opacity duration-[1400ms] ease-in-out",
                 index === active ? "opacity-100" : "opacity-0"
               )}
               aria-hidden={index !== active}
@@ -99,8 +140,7 @@ export function WhySection() {
           ))}
         </div>
 
-        {/* Reasons panel — light studio surface with paint-reflection streaks */}
-        <div className="why-panel relative flex flex-col justify-center overflow-hidden px-6 py-14 sm:px-10 sm:py-16 lg:px-14 lg:py-20">
+        <div className="why-panel relative flex flex-col justify-center overflow-hidden px-5 py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-20">
           <div aria-hidden className="why-panel__glow" />
           <div aria-hidden className="why-panel__streaks" />
 
@@ -116,15 +156,30 @@ export function WhySection() {
               Why Choose Us?
             </h2>
 
-            <ul className="mt-10 space-y-8 sm:mt-12 sm:space-y-10">
+            <motion.ul
+              className="mt-8 space-y-6 sm:mt-10 sm:space-y-8 lg:mt-12 lg:space-y-10"
+              variants={reduceMotion ? undefined : listVariants}
+              initial={reduceMotion ? false : "hidden"}
+              whileInView={reduceMotion ? undefined : "show"}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               {REASONS.map((reason, index) => {
-                const isActive = hovered === index || (hovered === null && index === 1);
+                const isActive =
+                  hovered === index || (hovered === null && activeReason === index);
+
                 return (
-                  <li
+                  <motion.li
                     key={reason.number}
-                    className="group flex gap-4 sm:gap-5"
+                    variants={reduceMotion ? undefined : itemVariants}
+                    className="group flex cursor-pointer gap-4 sm:gap-5"
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
+                    onFocus={() => setHovered(index)}
+                    onBlur={() => setHovered(null)}
+                    onClick={() => {
+                      setHovered(index);
+                      setActiveReason(index);
+                    }}
                   >
                     <div className="why-number-scene relative size-12 shrink-0 sm:size-14">
                       <div
@@ -141,16 +196,34 @@ export function WhySection() {
                         </span>
                       </div>
                     </div>
-                    <div className="min-w-0 pt-0.5">
-                      <h3 className="text-lg font-bold text-slate-900 sm:text-xl">{reason.title}</h3>
+                    <motion.div
+                      className="min-w-0 pt-0.5"
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : {
+                              opacity: isActive ? 1 : 0.62,
+                              x: isActive ? 0 : -2,
+                            }
+                      }
+                      transition={{ duration: 0.55, ease: EASE_OUT }}
+                    >
+                      <h3
+                        className={cn(
+                          "text-lg font-bold transition-colors duration-500 sm:text-xl",
+                          isActive ? "text-slate-900" : "text-slate-700"
+                        )}
+                      >
+                        {reason.title}
+                      </h3>
                       <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-[15px]">
                         {reason.description}
                       </p>
-                    </div>
-                  </li>
+                    </motion.div>
+                  </motion.li>
                 );
               })}
-            </ul>
+            </motion.ul>
           </div>
         </div>
       </div>

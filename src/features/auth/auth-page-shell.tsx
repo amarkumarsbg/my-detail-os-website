@@ -62,13 +62,13 @@ export function AuthPageShell({
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="relative flex min-h-[calc(100dvh-3.5rem)] flex-col overflow-x-hidden bg-slate-50 sm:min-h-[calc(100dvh-4rem)]">
+    <div className="relative flex min-h-[calc(100dvh-3.5rem-env(safe-area-inset-top))] flex-col overflow-x-hidden bg-slate-50 sm:min-h-[calc(100dvh-4rem-env(safe-area-inset-top))]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(20,184,166,0.12),transparent_55%),linear-gradient(180deg,#f8fafc_0%,#f1f5f9_100%)]"
       />
 
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-start px-3 py-4 sm:justify-center sm:px-6 sm:py-10">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-start px-3 py-3 sm:justify-center sm:px-6 sm:py-8">
         <div
           className={cn(
             "w-full border border-slate-200/80 bg-white shadow-sm",

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 export function TestimonialsSection() {
   return (
-    <section className="relative overflow-hidden bg-slate-950 py-24 sm:py-32">
+    <section className="relative overflow-hidden bg-slate-950 py-10 sm:py-14 lg:py-16">
       {/* Background glow effects */}
       <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3">
         <div className="h-[400px] w-[600px] rounded-full bg-teal-500/10 blur-[120px]" />
@@ -25,7 +25,7 @@ export function TestimonialsSection() {
           <p className="mt-4 text-sm text-slate-400">{testimonialsDisclaimer}</p>
         </FadeIn>
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {testimonials.map((item, index) => {
             // Get initials for avatar (e.g. "Arjun Mehta" -> "AM")
             const initials = item.name.split(" ").map(n => n[0]).join("").substring(0, 2);

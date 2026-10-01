@@ -81,9 +81,14 @@ export default function MobilePage() {
 
             <div className="flex flex-wrap gap-3 pt-2">
               <Link href="/signup" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="rounded-full bg-teal-600 px-7 font-semibold hover:bg-teal-500">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 size-4" />
+                <Button
+                  size="lg"
+                  className="trial-cta group rounded-full bg-teal-500 px-7 font-semibold text-slate-950 hover:bg-teal-400"
+                >
+                  <span className="inline-flex items-center">
+                    Start Free Trial
+                    <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </span>
                 </Button>
               </Link>
               <Link href="/#mobile">

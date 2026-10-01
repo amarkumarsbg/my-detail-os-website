@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getFeatureData } from "@/data/feature-pages";
 import { getAllFeatureSlugs } from "@/data/navigation";
 import { notFound } from "next/navigation";
+import { FadeIn } from "@/components/ui/fade-in";
 
 // --- HERO MOCK UI VARIANTS ---
 
@@ -1640,7 +1641,7 @@ function DeepDiveSettingsMockUI({ title, short, hash }: { title: string, short: 
           </div>
         </div>
       </div>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {[
           { label: 'Auto-Sync Data', desc: 'Sync with cloud automatically', on: true },
           { label: 'Push Notifications', desc: 'Alert staff on updates', on: hash % 2 === 0 },
@@ -1917,25 +1918,26 @@ const data = getFeatureData(resolvedParams.slug);
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-[#18181b] overflow-hidden">
+      <section className="relative overflow-hidden bg-[#18181b] pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20">
         {/* Glow Effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-600/20 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-800/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-8">
             {/* Left Content */}
+            <FadeIn>
             <div className="max-w-2xl">
-              <div className="inline-flex items-center rounded-full bg-teal-500/10 border border-teal-500/20 px-3 py-1 mb-6">
+              <div className="mb-4 inline-flex items-center rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1">
                 <span className="text-[11px] font-bold tracking-wider text-teal-500 uppercase">
                   {data.hero.badge}
                 </span>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-6">
+              <h1 className="mb-3 text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
                 {data.hero.titleStart} <br className="hidden sm:block" />
-                <span className="relative inline-block mt-2">
+                <span className="relative mt-1.5 inline-block">
                   {data.hero.titleHighlight}
-                  <div className="absolute -bottom-2 left-0 right-0 h-1 bg-teal-500 rounded-full" />
+                  <div className="absolute -bottom-1.5 right-0 left-0 h-1 rounded-full bg-teal-500" />
                 </span>
                 {data.hero.titleEnd && (
                   <>
@@ -1944,20 +1946,28 @@ const data = getFeatureData(resolvedParams.slug);
                   </>
                 )}
               </h1>
-              <p className="text-lg text-slate-300 leading-relaxed mb-8 max-w-xl">
+              <p className="mb-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
                 {data.hero.description}
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Link href="/signup">
-                  <Button size="lg" className="h-12 px-8 rounded-full bg-teal-600 hover:bg-teal-500 text-white font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(13,148,136,0.3)] w-full sm:w-auto">
-                    Start 7-Day Free Trial <ArrowRight className="ml-2 size-4" />
+              <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:gap-4">
+                <Link href="/signup" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    size="lg"
+                    className="trial-cta group h-12 w-full rounded-full bg-teal-500 px-8 font-bold text-slate-950 transition-all hover:bg-teal-400 sm:w-auto"
+                  >
+                    <span className="inline-flex items-center">
+                      Start 7-Day Free Trial
+                      <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    </span>
                   </Button>
                 </Link>
               </div>
             </div>
+            </FadeIn>
 
             {/* Right Content: Feature-specific Mock UI or photo showcase */}
+            <FadeIn delay={0.12} direction="left">
             <div className="relative">
               <FeatureHeroMock
                 kind={heroKind}
@@ -1967,29 +1977,31 @@ const data = getFeatureData(resolvedParams.slug);
                 hash={hash}
               />
             </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
       {/* 2. Benefits Section */}
-      <section className="py-24 bg-white">
+      <section className="bg-white py-12 sm:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <FadeIn>
+          <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
             {/* Left */}
             <div>
-              <div className="inline-flex items-center rounded-full bg-teal-100 px-3 py-1 mb-6">
+              <div className="mb-4 inline-flex items-center rounded-full bg-teal-100 px-3 py-1">
                 <span className="text-[11px] font-bold tracking-wider text-teal-800 uppercase">
                   {data.benefits.badge}
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.2] mb-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl mb-4 font-bold leading-[1.2] tracking-tight text-slate-900">
                 {data.benefits.titleStart} <br className="hidden sm:block" />
                 <span className="relative inline-block mt-2">
                   {data.benefits.titleHighlight}
                   <div className="absolute -bottom-2 left-0 right-0 h-1 bg-teal-500 rounded-full" />
                 </span>
               </h2>
-              <p className="text-lg text-slate-600 leading-relaxed mb-6">
+              <p className="mb-4 text-lg leading-relaxed text-slate-600">
                 {data.benefits.p1}
               </p>
               <p className="text-lg text-slate-600 leading-relaxed">
@@ -1998,8 +2010,8 @@ const data = getFeatureData(resolvedParams.slug);
             </div>
 
             {/* Right: Feature Grid */}
-            <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 sm:p-10">
-              <h3 className="text-xl font-bold text-slate-900 mb-8">
+            <div className="rounded-3xl border border-slate-100 bg-slate-50 p-5 sm:p-7">
+              <h3 className="mb-5 text-xl font-bold text-slate-900 sm:mb-6">
                 Why {data.hero.titleHighlight} is Critical for Garages:
               </h3>
               <div className="grid sm:grid-cols-2 gap-4">
@@ -2017,13 +2029,15 @@ const data = getFeatureData(resolvedParams.slug);
               </div>
             </div>
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* 3. Comparison Section (Modern Split Cards) */}
-      <section className="py-24 bg-[#f8fafc] border-t border-slate-200">
+      <section className="border-t border-slate-200 bg-[#f8fafc] py-12 sm:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <FadeIn>
+          <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.2] mb-4">
               {data.comparison.titleStart} <br className="hidden sm:block" />
               <span className="relative inline-block">
@@ -2031,12 +2045,12 @@ const data = getFeatureData(resolvedParams.slug);
                 <div className="absolute -bottom-2 left-0 right-0 h-1 bg-teal-500 rounded-full" />
               </span>
             </h2>
-            <p className="text-lg text-slate-600 mt-6">
+            <p className="mt-4 text-lg text-slate-600">
               {data.comparison.subtitle}
             </p>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {data.comparison.rows.map((row, i) => (
               <div key={i} className="relative bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm overflow-hidden flex flex-col md:flex-row gap-6 md:gap-8 items-stretch group hover:shadow-md transition-shadow">
                 
@@ -2087,13 +2101,15 @@ const data = getFeatureData(resolvedParams.slug);
               </div>
             ))}
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* 4. Feature Grid Section (Bento Box Design) */}
-      <section className="py-24 bg-[#fafafa]">
+      <section className="bg-[#fafafa] py-12 sm:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <FadeIn>
+          <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.2] mb-4">
               {data.grid.titleStart} <br className="hidden sm:block" />
               <span className="relative inline-block mt-2">
@@ -2101,7 +2117,7 @@ const data = getFeatureData(resolvedParams.slug);
                 <div className="absolute -bottom-2 left-0 right-0 h-1 bg-teal-500 rounded-full" />
               </span>
             </h2>
-            <p className="text-lg text-slate-600 mt-6">
+            <p className="mt-4 text-lg text-slate-600">
               {data.grid.subtitle}
             </p>
           </div>
@@ -2148,14 +2164,16 @@ const data = getFeatureData(resolvedParams.slug);
               );
             })}
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* 5. Workflow Section */}
-      <section className="py-24 bg-white">
+      <section className="bg-white py-12 sm:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center rounded-full bg-teal-100 px-3 py-1 mb-6">
+          <FadeIn>
+          <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
+            <div className="mb-4 inline-flex items-center rounded-full bg-teal-100 px-3 py-1">
               <span className="text-[11px] font-bold tracking-wider text-teal-800 uppercase">
                 {data.workflow.badge}
               </span>
@@ -2167,7 +2185,7 @@ const data = getFeatureData(resolvedParams.slug);
                 <div className="absolute -bottom-2 left-0 right-0 h-1 bg-teal-500 rounded-full" />
               </span>
             </h2>
-            <p className="text-lg text-slate-600 mt-6">
+            <p className="mt-4 text-lg text-slate-600">
               {data.workflow.subtitle}
             </p>
           </div>
@@ -2181,21 +2199,23 @@ const data = getFeatureData(resolvedParams.slug);
               </div>
             ))}
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* 6. Deep Dive Section */}
-      <section className="py-24 bg-[#fafafa]">
+      <section className="bg-[#fafafa] py-12 sm:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <FadeIn>
+          <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
             {/* Left */}
             <div>
-              <div className="inline-flex items-center rounded-full bg-teal-100 px-3 py-1 mb-6">
+              <div className="mb-4 inline-flex items-center rounded-full bg-teal-100 px-3 py-1">
                 <span className="text-[11px] font-bold tracking-wider text-teal-800 uppercase">
                   {data.deepDive.badge}
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.2] mb-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl mb-4 font-bold leading-[1.2] tracking-tight text-slate-900">
                 {data.deepDive.titleStart} <br className="hidden sm:block" />
                 <span className="relative inline-block mt-2">
                   {data.deepDive.titleHighlight}
@@ -2206,7 +2226,7 @@ const data = getFeatureData(resolvedParams.slug);
                 {data.deepDive.subtitle}
               </p>
 
-              <div className="space-y-8">
+              <div className="space-y-5">
                 {data.deepDive.features.map((feature, i) => (
                   <div key={i} className="flex gap-4">
                     <div className="size-8 rounded-full bg-teal-100 flex items-center justify-center shrink-0 mt-1">
@@ -2228,19 +2248,46 @@ const data = getFeatureData(resolvedParams.slug);
               {deepDiveVariant === 2 && <DeepDiveSettingsMockUI title={formattedName} short={shortName} hash={hash} />}
             </div>
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-teal-900 text-center">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">Ready to control your workshop operations?</h2>
-          <p className="text-teal-100 text-lg mb-8 max-w-2xl mx-auto">Join thousands of workshop owners using MY DETAIL OS to automate billing, track expenses, and maximize net profits.</p>
-          <Link href="/signup">
-            <Button size="lg" className="h-14 px-8 rounded-full bg-white text-teal-900 hover:bg-slate-100 font-bold text-lg">
-              Start Your Free Trial
+      <section className="relative isolate overflow-hidden bg-slate-950 py-14 text-center sm:py-16 lg:py-20">
+        <div className="absolute inset-0" aria-hidden>
+          <Image
+            src="/images/cta-studio-premium.jpg"
+            alt=""
+            fill
+            className="object-cover object-[70%_48%] sm:object-[75%_45%] lg:object-[80%_42%] lg:scale-105"
+            sizes="100vw"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-slate-950/45 sm:bg-slate-950/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/25 to-slate-950/45" />
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-teal-400/40 to-transparent" />
+        </div>
+
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+          <h2 className="mb-5 text-balance text-3xl font-bold text-white drop-shadow-sm sm:mb-6 sm:text-4xl">
+            Ready to control your workshop operations?
+          </h2>
+          <p className="mx-auto mb-7 max-w-2xl text-pretty text-base text-slate-100 sm:mb-8 sm:text-lg">
+            Join thousands of workshop owners using MY DETAIL OS to automate billing, track expenses, and maximize net profits.
+          </p>
+          <Link href="/signup" target="_blank" rel="noopener noreferrer">
+            <Button
+              size="lg"
+              className="trial-cta group h-14 rounded-full bg-teal-400 px-8 text-lg font-bold text-slate-950 hover:bg-teal-300"
+            >
+              <span className="inline-flex items-center">
+                Start Your Free Trial
+                <ArrowRight className="ml-2 size-5 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </span>
             </Button>
           </Link>
+          </FadeIn>
         </div>
       </section>
     </div>

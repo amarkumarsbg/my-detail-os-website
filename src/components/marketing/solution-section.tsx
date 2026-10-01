@@ -6,14 +6,14 @@ import { FadeIn } from "@/components/ui/fade-in";
 
 export function SolutionSection() {
   return (
-    <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-slate-950 py-16 sm:py-20 lg:py-16">
+    <section className="relative flex min-h-0 items-center overflow-hidden bg-slate-950 py-12 sm:py-16 lg:min-h-[100svh] lg:py-16">
       <div
         aria-hidden
         className="pointer-events-none absolute top-0 left-1/2 h-[320px] w-full max-w-3xl -translate-x-1/2 rounded-full bg-teal-500/15 blur-[120px]"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <FadeIn className="mx-auto mb-8 max-w-3xl text-center lg:mb-10">
+        <FadeIn className="mx-auto mb-6 max-w-3xl text-center sm:mb-8 lg:mb-10">
           <p className="inline-flex items-center gap-2 rounded-full bg-teal-500/10 px-3 py-1 text-xs font-semibold tracking-[0.16em] text-teal-400 uppercase ring-1 ring-inset ring-teal-500/20">
             <GitBranch className="size-3.5" aria-hidden />
             Connected Workflow

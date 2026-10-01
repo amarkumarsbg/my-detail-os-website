@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { Building2, Check, Users } from "lucide-react";
+import { ArrowRight, Building2, Check, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/ui/fade-in";
 import { pricingNote, pricingPlans, type PricingPlan } from "@/data/pricing";
@@ -44,8 +44,8 @@ export function PricingSection({ compact = false }: { compact?: boolean }) {
     <section
       id="pricing"
       className={cn(
-        "relative overflow-hidden",
-        compact ? "mt-2" : "bg-[linear-gradient(180deg,#f8fafc_0%,#f0fdfa_42%,#ffffff_100%)] py-16 sm:py-24"
+        "relative overflow-hidden scroll-mt-[calc(3.5rem+env(safe-area-inset-top)+0.5rem)] sm:scroll-mt-[calc(4rem+env(safe-area-inset-top)+0.5rem)]",
+        compact ? "mt-2" : "bg-[linear-gradient(180deg,#f8fafc_0%,#f0fdfa_42%,#ffffff_100%)] py-14 sm:py-20 lg:py-24"
       )}
     >
       {!compact && (
@@ -76,7 +76,7 @@ export function PricingSection({ compact = false }: { compact?: boolean }) {
           </FadeIn>
         )}
 
-        <div className={cn("grid gap-5 lg:grid-cols-4 lg:gap-5", compact ? "" : "mt-12 sm:mt-14")}>
+        <div className={cn("grid gap-4 sm:gap-5 lg:grid-cols-4 lg:gap-5", compact ? "" : "mt-8 sm:mt-12")}>
           {plans.map((plan, index) => {
             const featured = Boolean(plan.highlighted);
             const fromX = index % 2 === 0 ? -36 : 36;
@@ -200,13 +200,24 @@ export function PricingSection({ compact = false }: { compact?: boolean }) {
                   <Button
                     variant={featured ? "default" : "outline"}
                     className={cn(
-                      "btn-marketing h-11 w-full rounded-full text-sm font-semibold transition-transform duration-300 group-hover:scale-[1.02]",
+                      "btn-marketing group h-11 w-full rounded-full text-sm font-semibold transition-all duration-300",
+                      plan.ctaHref === "/signup" || plan.ctaLabel.toLowerCase().includes("trial")
+                        ? "trial-cta"
+                        : "",
                       featured
                         ? "bg-teal-400 text-slate-950 hover:bg-teal-300"
-                        : "border-slate-200 bg-white text-slate-900 hover:border-teal-400 hover:bg-teal-50 hover:text-teal-900"
+                        : plan.ctaHref === "/signup" || plan.ctaLabel.toLowerCase().includes("trial")
+                          ? "border-transparent bg-teal-600 text-white hover:bg-teal-500"
+                          : "border-slate-200 bg-white text-slate-900 hover:border-teal-400 hover:bg-teal-50 hover:text-teal-900"
                     )}
                   >
-                    {plan.ctaLabel}
+                    <span className="inline-flex items-center justify-center gap-1.5">
+                      {plan.ctaLabel}
+                      {(plan.ctaHref === "/signup" ||
+                        plan.ctaLabel.toLowerCase().includes("trial")) && (
+                        <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                      )}
+                    </span>
                   </Button>
                 </Link>
               </motion.article>

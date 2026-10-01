@@ -39,18 +39,18 @@ export function ProductShowcase() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="space-y-24 overflow-x-clip bg-white py-24 sm:py-32 lg:space-y-32">
+    <section className="space-y-14 overflow-x-clip bg-white py-14 sm:space-y-20 sm:py-20 lg:space-y-24 lg:py-24">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <FadeIn className="mx-auto mb-20 max-w-2xl text-center lg:mb-24">
+        <FadeIn className="mx-auto mb-12 max-w-2xl text-center sm:mb-16 lg:mb-20">
           <p className="inline-flex items-center rounded-full bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-600 ring-1 ring-inset ring-teal-500/20">
             Product showcase
           </p>
-          <h2 className="mt-6 text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="mt-4 text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:mt-6 sm:text-4xl">
             Built around how workshops actually operate.
           </h2>
         </FadeIn>
 
-        <div className="space-y-24 lg:space-y-32">
+        <div className="space-y-14 sm:space-y-20 lg:space-y-24">
           {showcaseSections.map((section, index) => {
             const imageOnLeft = index % 2 === 1;
             const textFrom = imageOnLeft ? "right" : "left";
@@ -59,7 +59,7 @@ export function ProductShowcase() {
             return (
               <div
                 key={section.id}
-                className={`grid items-center gap-12 lg:grid-cols-2 lg:gap-16 ${
+                className={`grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-16 ${
                   imageOnLeft ? "lg:[&>*:first-child]:order-2" : ""
                 }`}
               >

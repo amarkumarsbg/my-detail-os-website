@@ -7,9 +7,9 @@ import { footerNav } from "@/data/navigation";
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-900 bg-slate-950 pt-12 pb-8 text-slate-300 sm:pt-16">
+    <footer className="border-t border-slate-800 bg-slate-900 pt-10 pb-8 text-slate-300 sm:pt-14">
       <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-6 lg:px-8">
-        <div className="mb-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 sm:gap-y-12 lg:mb-16 lg:grid-cols-5 lg:gap-8">
+        <div className="mb-10 grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-x-8 sm:gap-y-10 lg:mb-14 lg:grid-cols-5 lg:gap-8">
           {/* Brand — full width on mobile, first column on desktop */}
           <div className="col-span-2 space-y-5 lg:col-span-1 lg:space-y-6 lg:pr-8">
             <Link href="/" className="mb-2 flex items-center gap-2.5 sm:gap-3">

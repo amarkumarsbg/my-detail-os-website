@@ -38,23 +38,23 @@ const mobilePoints = [
 /** Homepage section — MY DETAIL OS works on mobile too. */
 export function MobileSection() {
   return (
-    <section id="mobile" className="relative overflow-x-clip bg-white py-20 sm:py-28 lg:py-32">
+    <section id="mobile" className="relative scroll-mt-[calc(3.5rem+env(safe-area-inset-top)+0.5rem)] overflow-x-clip bg-white py-14 sm:scroll-mt-[calc(4rem+env(safe-area-inset-top)+0.5rem)] sm:py-20 lg:py-24">
       <div
         aria-hidden
         className="pointer-events-none absolute top-0 right-0 hidden h-[420px] w-[420px] rounded-full bg-teal-100/40 blur-3xl sm:block"
       />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <FadeIn>
             <p className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-700 ring-1 ring-inset ring-teal-500/20">
               <Smartphone className="size-3.5" aria-hidden />
               Mobile ready
             </p>
-            <h2 className="mt-6 text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="mt-4 text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:mt-6 sm:text-4xl">
               Your workshop runs on mobile too.
             </h2>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-slate-600 sm:mt-5 sm:text-lg">
               Owners, staff, and customers can use MY DETAIL OS from a phone or tablet — not only
               from a desktop browser.
             </p>

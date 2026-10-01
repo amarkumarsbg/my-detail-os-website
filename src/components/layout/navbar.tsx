@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState, useRef } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { primaryNav } from "@/data/navigation";
 import { siteConfig } from "@/config/site";
@@ -130,7 +130,7 @@ export function Navbar() {
     <motion.header
       initial={false}
       className={cn(
-        "site-nav pointer-events-none fixed inset-x-0 top-0 z-[70]",
+        "site-nav pointer-events-none fixed inset-x-0 top-0 z-[70] pt-[env(safe-area-inset-top)]",
         menuOpen && "z-[80]"
       )}
     >
@@ -142,7 +142,7 @@ export function Navbar() {
             : "border-white/10 bg-slate-950/55 shadow-[0_12px_40px_-20px_rgba(0,0,0,0.65)]"
         )}
       >
-        <div className="site-nav__rail mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:h-16 sm:px-6 lg:px-8">
+        <div className="site-nav__rail mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:h-16 sm:gap-4 sm:px-6 lg:px-8">
           {/* Brand */}
           <Link
             href="/"
@@ -272,8 +272,8 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Actions */}
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          {/* Actions — trial CTA only from lg up; phones use hero + drawer CTA */}
+          <div className="flex shrink-0 items-center gap-3 sm:gap-3.5">
             <Link
               href="/login"
               target="_blank"
@@ -287,24 +287,32 @@ export function Navbar() {
             >
               Login
             </Link>
-            <Link href="/signup" target="_blank" rel="noopener noreferrer" className="hidden sm:block">
+            <Link
+              href="/signup"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden shrink-0 lg:inline-flex"
+            >
               <Button
                 size="sm"
                 className={cn(
-                  "h-9 rounded-md px-4 text-[13px] font-semibold transition-colors",
+                  "trial-cta group h-9 rounded-full px-4 text-[13px] font-semibold transition-all",
                   light
                     ? "bg-teal-600 text-white hover:bg-teal-500"
-                    : "bg-teal-500 text-slate-950 shadow-[0_0_0_1px_rgba(251,134,18,0.35)] hover:bg-teal-400"
+                    : "bg-teal-500 text-slate-950 hover:bg-teal-400"
                 )}
               >
-                Start Free Trial
+                <span className="inline-flex items-center gap-1.5">
+                  Start Free Trial
+                  <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                </span>
               </Button>
             </Link>
 
             <button
               type="button"
               className={cn(
-                "inline-flex size-10 cursor-pointer items-center justify-center rounded-md border transition-colors lg:hidden",
+                "inline-flex size-11 cursor-pointer items-center justify-center rounded-md border transition-colors lg:hidden",
                 light
                   ? "border-slate-200 bg-white/90 text-slate-800 hover:bg-slate-100"
                   : "border-white/30 bg-black/35 text-white shadow-sm hover:bg-white/15"
@@ -351,57 +359,67 @@ export function Navbar() {
               if (isRich) {
                 const links = columns.flatMap((col) => col.items);
                 return (
-                  <div className="p-5 sm:p-6">
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                      {links.map((link) => {
+                  <div className="p-3 sm:p-4">
+                    <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
+                      {links.map((link, i) => {
                         const Icon = link.icon;
                         return (
-                          <Link
+                          <motion.div
                             key={`${link.href}-${link.label}`}
-                            href={link.href}
-                            onClick={() => setHoveredNav(null)}
-                            className={cn(
-                              "group flex items-start gap-3 rounded-xl p-3 transition-colors",
-                              light ? "hover:bg-slate-50" : "hover:bg-white/5"
-                            )}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{
+                              duration: 0.28,
+                              delay: 0.04 + i * 0.03,
+                              ease: [0.22, 1, 0.36, 1],
+                            }}
                           >
-                            <span
+                            <Link
+                              href={link.href}
+                              onClick={() => setHoveredNav(null)}
                               className={cn(
-                                "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-lg ring-1 transition-colors",
-                                light
-                                  ? "bg-teal-50 text-teal-700 ring-teal-600/10 group-hover:bg-teal-100"
-                                  : "bg-teal-500/15 text-teal-300 ring-teal-400/20 group-hover:bg-teal-500/25"
+                                "group flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors",
+                                light ? "hover:bg-slate-50" : "hover:bg-white/5"
                               )}
                             >
-                              {Icon ? (
-                                <Icon className="size-5" aria-hidden />
-                              ) : (
-                                <span className="size-2 rounded-full bg-teal-500" />
-                              )}
-                            </span>
-                            <span className="min-w-0">
                               <span
                                 className={cn(
-                                  "block text-sm font-semibold",
+                                  "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md ring-1 transition-colors",
                                   light
-                                    ? "text-slate-900 group-hover:text-teal-800"
-                                    : "text-white group-hover:text-teal-200"
+                                    ? "bg-teal-50 text-teal-700 ring-teal-600/10 group-hover:bg-teal-100"
+                                    : "bg-teal-500/15 text-teal-300 ring-teal-400/20 group-hover:bg-teal-500/25"
                                 )}
                               >
-                                {link.label}
+                                {Icon ? (
+                                  <Icon className="size-4" aria-hidden />
+                                ) : (
+                                  <span className="size-1.5 rounded-full bg-teal-500" />
+                                )}
                               </span>
-                              {link.description ? (
+                              <span className="min-w-0">
                                 <span
                                   className={cn(
-                                    "mt-0.5 block text-[13px] leading-snug line-clamp-2",
-                                    light ? "text-slate-500" : "text-slate-400"
+                                    "block text-[13px] font-semibold leading-snug",
+                                    light
+                                      ? "text-slate-900 group-hover:text-teal-800"
+                                      : "text-white group-hover:text-teal-200"
                                   )}
                                 >
-                                  {link.description}
+                                  {link.label}
                                 </span>
-                              ) : null}
-                            </span>
-                          </Link>
+                                {link.description ? (
+                                  <span
+                                    className={cn(
+                                      "mt-0.5 block text-xs leading-snug line-clamp-2",
+                                      light ? "text-slate-500" : "text-slate-400"
+                                    )}
+                                  >
+                                    {link.description}
+                                  </span>
+                                ) : null}
+                              </span>
+                            </Link>
+                          </motion.div>
                         );
                       })}
                     </div>
@@ -410,12 +428,12 @@ export function Navbar() {
               }
 
               return (
-                <div className="flex justify-between gap-8 p-8">
+                <div className="flex justify-between gap-6 p-5 sm:p-6">
                   {columns.map((column) => (
                     <div key={column.title} className="flex-1">
                       <h4
                         className={cn(
-                          "mb-4 border-b pb-2 text-[12px] font-bold tracking-wider uppercase",
+                          "mb-3 border-b pb-2 text-[11px] font-bold tracking-wider uppercase",
                           light
                             ? "border-slate-100 text-slate-900"
                             : "border-white/10 text-white"
@@ -423,13 +441,13 @@ export function Navbar() {
                       >
                         {column.title}
                       </h4>
-                      <ul className="space-y-3">
+                      <ul className="space-y-1.5">
                         {column.items.map((link) => (
                           <li key={link.label}>
                             <Link
                               href={link.href}
                               className={cn(
-                                "flex items-center text-[13px] font-medium transition-all hover:translate-x-1",
+                                "flex items-center rounded-md px-1 py-1.5 text-[13px] font-medium transition-all hover:translate-x-1",
                                 light
                                   ? "text-slate-500 hover:text-teal-600"
                                   : "text-slate-400 hover:text-teal-300"
@@ -456,7 +474,7 @@ export function Navbar() {
       {menuOpen && (
         <motion.div
           id={menuId}
-          className="fixed inset-0 z-[75] flex flex-col bg-slate-950 pt-16 lg:hidden"
+          className="fixed inset-0 z-[75] flex flex-col bg-slate-950 pt-[calc(3.5rem+env(safe-area-inset-top))] lg:hidden"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
@@ -466,7 +484,7 @@ export function Navbar() {
           aria-label="Navigation menu"
         >
           <nav
-            className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-6"
+            className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-5 sm:py-6"
             aria-label="Mobile primary"
           >
             {primaryNav.map((item) => {
@@ -546,11 +564,11 @@ export function Navbar() {
                     </Link>
                   )}
                   {item.megaMenu && sectionOpen ? (
-                    <div className="mb-2 ml-3 space-y-1 border-l border-white/10 pl-3">
+                    <div className="mb-2 ml-3 space-y-0.5 border-l border-white/10 pl-3">
                       <Link
                         href={item.href}
                         onClick={closeMenu}
-                        className="block rounded-lg px-3 py-2 text-sm font-medium text-teal-300/90 hover:bg-white/5"
+                        className="block rounded-lg px-3 py-3 text-sm font-medium text-teal-300/90 hover:bg-white/5"
                       >
                         View all {item.label.toLowerCase()}
                       </Link>
@@ -560,7 +578,7 @@ export function Navbar() {
                             key={`${link.href}-${link.label}`}
                             href={link.href}
                             onClick={closeMenu}
-                            className="block rounded-lg px-3 py-2 text-sm text-slate-400 hover:bg-white/5 hover:text-teal-300"
+                            className="block rounded-lg px-3 py-3 text-sm text-slate-400 hover:bg-white/5 hover:text-teal-300"
                           >
                             {link.label}
                           </Link>
@@ -572,7 +590,7 @@ export function Navbar() {
               );
             })}
           </nav>
-          <div className="flex flex-col gap-3 border-t border-white/10 p-4">
+          <div className="flex flex-col gap-3 border-t border-white/10 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
             <Link
               href="/login"
               target="_blank"
@@ -594,8 +612,11 @@ export function Navbar() {
               onClick={closeMenu}
               className="block w-full"
             >
-              <Button className="h-12 w-full rounded-xl bg-teal-500 font-semibold text-slate-950 hover:bg-teal-400">
-                Start Free Trial
+              <Button className="trial-cta group h-12 w-full rounded-xl bg-teal-500 font-semibold text-slate-950 hover:bg-teal-400">
+                <span className="inline-flex items-center gap-2">
+                  Start Free Trial
+                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                </span>
               </Button>
             </Link>
           </div>

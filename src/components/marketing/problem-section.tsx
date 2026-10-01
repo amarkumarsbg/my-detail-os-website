@@ -32,7 +32,7 @@ export function ProblemSection() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="relative overflow-hidden bg-slate-50 py-24 sm:py-32">
+    <section className="relative overflow-hidden bg-slate-50 py-14 sm:py-20 lg:py-24">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/40 to-transparent"
@@ -43,12 +43,12 @@ export function ProblemSection() {
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-14 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-20">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-20">
           <FadeIn className="lg:sticky lg:top-28">
             <p className="inline-flex items-center rounded-full bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-700 ring-1 ring-inset ring-teal-500/20">
               The Challenge
             </p>
-            <h2 className="mt-6 text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
+            <h2 className="mt-4 text-balance font-heading text-3xl font-bold tracking-tight text-slate-900 sm:mt-6 sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
               Running a workshop shouldn&apos;t mean managing everything manually.
             </h2>
             <p className="mt-5 max-w-md text-pretty text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -64,7 +64,7 @@ export function ProblemSection() {
             </div>
 
             <Link
-              href="/#solutions"
+              href="/solutions"
               className="group mt-10 inline-flex items-center gap-2 text-sm font-semibold text-teal-700 transition-colors hover:text-teal-800"
             >
               See how MY DETAIL OS fixes this

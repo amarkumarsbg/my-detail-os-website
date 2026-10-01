@@ -154,7 +154,7 @@ export const primaryNav: NavItem[] = [
   },
   {
     label: "Solutions",
-    href: "/#solutions",
+    href: "/solutions",
     megaMenuLayout: "rich",
     megaMenu: [
       {

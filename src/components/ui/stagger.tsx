@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ReactNode, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const EASE_OUT = [0.21, 0.47, 0.32, 0.98] as const;
@@ -21,11 +21,24 @@ export function StaggerContainer({
   staggerChildren = 0.1,
   viewPortOnce = true,
 }: StaggerContainerProps) {
+  const reduceMotion = useReducedMotion();
+  const [forceVisible, setForceVisible] = useState(false);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setForceVisible(true), 1400 + delayChildren * 1000);
+    return () => window.clearTimeout(id);
+  }, [delayChildren]);
+
+  if (reduceMotion) {
+    return <div className={cn(className)}>{children}</div>;
+  }
+
   return (
     <motion.div
       initial="hidden"
       whileInView="show"
-      viewport={{ once: viewPortOnce, margin: "0px 0px -8% 0px", amount: 0.12 }}
+      animate={forceVisible ? "show" : undefined}
+      viewport={{ once: viewPortOnce, margin: "0px 0px -8% 0px", amount: 0.08 }}
       variants={{
         hidden: {},
         show: {
@@ -52,9 +65,15 @@ interface StaggerItemProps {
 export function StaggerItem({
   children,
   className,
-  yOffset = 18,
+  yOffset = 16,
   duration = 0.4,
 }: StaggerItemProps) {
+  const reduceMotion = useReducedMotion();
+
+  if (reduceMotion) {
+    return <div className={cn(className)}>{children}</div>;
+  }
+
   return (
     <motion.div
       variants={{
