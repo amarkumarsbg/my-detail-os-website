@@ -137,10 +137,10 @@ export function SignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-5">
       {isRedirecting ? <OpeningWorkshopOverlay href={redirectHref} /> : null}
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-3.5 sm:grid-cols-2 sm:gap-5">
         <FloatingInput
           id="ownerName"
           label="Owner Name"
@@ -164,12 +164,12 @@ export function SignupForm() {
         <div className="sm:col-span-2">
           <label
             htmlFor="phone"
-            className="mb-2 block text-sm font-medium text-slate-600"
+            className="mb-1.5 block text-sm font-medium text-slate-600 sm:mb-2"
           >
             Mobile Number
           </label>
           <div className="flex gap-2">
-            <div className="flex h-12 shrink-0 items-center justify-center rounded-xl border-2 border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-500">
+            <div className="flex h-11 shrink-0 items-center justify-center rounded-xl border-2 border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-500 sm:h-12">
               +91
             </div>
             <input
@@ -182,7 +182,7 @@ export function SignupForm() {
               required
               maxLength={10}
               placeholder="10-digit mobile number"
-              className="block h-12 w-full rounded-xl border-2 border-slate-200 bg-white px-3.5 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:outline-none focus:ring-0 sm:text-sm"
+              className="block h-11 w-full rounded-xl border-2 border-slate-200 bg-white px-3.5 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:outline-none focus:ring-0 sm:h-12 sm:text-sm"
             />
           </div>
         </div>
@@ -210,7 +210,7 @@ export function SignupForm() {
           />
         </div>
 
-        <div className="space-y-2 sm:col-span-2">
+        <div className="space-y-1.5 sm:col-span-2 sm:space-y-2">
           <FloatingInput
             id="password"
             type="password"
@@ -221,13 +221,13 @@ export function SignupForm() {
             autoComplete="new-password"
             placeholder="Strong password"
           />
-          <p className="text-xs leading-relaxed text-slate-500">
+          <p className="text-xs leading-snug text-slate-500 sm:leading-relaxed">
             Min. 8 characters with uppercase, lowercase, a number, and a special character
             (#@$%&*!?+-).
           </p>
         </div>
 
-        <div className="space-y-2 sm:col-span-2">
+        <div className="space-y-1.5 sm:col-span-2 sm:space-y-2">
           <FloatingInput
             id="confirmPassword"
             type="password"
@@ -248,7 +248,7 @@ export function SignupForm() {
         type="submit"
         size="lg"
         disabled={isRedirecting || passwordMismatch}
-        className="mt-1 h-12 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700"
+        className="mt-0.5 h-11 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700 sm:mt-1 sm:h-12"
       >
         <span className="sm:hidden">Start Free Trial</span>
         <span className="hidden sm:inline">Sign Up & Start Free Trial</span>

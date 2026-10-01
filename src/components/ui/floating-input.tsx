@@ -23,7 +23,7 @@ const FloatingInput = React.forwardRef<HTMLInputElement, FloatingInputProps>(
           ref={ref}
           placeholder={placeholder || " "}
           className={cn(
-            "peer block h-12 w-full rounded-xl border-2 border-slate-200 bg-white px-3.5 text-base text-slate-900 placeholder:text-transparent transition-colors sm:text-sm",
+            "peer block h-11 w-full rounded-xl border-2 border-slate-200 bg-white px-3.5 text-base text-slate-900 placeholder:text-transparent transition-colors sm:h-12 sm:text-sm",
             "focus:border-teal-600 focus:placeholder:text-slate-400 focus:outline-none focus:ring-0",
             "disabled:cursor-not-allowed disabled:opacity-50",
             isPassword && "pr-11",

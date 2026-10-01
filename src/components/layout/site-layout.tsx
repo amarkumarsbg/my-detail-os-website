@@ -14,11 +14,11 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
 
   // Feature pages have dark hero sections that need to reach the absolute top of the screen
   const isFeaturePage = pathname.startsWith("/features/");
-  const hasNoTopPadding = isAuthPage || isFeaturePage;
+  const hasNoTopPadding = isFeaturePage;
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-clip">
-      {!isAuthPage && <Navbar />}
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden">
+      <Navbar />
       <main className={hasNoTopPadding ? "flex-1" : "flex-1 pt-14 sm:pt-16"}>
         {children}
       </main>

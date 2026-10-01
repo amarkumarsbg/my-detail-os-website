@@ -206,11 +206,11 @@ export function LoginForm() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3.5 sm:space-y-5">
       {isRedirecting ? <OpeningWorkshopOverlay href={redirectHref} /> : null}
 
       {loginMethod === "email" ? (
-        <form onSubmit={handleEmailSubmit} className="space-y-5">
+        <form onSubmit={handleEmailSubmit} className="space-y-3.5 sm:space-y-5">
           <FloatingInput
             id="email"
             type="email"
@@ -221,7 +221,7 @@ export function LoginForm() {
             required
             autoComplete="email"
           />
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <div className="flex justify-end">
               <Link
                 href="/forgot-password"
@@ -246,22 +246,22 @@ export function LoginForm() {
             type="submit"
             size="lg"
             disabled={isLoading || isRedirecting}
-            className="h-12 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700"
+            className="h-11 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700 sm:h-12"
           >
             Sign In
           </Button>
         </form>
       ) : (
-        <form onSubmit={handleMobileSubmit} className="space-y-5">
+        <form onSubmit={handleMobileSubmit} className="space-y-3.5 sm:space-y-5">
           <div>
             <label
               htmlFor="mobile"
-              className="mb-2 block text-sm font-medium text-slate-600"
+              className="mb-1.5 block text-sm font-medium text-slate-600 sm:mb-2"
             >
               Mobile Number
             </label>
             <div className="flex gap-2">
-              <div className="flex h-12 shrink-0 items-center justify-center rounded-xl border-2 border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-500">
+              <div className="flex h-11 shrink-0 items-center justify-center rounded-xl border-2 border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-500 sm:h-12">
                 +91
               </div>
               <input
@@ -274,7 +274,7 @@ export function LoginForm() {
                 onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
                 required
                 maxLength={10}
-                className="block h-12 w-full rounded-xl border-2 border-slate-200 bg-white px-3.5 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:outline-none focus:ring-0 disabled:opacity-50 sm:text-sm"
+                className="block h-11 w-full rounded-xl border-2 border-slate-200 bg-white px-3.5 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:outline-none focus:ring-0 disabled:opacity-50 sm:h-12 sm:text-sm"
               />
             </div>
           </div>
@@ -284,7 +284,7 @@ export function LoginForm() {
               type="submit"
               size="lg"
               disabled={isLoading || isRedirecting || mobile.length < 10}
-              className="h-12 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700"
+              className="h-11 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700 sm:h-12"
             >
               {isLoading ? (
                 <>
@@ -297,7 +297,7 @@ export function LoginForm() {
             </Button>
           ) : (
             <>
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 <div className="flex items-baseline justify-between gap-x-3">
                   <span className="text-sm font-medium text-slate-600">Enter OTP</span>
                   <button
@@ -322,7 +322,7 @@ export function LoginForm() {
                 type="submit"
                 size="lg"
                 disabled={isLoading || isRedirecting || otp.length < 4}
-                className="h-12 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700"
+                className="h-11 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700 sm:h-12"
               >
                 Verify & Sign In
               </Button>
@@ -342,7 +342,7 @@ export function LoginForm() {
           type="button"
           onClick={() => switchTo("mobile")}
           disabled={isRedirecting}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50 sm:h-12"
         >
           <Smartphone className="size-4 text-teal-600" />
           Login with Mobile OTP
@@ -352,7 +352,7 @@ export function LoginForm() {
           type="button"
           onClick={() => switchTo("email")}
           disabled={isRedirecting}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-50 sm:h-12"
         >
           Login with Email
         </button>

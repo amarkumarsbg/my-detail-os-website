@@ -202,7 +202,7 @@ export function HeroSection() {
 
   return (
     <>
-      <section className="relative isolate -mt-14 flex min-h-[100svh] flex-col overflow-x-clip bg-slate-950 sm:-mt-16">
+      <section className="relative isolate -mt-14 flex min-h-[100svh] flex-col overflow-x-hidden bg-slate-950 sm:-mt-16">
         <div className="relative flex min-h-0 flex-1 flex-col">
           <HeroBackgroundCarousel active={activeSlide} />
 
@@ -225,42 +225,28 @@ export function HeroSection() {
                 </p>
               </div>
 
-              <FadeIn delay={0.9} className="mt-8 sm:mt-10">
+              <FadeIn delay={0.15} className="mt-8 sm:mt-10">
                 <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
-                  <motion.div
-                    className="hero-cta-float w-full sm:w-auto"
-                    initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.05, duration: 0.5, ease: EASE_OUT }}
-                  >
-                    <Link href="/signup" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-auto">
-                      <Button
-                        size="lg"
-                        className="hero-cta hero-cta--primary btn-marketing group relative h-12 w-full overflow-hidden rounded-full px-6 text-base font-semibold shadow-xl transition-transform duration-300 hover:scale-[1.04] sm:h-14 sm:px-8 sm:text-lg"
-                      >
-                        <span className="relative z-10 inline-flex items-center">
-                          Start Free Trial
-                          <ArrowRight className="ml-2 size-5 transition-transform duration-300 group-hover:translate-x-1.5" />
-                        </span>
-                      </Button>
-                    </Link>
-                  </motion.div>
-                  <motion.div
-                    className="hero-cta-float hero-cta-float--delayed w-full sm:w-auto"
-                    initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.18, duration: 0.5, ease: EASE_OUT }}
-                  >
+                  <Link href="/signup" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-auto">
                     <Button
-                      variant="outline"
                       size="lg"
-                      onClick={() => setIsVideoOpen(true)}
-                      className="hero-cta hero-cta--ghost btn-marketing group h-12 w-full rounded-full border-white/30 bg-white/5 px-6 text-base font-semibold text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-[1.04] hover:border-white/50 hover:bg-white/10 hover:text-white sm:h-14 sm:w-auto sm:px-8 sm:text-lg"
+                      className="hero-cta hero-cta--primary btn-marketing group relative h-12 w-full overflow-hidden rounded-full px-6 text-base font-semibold shadow-xl transition-transform duration-300 hover:scale-[1.04] sm:h-14 sm:px-8 sm:text-lg"
                     >
-                      <Play className="mr-2 size-5 fill-white/80 transition-transform duration-300 group-hover:scale-125" />
-                      Watch Demo
+                      <span className="relative z-10 inline-flex items-center">
+                        Start Free Trial
+                        <ArrowRight className="ml-2 size-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                      </span>
                     </Button>
-                  </motion.div>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={() => setIsVideoOpen(true)}
+                    className="hero-cta hero-cta--ghost btn-marketing group h-12 w-full rounded-full border-white/30 bg-white/5 px-6 text-base font-semibold text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-[1.04] hover:border-white/50 hover:bg-white/10 hover:text-white sm:h-14 sm:w-auto sm:px-8 sm:text-lg"
+                  >
+                    <Play className="mr-2 size-5 fill-white/80 transition-transform duration-300 group-hover:scale-125" />
+                    Watch Demo
+                  </Button>
                 </div>
               </FadeIn>
             </div>

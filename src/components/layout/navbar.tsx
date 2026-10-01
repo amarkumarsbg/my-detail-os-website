@@ -15,6 +15,8 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHash, setActiveHash] = useState("");
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+  /** Mobile accordion: Features / Solutions stay collapsed until tapped. */
+  const [mobileOpenSection, setMobileOpenSection] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const menuId = useId();
   const isClickScrolling = useRef(false);
@@ -97,11 +99,15 @@ export function Navbar() {
 
   useEffect(() => {
     setMenuOpen(false);
+    setMobileOpenSection(null);
     setScrolled(window.scrollY > 48);
   }, [pathname]);
 
   useEffect(() => {
-    if (!menuOpen) return;
+    if (!menuOpen) {
+      setMobileOpenSection(null);
+      return;
+    }
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setMenuOpen(false);
     };
@@ -114,17 +120,18 @@ export function Navbar() {
     };
   }, [menuOpen]);
 
-  const closeMenu = () => setMenuOpen(false);
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setMobileOpenSection(null);
+  };
 
   return (
     <>
     <motion.header
-      initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
+      initial={false}
       className={cn(
-        "site-nav pointer-events-none fixed inset-x-0 top-0 z-50",
-        menuOpen && "z-[60]"
+        "site-nav pointer-events-none fixed inset-x-0 top-0 z-[70]",
+        menuOpen && "z-[80]"
       )}
     >
       <div
@@ -297,10 +304,10 @@ export function Navbar() {
             <button
               type="button"
               className={cn(
-                "inline-flex size-9 cursor-pointer items-center justify-center rounded-md border transition-colors lg:hidden",
+                "inline-flex size-10 cursor-pointer items-center justify-center rounded-md border transition-colors lg:hidden",
                 light
-                  ? "border-slate-200 text-slate-800 hover:bg-slate-100"
-                  : "border-white/15 text-white hover:bg-white/10"
+                  ? "border-slate-200 bg-white/90 text-slate-800 hover:bg-slate-100"
+                  : "border-white/30 bg-black/35 text-white shadow-sm hover:bg-white/15"
               )}
               onClick={() => setMenuOpen((open) => !open)}
               aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
@@ -449,7 +456,7 @@ export function Navbar() {
       {menuOpen && (
         <motion.div
           id={menuId}
-          className="fixed inset-0 z-[55] flex flex-col bg-slate-950 pt-16 lg:hidden"
+          className="fixed inset-0 z-[75] flex flex-col bg-slate-950 pt-16 lg:hidden"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
@@ -473,43 +480,80 @@ export function Navbar() {
                 active = pathname === item.href;
               }
 
+              const sectionOpen = mobileOpenSection === item.label;
+
               return (
                 <div key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={(e) => {
-                      if (pathname === "/" && isHash) {
-                        const id = item.href.replace("/#", "");
-                        const element = document.getElementById(id);
-                        if (element) {
+                  {item.megaMenu ? (
+                    <button
+                      type="button"
+                      aria-expanded={sectionOpen}
+                      onClick={() =>
+                        setMobileOpenSection((prev) =>
+                          prev === item.label ? null : item.label
+                        )
+                      }
+                      className={cn(
+                        "flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left text-base font-semibold transition-colors",
+                        sectionOpen || active
+                          ? "bg-teal-500/15 text-teal-300"
+                          : "text-white hover:bg-white/5"
+                      )}
+                    >
+                      {item.label}
+                      <ChevronDown
+                        className={cn(
+                          "size-4 opacity-50 transition-transform duration-200",
+                          sectionOpen && "rotate-180"
+                        )}
+                      />
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={(e) => {
+                        if (pathname === "/" && isHash) {
+                          const id = item.href.replace("/#", "");
+                          const element = document.getElementById(id);
+                          if (element) {
+                            e.preventDefault();
+                            closeMenu();
+                            setActiveHash(`#${id}`);
+                            window.history.pushState(null, "", item.href);
+                            setTimeout(
+                              () => element.scrollIntoView({ behavior: "smooth" }),
+                              50
+                            );
+                            return;
+                          }
+                        }
+                        if (pathname === "/" && isHome) {
                           e.preventDefault();
                           closeMenu();
-                          setActiveHash(`#${id}`);
-                          window.history.pushState(null, "", item.href);
-                          setTimeout(() => element.scrollIntoView({ behavior: "smooth" }), 50);
+                          setActiveHash("");
+                          window.history.pushState(null, "", "/");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
                           return;
                         }
-                      }
-                      if (pathname === "/" && isHome) {
-                        e.preventDefault();
                         closeMenu();
-                        setActiveHash("");
-                        window.history.pushState(null, "", "/");
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                        return;
-                      }
-                      closeMenu();
-                    }}
-                    className={cn(
-                      "flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-semibold transition-colors",
-                      active ? "bg-teal-500/15 text-teal-300" : "text-white hover:bg-white/5"
-                    )}
-                  >
-                    {item.label}
-                    {item.megaMenu ? <ChevronDown className="size-4 opacity-50" /> : null}
-                  </Link>
-                  {item.megaMenu ? (
+                      }}
+                      className={cn(
+                        "flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-semibold transition-colors",
+                        active ? "bg-teal-500/15 text-teal-300" : "text-white hover:bg-white/5"
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                  {item.megaMenu && sectionOpen ? (
                     <div className="mb-2 ml-3 space-y-1 border-l border-white/10 pl-3">
+                      <Link
+                        href={item.href}
+                        onClick={closeMenu}
+                        className="block rounded-lg px-3 py-2 text-sm font-medium text-teal-300/90 hover:bg-white/5"
+                      >
+                        View all {item.label.toLowerCase()}
+                      </Link>
                       {item.megaMenu.flatMap((col) =>
                         col.items.map((link) => (
                           <Link
@@ -528,8 +572,14 @@ export function Navbar() {
               );
             })}
           </nav>
-          <div className="space-y-3 border-t border-white/10 p-4">
-            <Link href="/login" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
+          <div className="flex flex-col gap-3 border-t border-white/10 p-4">
+            <Link
+              href="/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMenu}
+              className="block w-full"
+            >
               <Button
                 variant="outline"
                 className="h-12 w-full rounded-xl border-white/20 bg-transparent text-white hover:bg-white/10"
@@ -537,7 +587,13 @@ export function Navbar() {
                 Login
               </Button>
             </Link>
-            <Link href="/signup" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
+            <Link
+              href="/signup"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMenu}
+              className="block w-full"
+            >
               <Button className="h-12 w-full rounded-xl bg-teal-500 font-semibold text-slate-950 hover:bg-teal-400">
                 Start Free Trial
               </Button>

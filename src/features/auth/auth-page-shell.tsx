@@ -1,6 +1,9 @@
-import Link from "next/link";
-import { siteConfig } from "@/config/site";
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 type AuthPageShellProps = {
   title: string;
@@ -10,59 +13,93 @@ type AuthPageShellProps = {
   wide?: boolean;
 };
 
+function AnimatedWords({
+  text,
+  className,
+  as: Tag = "span",
+  delay = 0,
+  reduceMotion,
+}: {
+  text: string;
+  className?: string;
+  as?: "h1" | "p" | "span";
+  delay?: number;
+  reduceMotion: boolean | null;
+}) {
+  const words = text.trim().split(/\s+/);
+
+  if (reduceMotion) {
+    return <Tag className={className}>{text}</Tag>;
+  }
+
+  return (
+    <Tag className={cn("flex flex-wrap justify-center gap-x-[0.28em]", className)}>
+      {words.map((word, i) => (
+        <motion.span
+          key={`${word}-${i}`}
+          className="inline-block"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.45,
+            delay: delay + i * 0.055,
+            ease: EASE_OUT,
+          }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </Tag>
+  );
+}
+
 export function AuthPageShell({
   title,
   description,
   children,
   wide = false,
 }: AuthPageShellProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div className="relative flex min-h-dvh flex-col overflow-x-hidden bg-slate-50">
-      {/* Soft atmosphere — mobile + desktop */}
+    <div className="relative flex min-h-[calc(100dvh-3.5rem)] flex-col overflow-x-hidden bg-slate-50 sm:min-h-[calc(100dvh-4rem)]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(20,184,166,0.12),transparent_55%),linear-gradient(180deg,#f8fafc_0%,#f1f5f9_100%)]"
       />
 
-      {/* Brand pill → homepage (same chrome as marketing navbar logo) */}
-      <div className="relative z-20 mx-auto w-full max-w-7xl px-3 pt-4 sm:px-6 sm:pt-6 lg:px-8">
-        <Link
-          href="/"
-          aria-label={`${siteConfig.name} — Home`}
-          className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 bg-white/70 px-2 shadow-lg backdrop-blur-xl transition-opacity hover:opacity-90 sm:h-14 sm:gap-2.5 sm:px-3"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={siteConfig.logoMark}
-            alt=""
-            width={36}
-            height={36}
-            className="size-7 shrink-0 rounded-md object-cover shadow-sm sm:size-9 sm:rounded-lg"
-          />
-          <span className="pr-1.5 font-heading text-sm font-semibold tracking-tight whitespace-nowrap text-slate-900 sm:pr-3 sm:text-base">
-            {siteConfig.name}
-          </span>
-        </Link>
-      </div>
-
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-8 sm:px-6 sm:py-10">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-start px-3 py-4 sm:justify-center sm:px-6 sm:py-10">
         <div
           className={cn(
             "w-full border border-slate-200/80 bg-white shadow-sm",
-            "rounded-2xl p-5 sm:p-8 md:p-10",
+            "rounded-xl p-4 sm:rounded-2xl sm:p-8 md:p-10",
             wide ? "max-w-lg" : "max-w-md"
           )}
         >
-          <div className="mb-6 text-center sm:mb-8">
-            <h1 className="text-balance text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-              {title}
-            </h1>
-            <p className="mt-2 max-w-sm mx-auto text-pretty text-sm leading-relaxed text-slate-500">
-              {description}
-            </p>
+          <div className="mb-4 text-center sm:mb-8">
+            <AnimatedWords
+              as="h1"
+              text={title}
+              delay={0.05}
+              reduceMotion={reduceMotion}
+              className="text-balance text-lg font-bold tracking-tight text-slate-900 sm:text-2xl"
+            />
+            <AnimatedWords
+              as="p"
+              text={description}
+              delay={0.22}
+              reduceMotion={reduceMotion}
+              className="mt-1 max-w-sm mx-auto text-pretty text-sm leading-snug text-slate-500 sm:mt-2 sm:leading-relaxed"
+            />
           </div>
 
-          {children}
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.4, ease: EASE_OUT }}
+          >
+            {children}
+          </motion.div>
         </div>
       </div>
     </div>
