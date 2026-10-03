@@ -36,6 +36,10 @@ export function SignupForm() {
     () => normalizePlanCode(searchParams.get("plan") ?? searchParams.get("planCode")),
     [searchParams]
   );
+  const referralCode = useMemo(() => {
+    const raw = (searchParams.get("ref") ?? searchParams.get("referral") ?? "").trim().toUpperCase();
+    return /^[A-Z0-9-]{4,24}$/.test(raw) ? raw : undefined;
+  }, [searchParams]);
   const [businessName, setBusinessName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,6 +90,7 @@ export function SignupForm() {
         password,
         branchName: branchName.trim() || "HQ",
         ...(planCode ? { planCode } : {}),
+        ...(referralCode ? { referralCode } : {}),
       });
 
       setSession(result.user, result.accessToken);
@@ -99,6 +104,7 @@ export function SignupForm() {
         accessToken: result.accessToken,
         next: result.user.mustChangePassword ? "/change-password" : "/dashboard",
         orgSlug,
+        referralCode,
       });
 
       let destUrl: URL;

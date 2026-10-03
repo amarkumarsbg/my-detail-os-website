@@ -106,20 +106,24 @@ export function workshopAppLoginUrl(opts?: {
   next?: string;
   /** Organization public slug — required for white-label tenant handoff. */
   orgSlug?: string | null;
+  /** Partner code from ?ref= so the workshop checkout field can prefill. */
+  referralCode?: string | null;
 }): string {
   const base = normalizePublicOrigin(siteConfig.workshopAppUrl, DEFAULT_WORKSHOP_APP_URL);
   const slug = (opts?.orgSlug ?? "").trim().toLowerCase() || null;
   const nextRaw = opts?.next ?? "/dashboard";
   const next = tenantWorkshopPath(slug, nextRaw);
   const loginPath = tenantWorkshopPath(slug, "/login");
+  const ref = (opts?.referralCode ?? "").trim().toUpperCase();
+  const refQuery = /^[A-Z0-9-]{4,24}$/.test(ref) ? `?ref=${encodeURIComponent(ref)}` : "";
 
   if (!opts?.accessToken) {
-    return `${base}${loginPath}`;
+    return `${base}${loginPath}${refQuery}`;
   }
   // Put token in the hash so it is not sent to the workshop host in request logs.
   // Land on the destination page directly (skip /login hop).
   const params = new URLSearchParams({
     accessToken: opts.accessToken,
   });
-  return `${base}${next}#${params.toString()}`;
+  return `${base}${next}${refQuery}#${params.toString()}`;
 }
