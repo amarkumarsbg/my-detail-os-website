@@ -221,15 +221,7 @@ export function LoginForm() {
             required
             autoComplete="email"
           />
-          <div className="space-y-1.5 sm:space-y-2">
-            <div className="flex justify-end">
-              <Link
-                href="/forgot-password"
-                className="inline-flex min-h-10 items-center text-sm font-semibold text-teal-700 hover:text-teal-600"
-              >
-                Forgot Password?
-              </Link>
-            </div>
+          <div className="space-y-1.5">
             <FloatingInput
               id="password"
               type="password"
@@ -240,6 +232,14 @@ export function LoginForm() {
               required
               autoComplete="current-password"
             />
+            <div className="flex justify-end">
+              <Link
+                href="/forgot-password"
+                className="text-sm font-semibold text-teal-700 hover:text-teal-600"
+              >
+                Forgot Password?
+              </Link>
+            </div>
           </div>
 
           <Button

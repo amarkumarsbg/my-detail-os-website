@@ -276,8 +276,6 @@ export function Navbar() {
           <div className="flex shrink-0 items-center gap-3 sm:gap-3.5">
             <Link
               href="/login"
-              target="_blank"
-              rel="noopener noreferrer"
               className={cn(
                 "hidden text-[13px] font-medium transition-colors lg:inline",
                 light
@@ -593,8 +591,6 @@ export function Navbar() {
           <div className="flex flex-col gap-3 border-t border-white/10 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
             <Link
               href="/login"
-              target="_blank"
-              rel="noopener noreferrer"
               onClick={closeMenu}
               className="block w-full"
             >
