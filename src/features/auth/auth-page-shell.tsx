@@ -76,7 +76,7 @@ export function AuthPageShell({
             wide ? "max-w-lg" : "max-w-md"
           )}
         >
-          <div className="mb-4 text-center sm:mb-8">
+          <div className="mb-3 text-center sm:mb-4">
             <AnimatedWords
               as="h1"
               text={title}
@@ -84,13 +84,20 @@ export function AuthPageShell({
               reduceMotion={reduceMotion}
               className="text-balance text-lg font-bold tracking-tight text-slate-900 sm:text-2xl"
             />
-            <AnimatedWords
-              as="p"
-              text={description}
-              delay={0.22}
-              reduceMotion={reduceMotion}
-              className="mt-1 max-w-sm mx-auto text-pretty text-sm leading-snug text-slate-500 sm:mt-2 sm:leading-relaxed"
-            />
+            {reduceMotion ? (
+              <p className="mx-auto mt-1.5 max-w-[22rem] text-pretty text-sm leading-relaxed text-slate-500 sm:mt-2">
+                {description}
+              </p>
+            ) : (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.22, ease: EASE_OUT }}
+                className="mx-auto mt-1.5 max-w-[22rem] text-pretty text-sm leading-relaxed text-slate-500 sm:mt-2"
+              >
+                {description}
+              </motion.p>
+            )}
           </div>
 
           <motion.div

@@ -13,7 +13,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthPageShell
       title="Forgot Password"
-      description="Enter your registered email to receive a password reset link"
+      description="Enter your registered email and we'll send you a password reset link."
     >
       <ForgotPasswordForm />
     </AuthPageShell>

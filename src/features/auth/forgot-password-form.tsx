@@ -65,11 +65,11 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-5">
       <FloatingInput
         id="email"
         type="email"
-        label="Email Address"
+        label="Email"
         placeholder="example@gmail.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -81,7 +81,7 @@ export function ForgotPasswordForm() {
         type="submit"
         size="lg"
         disabled={isLoading}
-        className="h-12 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700"
+        className="h-11 w-full rounded-xl bg-teal-600 text-base font-semibold text-white shadow-sm hover:bg-teal-700 sm:h-12"
       >
         {isLoading ? (
           <>
@@ -93,14 +93,11 @@ export function ForgotPasswordForm() {
         )}
       </Button>
 
-      <div className="text-center">
-        <Link
-          href="/login"
-          className="inline-flex h-11 items-center justify-center text-sm font-semibold text-teal-600 hover:text-teal-700"
-        >
+      <p className="text-center text-sm text-slate-600">
+        <Link href="/login" className="font-semibold text-teal-600 hover:underline">
           Back to Sign In
         </Link>
-      </div>
+      </p>
 
       {error && (
         <Alert tone="error">
