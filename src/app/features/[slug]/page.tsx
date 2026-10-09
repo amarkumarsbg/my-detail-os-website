@@ -3,57 +3,57 @@ import { ArrowRight, Apple, Play, X, Check, Activity, Users, Zap, Terminal, Sett
 import Image from "next/image";
 import Link from "next/link";
 import { getFeatureData } from "@/data/feature-pages";
+import { getFeatureVisualTheme } from "@/data/feature-visuals";
 import { getAllFeatureSlugs } from "@/data/navigation";
 import { notFound } from "next/navigation";
 import { FadeIn } from "@/components/ui/fade-in";
+import { cn } from "@/lib/utils";
+
+function SectionAtmosphere({
+  src,
+  objectPosition = "object-center",
+  dark = false,
+  intensity = "soft",
+}: {
+  src: string;
+  objectPosition?: string;
+  dark?: boolean;
+  intensity?: "soft" | "medium";
+}) {
+  const veil = dark
+    ? intensity === "medium"
+      ? "bg-slate-950/78"
+      : "bg-slate-950/70"
+    : intensity === "medium"
+      ? "bg-white/88"
+      : "bg-white/92";
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <Image
+        src={src}
+        alt=""
+        fill
+        className={cn("scale-105 object-cover opacity-40 blur-[1px]", objectPosition)}
+        sizes="100vw"
+        priority={false}
+      />
+      <div className={cn("absolute inset-0", veil)} />
+      <div
+        className={
+          dark
+            ? "absolute inset-0 bg-gradient-to-b from-slate-950/40 via-transparent to-slate-950/50"
+            : "absolute inset-0 bg-gradient-to-b from-white/50 via-transparent to-white/70"
+        }
+      />
+    </div>
+  );
+}
 
 // --- HERO MOCK UI VARIANTS ---
 
-const showcasePhotos = [
-  {
-    src: "/images/features/auto-repair.jpg",
-    alt: "Mechanic inspecting a vehicle engine in a professional garage",
-    label: "Live workshop floor",
-  },
-  {
-    src: "/images/features/garage-bay.jpg",
-    alt: "Technician performing an oil change in a service bay",
-    label: "Daily service bay",
-  },
-  {
-    src: "/images/features/car-service.jpg",
-    alt: "Polished car inside a professional automotive workshop",
-    label: "Premium workshop finish",
-  },
-  {
-    src: "/images/features/detail-ready-car.png",
-    alt: "Detail-ready luxury car after professional service",
-    label: "Detailing-ready results",
-  },
-  {
-    src: "/images/features/premium-car.jpg",
-    alt: "Premium vehicle after professional auto care",
-    label: "Built for premium garages",
-  },
-] as const;
-
-function getShowcasePhotos(slug: string, hash: number) {
-  if (slug.includes("detail") || slug.includes("detailing")) {
-    return [showcasePhotos[3], showcasePhotos[2]];
-  }
-  if (slug.includes("workshop")) {
-    return [showcasePhotos[2], showcasePhotos[0]];
-  }
-  if (slug.includes("garage") || slug.includes("software") || slug.includes("app")) {
-    return [showcasePhotos[0], showcasePhotos[1]];
-  }
-  const i = hash % showcasePhotos.length;
-  return [showcasePhotos[i], showcasePhotos[(i + 1) % showcasePhotos.length]];
-}
-
 /** Photo-led hero for SEO / marketing pages instead of a generic dashboard mock. */
 function HeroShowcasePhotoUI({ slug, hash }: { slug: string; title: string; hash: number }) {
-  const [primary, secondary] = getShowcasePhotos(slug, hash);
+  const [primary, secondary] = getFeatureVisualTheme(slug).showcase;
   const jobsToday = 12 + (hash % 9);
   const rating = (4.6 + (hash % 4) * 0.1).toFixed(1);
 
@@ -1744,18 +1744,22 @@ function getHeroKind(slug: string): HeroKind {
     settings: "settings",
     "reports-analytics": "analytics",
     "service-history": "vehicles",
-    "multi-branch": "locations",
+    "multi-branch": "showcase",
     erp: "dashboard",
-    "workshop-management": "job-cards",
-    "automobile-workshop": "job-cards",
-    "auto-repair-shop": "job-cards",
-    "car-garage": "job-cards",
-    "car-workshop": "job-cards",
-    "bike-workshop": "job-cards",
-    "truck-workshop": "job-cards",
-    "ev-garage": "job-cards",
-    "car-detailing": "services",
-    "fleet-workshop": "vehicles",
+    "workshop-management": "showcase",
+    "automobile-workshop": "showcase",
+    "auto-repair-shop": "showcase",
+    "car-garage": "showcase",
+    "car-workshop": "showcase",
+    "bike-workshop": "showcase",
+    "truck-workshop": "showcase",
+    "ev-garage": "showcase",
+    "car-detailing": "showcase",
+    "car-wash": "showcase",
+    "auto-spa": "showcase",
+    "ceramic-ppf": "showcase",
+    "oil-lube": "showcase",
+    "fleet-workshop": "showcase",
     "garage-app": "showcase",
     "workshop-app": "showcase",
     marketing: "analytics",
@@ -1893,6 +1897,7 @@ export default async function FeaturePage({ params }: { params: Promise<{ slug: 
     notFound();
   }
 const data = getFeatureData(resolvedParams.slug);
+  const visuals = getFeatureVisualTheme(resolvedParams.slug);
 
   const formattedName = resolvedParams.slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   const shortName = formattedName.substring(0, 3).toUpperCase();
@@ -1903,9 +1908,9 @@ const data = getFeatureData(resolvedParams.slug);
   
   // Smart Deep Dive Variant Selection
   let deepDiveVariant = 0; // Default: Ledger
-  if (resolvedParams.slug.match(/workflow|job-card|service|repair|inspection|booking|appointment|pickup/)) {
+  if (resolvedParams.slug.match(/workflow|job-card|service|repair|inspection|booking|appointment|pickup|garage|detail|bike|fleet|workshop/)) {
     deepDiveVariant = 1; // Workflow Tracker
-  } else if (resolvedParams.slug.match(/setting|access|role|branch|location|user/)) {
+  } else if (resolvedParams.slug.match(/setting|access|role|branch|location|user|multi-branch/)) {
     deepDiveVariant = 2; // Settings
   } else if (resolvedParams.slug.match(/finance|billing|ledger|payment|expense|vendor|partie/)) {
     deepDiveVariant = 0; // Ledger
@@ -1919,9 +1924,21 @@ const data = getFeatureData(resolvedParams.slug);
     <div className="flex flex-col min-h-screen">
       {/* 1. Hero Section */}
       <section className="relative overflow-hidden bg-[#18181b] pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20">
-        {/* Glow Effects */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-600/20 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-800/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <Image
+            src={visuals.heroBg}
+            alt=""
+            fill
+            priority
+            className={cn("object-cover opacity-45", visuals.heroObjectPosition ?? "object-center")}
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-slate-950/72" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/55 to-slate-950/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/40" />
+        </div>
+        <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-teal-600/20 blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-teal-800/10 blur-[100px] pointer-events-none" />
 
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-8">
@@ -1983,8 +2000,9 @@ const data = getFeatureData(resolvedParams.slug);
       </section>
 
       {/* 2. Benefits Section */}
-      <section className="bg-white py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-white py-12 sm:py-16 lg:py-20">
+        <SectionAtmosphere src={visuals.benefitsBg} intensity="soft" />
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
           <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
             {/* Left */}
@@ -2034,8 +2052,9 @@ const data = getFeatureData(resolvedParams.slug);
       </section>
 
       {/* 3. Comparison Section (Modern Split Cards) */}
-      <section className="border-t border-slate-200 bg-[#f8fafc] py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden border-t border-slate-200 bg-[#f8fafc] py-12 sm:py-16 lg:py-20">
+        <SectionAtmosphere src={visuals.comparisonBg} intensity="medium" />
+        <div className="relative z-10 mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
           <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.2] mb-4">
@@ -2052,7 +2071,7 @@ const data = getFeatureData(resolvedParams.slug);
 
           <div className="space-y-4">
             {data.comparison.rows.map((row, i) => (
-              <div key={i} className="relative bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm overflow-hidden flex flex-col md:flex-row gap-6 md:gap-8 items-stretch group hover:shadow-md transition-shadow">
+              <div key={i} className="group relative flex flex-col items-stretch gap-6 overflow-hidden rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md md:flex-row md:gap-8 md:p-8">
                 
                 {/* Area Label */}
                 <div className="md:w-1/4 flex flex-col justify-center">
@@ -2106,8 +2125,9 @@ const data = getFeatureData(resolvedParams.slug);
       </section>
 
       {/* 4. Feature Grid Section (Bento Box Design) */}
-      <section className="bg-[#fafafa] py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#fafafa] py-12 sm:py-16 lg:py-20">
+        <SectionAtmosphere src={visuals.workflowBg} intensity="soft" />
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
           <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.2] mb-4">
@@ -2136,7 +2156,7 @@ const data = getFeatureData(resolvedParams.slug);
               return (
                 <div 
                   key={i} 
-                  className={`group relative bg-white rounded-3xl p-6 lg:p-8 border border-slate-200 overflow-hidden hover:border-teal-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${spanClasses}`}
+                  className={`group relative bg-white/95 backdrop-blur-sm rounded-3xl p-6 lg:p-8 border border-slate-200 overflow-hidden hover:border-teal-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${spanClasses}`}
                 >
                   {/* Decorative glowing gradient on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-teal-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -2169,8 +2189,9 @@ const data = getFeatureData(resolvedParams.slug);
       </section>
 
       {/* 5. Workflow Section */}
-      <section className="bg-white py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-white py-12 sm:py-16 lg:py-20">
+        <SectionAtmosphere src={visuals.deepDiveBg} intensity="soft" />
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
           <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-10">
             <div className="mb-4 inline-flex items-center rounded-full bg-teal-100 px-3 py-1">
@@ -2192,10 +2213,10 @@ const data = getFeatureData(resolvedParams.slug);
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {data.workflow.steps.map((step, i) => (
-              <div key={i} className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all relative">
-                <div className="text-3xl font-black text-teal-200 mb-4">{step.num}</div>
-                <h4 className="font-bold text-slate-900 text-sm mb-2">{step.title}</h4>
-                <p className="text-xs text-slate-500 leading-relaxed">{step.desc}</p>
+              <div key={i} className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm backdrop-blur-sm transition-all hover:shadow-md">
+                <div className="mb-4 text-3xl font-black text-teal-200">{step.num}</div>
+                <h4 className="mb-2 text-sm font-bold text-slate-900">{step.title}</h4>
+                <p className="text-xs leading-relaxed text-slate-500">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -2204,8 +2225,9 @@ const data = getFeatureData(resolvedParams.slug);
       </section>
 
       {/* 6. Deep Dive Section */}
-      <section className="bg-[#fafafa] py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#fafafa] py-12 sm:py-16 lg:py-20">
+        <SectionAtmosphere src={visuals.benefitsBg} intensity="medium" />
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
           <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
             {/* Left */}
@@ -2256,7 +2278,7 @@ const data = getFeatureData(resolvedParams.slug);
       <section className="relative isolate overflow-hidden bg-slate-950 py-14 text-center sm:py-16 lg:py-20">
         <div className="absolute inset-0" aria-hidden>
           <Image
-            src="/images/cta-studio-premium.jpg"
+            src={visuals.ctaBg}
             alt=""
             fill
             className="object-cover object-[70%_48%] sm:object-[75%_45%] lg:object-[80%_42%] lg:scale-105"
@@ -2270,11 +2292,14 @@ const data = getFeatureData(resolvedParams.slug);
 
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-wider text-teal-300">
+            {visuals.accentLabel}
+          </p>
           <h2 className="mb-5 text-balance text-3xl font-bold text-white drop-shadow-sm sm:mb-6 sm:text-4xl">
-            Ready to control your workshop operations?
+            Ready to upgrade how you run {formattedName.toLowerCase()}?
           </h2>
           <p className="mx-auto mb-7 max-w-2xl text-pretty text-base text-slate-100 sm:mb-8 sm:text-lg">
-            Join thousands of workshop owners using MY DETAIL OS to automate billing, track expenses, and maximize net profits.
+            Join workshop owners using MY DETAIL OS to digitize job cards, billing, customers, and floor operations.
           </p>
           <Link href="/signup" target="_blank" rel="noopener noreferrer">
             <Button

@@ -1,29 +1,30 @@
+import Link from "next/link";
 import { FadeIn } from "@/components/ui/fade-in";
 import {
   Car,
   Bike,
-  Bus,
-  Paintbrush,
+  Truck,
+  SprayCan,
   Network,
-  User,
+  Store,
   Droplets,
   Sparkles,
-  Wrench,
+  Fuel,
   Shield,
   type LucideIcon,
 } from "lucide-react";
 
-const workshopTypes = [
-  { name: "Car Garages", icon: Car },
-  { name: "Bike Workshops", icon: Bike },
-  { name: "Car Wash", icon: Droplets },
-  { name: "Auto Spa", icon: Sparkles },
-  { name: "Fleet Workshops", icon: Bus },
-  { name: "Car Detailing", icon: Paintbrush },
-  { name: "Oil & Lube", icon: Wrench },
-  { name: "Ceramic / PPF", icon: Shield },
-  { name: "Multi-Branch Garages", icon: Network },
-  { name: "Independent Garages", icon: User },
+const workshopTypes: { name: string; href: string; icon: LucideIcon }[] = [
+  { name: "Car Garages", href: "/features/car-garage", icon: Car },
+  { name: "Bike Workshops", href: "/features/bike-workshop", icon: Bike },
+  { name: "Car Wash", href: "/features/car-wash", icon: Droplets },
+  { name: "Auto Spa", href: "/features/auto-spa", icon: Sparkles },
+  { name: "Fleet Workshops", href: "/features/fleet-workshop", icon: Truck },
+  { name: "Car Detailing", href: "/features/car-detailing", icon: SprayCan },
+  { name: "Oil & Lube", href: "/features/oil-lube", icon: Fuel },
+  { name: "Ceramic / PPF", href: "/features/ceramic-ppf", icon: Shield },
+  { name: "Multi-Branch Garages", href: "/features/multi-branch", icon: Network },
+  { name: "Independent Garages", href: "/features/automobile-workshop", icon: Store },
 ];
 
 function WorkshopIconFace({
@@ -85,9 +86,10 @@ export function WorkshopTypes() {
           {workshopTypes.map((type) => {
             const Icon = type.icon;
             return (
-              <div
+              <Link
                 key={type.name}
-                className="group flex cursor-pointer flex-col items-center text-center"
+                href={type.href}
+                className="group flex flex-col items-center text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600/40 focus-visible:ring-offset-2 rounded-xl"
               >
                 <div className="workshop-type-scene relative size-[4.75rem] sm:size-20">
                   <div className="workshop-type-flip relative h-full w-full">
@@ -98,7 +100,7 @@ export function WorkshopTypes() {
                 <h3 className="mt-4 text-xs font-semibold tracking-wide text-slate-800 uppercase transition-colors duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:text-teal-700 sm:text-[13px]">
                   {type.name}
                 </h3>
-              </div>
+              </Link>
             );
           })}
         </div>

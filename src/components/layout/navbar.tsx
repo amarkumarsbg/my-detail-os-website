@@ -426,33 +426,38 @@ export function Navbar() {
               }
 
               return (
-                <div className="flex justify-between gap-6 p-5 sm:p-6">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-6 p-5 sm:grid-cols-4 sm:p-6 lg:gap-x-10">
                   {columns.map((column) => (
-                    <div key={column.title} className="flex-1">
-                      <h4
-                        className={cn(
-                          "mb-3 border-b pb-2 text-[11px] font-bold tracking-wider uppercase",
-                          light
-                            ? "border-slate-100 text-slate-900"
-                            : "border-white/10 text-white"
-                        )}
-                      >
-                        {column.title}
+                    <div key={column.title} className="min-w-0">
+                      <h4 className="mb-3 flex justify-start">
+                        <span className="inline-flex rounded-full bg-[#f8e4dc] px-3.5 py-1.5 text-left text-[12px] font-semibold leading-none tracking-wide text-[#8b3a3a]">
+                          {column.title}
+                        </span>
                       </h4>
-                      <ul className="space-y-1.5">
+                      <div
+                        className={cn(
+                          "mb-3 border-t",
+                          light ? "border-slate-200" : "border-white/10"
+                        )}
+                      />
+                      <ul className="space-y-0.5">
                         {column.items.map((link) => (
                           <li key={link.label}>
                             <Link
                               href={link.href}
                               className={cn(
-                                "flex items-center rounded-md px-1 py-1.5 text-[13px] font-medium transition-all hover:translate-x-1",
+                                "group flex items-center gap-2.5 rounded-md px-0.5 py-1.5 text-[13px] font-medium transition-colors",
                                 light
-                                  ? "text-slate-500 hover:text-teal-600"
-                                  : "text-slate-400 hover:text-teal-300"
+                                  ? "text-slate-700 hover:text-teal-700"
+                                  : "text-slate-300 hover:text-teal-300"
                               )}
                               onClick={() => setHoveredNav(null)}
                             >
-                              {link.label}
+                              <span
+                                className="size-1.5 shrink-0 rounded-full bg-[#f0c4b4]"
+                                aria-hidden
+                              />
+                              <span className="leading-snug">{link.label}</span>
                             </Link>
                           </li>
                         ))}
@@ -562,7 +567,7 @@ export function Navbar() {
                     </Link>
                   )}
                   {item.megaMenu && sectionOpen ? (
-                    <div className="mb-2 ml-3 space-y-0.5 border-l border-white/10 pl-3">
+                    <div className="mb-2 ml-3 space-y-3 border-l border-white/10 pl-3">
                       <Link
                         href={item.href}
                         onClick={closeMenu}
@@ -570,18 +575,36 @@ export function Navbar() {
                       >
                         View all {item.label.toLowerCase()}
                       </Link>
-                      {item.megaMenu.flatMap((col) =>
-                        col.items.map((link) => (
-                          <Link
-                            key={`${link.href}-${link.label}`}
-                            href={link.href}
-                            onClick={closeMenu}
-                            className="block rounded-lg px-3 py-3 text-sm text-slate-400 hover:bg-white/5 hover:text-teal-300"
-                          >
-                            {link.label}
-                          </Link>
-                        ))
-                      )}
+                      {item.megaMenuLayout === "columns"
+                        ? item.megaMenu.map((col) => (
+                            <div key={col.title} className="space-y-0.5">
+                              <p className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#f0c4b4]">
+                                {col.title}
+                              </p>
+                              {col.items.map((link) => (
+                                <Link
+                                  key={`${link.href}-${link.label}`}
+                                  href={link.href}
+                                  onClick={closeMenu}
+                                  className="block rounded-lg px-3 py-2.5 text-sm text-slate-400 hover:bg-white/5 hover:text-teal-300"
+                                >
+                                  {link.label}
+                                </Link>
+                              ))}
+                            </div>
+                          ))
+                        : item.megaMenu.flatMap((col) =>
+                            col.items.map((link) => (
+                              <Link
+                                key={`${link.href}-${link.label}`}
+                                href={link.href}
+                                onClick={closeMenu}
+                                className="block rounded-lg px-3 py-3 text-sm text-slate-400 hover:bg-white/5 hover:text-teal-300"
+                              >
+                                {link.label}
+                              </Link>
+                            ))
+                          )}
                     </div>
                   ) : null}
                 </div>

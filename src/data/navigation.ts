@@ -1,32 +1,4 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  Car,
-  Bike,
-  Wrench,
-  Paintbrush,
-  Truck,
-  Droplets,
-  Store,
-  Disc,
-  Fuel,
-  Factory,
-  Network,
-  LayoutDashboard,
-  ClipboardList,
-  CalendarCheck,
-  Package,
-  Users,
-  Gift,
-  Receipt,
-  Wallet,
-  UserCog,
-  Clock,
-  BarChart3,
-  MessageSquare,
-  Settings,
-  MapPin,
-  Smartphone,
-} from "lucide-react";
 
 export interface MegaMenuItem {
   label: string;
@@ -53,101 +25,63 @@ export const primaryNav: NavItem[] = [
   {
     label: "Features",
     href: "/#features",
-    megaMenuLayout: "rich",
+    megaMenuLayout: "columns",
     megaMenu: [
       {
-        title: "Platform features",
+        title: "Core Modules",
         items: [
-          {
-            label: "Dashboard",
-            href: "/features/dashboard",
-            description: "See today’s jobs, revenue, and workshop status at a glance.",
-            icon: LayoutDashboard,
-          },
-          {
-            label: "Job Cards",
-            href: "/features/job-cards",
-            description: "Track every vehicle from check-in through delivery.",
-            icon: ClipboardList,
-          },
-          {
-            label: "Bookings & Appointments",
-            href: "/features/bookings",
-            description: "Schedule slots and keep the bay calendar under control.",
-            icon: CalendarCheck,
-          },
-          {
-            label: "Inventory Hub",
-            href: "/features/inventory-hub",
-            description: "Manage parts, stock levels, purchases, and vendors.",
-            icon: Package,
-          },
-          {
-            label: "Customers CRM",
-            href: "/features/customers",
-            description: "Keep customer profiles, vehicles, and history connected.",
-            icon: Users,
-          },
-          {
-            label: "Membership & Rewards",
-            href: "/features/membership",
-            description: "Run loyalty programs that bring customers back.",
-            icon: Gift,
-          },
-          {
-            label: "Billing & Invoicing",
-            href: "/features/billing",
-            description: "Create GST invoices and track payments against jobs.",
-            icon: Receipt,
-          },
-          {
-            label: "Expenses & Cash",
-            href: "/features/expenses",
-            description: "Record workshop spend and keep cash & bank clear.",
-            icon: Wallet,
-          },
-          {
-            label: "Users & Staff",
-            href: "/features/users-staff",
-            description: "Roles, access, and day-to-day team management.",
-            icon: UserCog,
-          },
-          {
-            label: "Attendance & Payroll",
-            href: "/features/attendance",
-            description: "Track attendance, leave, and salary in one place.",
-            icon: Clock,
-          },
-          {
-            label: "Reports & Analytics",
-            href: "/features/analytics",
-            description: "Revenue, operations, and performance insights.",
-            icon: BarChart3,
-          },
-          {
-            label: "WhatsApp Messaging",
-            href: "/features/messages-log",
-            description: "Keep customers updated with service notifications.",
-            icon: MessageSquare,
-          },
-          {
-            label: "Multi-location",
-            href: "/features/locations",
-            description: "Run multiple branches with shared visibility.",
-            icon: MapPin,
-          },
-          {
-            label: "Settings",
-            href: "/features/settings",
-            description: "Configure branding, preferences, and workshop rules.",
-            icon: Settings,
-          },
-          {
-            label: "Mobile Experience",
-            href: "/mobile",
-            description: "Workshop app and customer portal that work on phone and tablet.",
-            icon: Smartphone,
-          },
+          { label: "Appointments & Pickup-Drop", href: "/features/bookings" },
+          { label: "Job Cards", href: "/features/job-cards" },
+          { label: "GST Billing", href: "/features/billing" },
+          { label: "CRM", href: "/features/customers" },
+          { label: "ERP", href: "/features/erp" },
+          { label: "Inventory", href: "/features/inventory-hub" },
+          { label: "Service Reminders", href: "/features/service-reminders" },
+          { label: "Customer Engagement", href: "/features/customer-engagement" },
+          { label: "WhatsApp Automation", href: "/features/messages-log" },
+          { label: "Automation", href: "/features/automation" },
+          { label: "Finance", href: "/features/finance" },
+          { label: "Accounting", href: "/features/accounting" },
+          { label: "Payroll", href: "/features/payroll" },
+          { label: "Attendance", href: "/features/attendance" },
+          { label: "Digital Gate Pass", href: "/features/digital-gate-pass" },
+          { label: "Test Drive", href: "/features/test-drive" },
+          { label: "Insurance Claims", href: "/features/insurance-claims" },
+        ],
+      },
+      {
+        title: "Workshop Solutions",
+        items: [
+          { label: "Workshop Management", href: "/features/workshop-management" },
+          { label: "Automobile Workshop", href: "/features/automobile-workshop" },
+          { label: "Auto Repair Shop", href: "/features/auto-repair-shop" },
+          { label: "Car Garage", href: "/features/car-garage" },
+          { label: "Car Workshop", href: "/features/car-workshop" },
+          { label: "Bike Workshop", href: "/features/bike-workshop" },
+          { label: "Truck Workshop", href: "/features/truck-workshop" },
+          { label: "EV Garage", href: "/features/ev-garage" },
+          { label: "Car Detailing", href: "/features/car-detailing" },
+          { label: "Fleet Workshop", href: "/features/fleet-workshop" },
+        ],
+      },
+      {
+        title: "Buying & Business",
+        items: [
+          { label: "Best Garage Software", href: "/features/best-garage-software" },
+          { label: "Best Workshop Software", href: "/features/best-workshop-software" },
+          { label: "Software India (Garage)", href: "/features/software-india-garage" },
+          { label: "Software India (Workshop)", href: "/features/software-india-workshop" },
+          { label: "Marketing", href: "/features/marketing" },
+          { label: "Multi-Branch", href: "/features/multi-branch" },
+          { label: "Service History", href: "/features/service-history" },
+          { label: "Reports & Analytics", href: "/features/analytics" },
+        ],
+      },
+      {
+        title: "Apps & Mobile",
+        items: [
+          { label: "Garage App", href: "/mobile" },
+          { label: "Workshop App", href: "/mobile" },
         ],
       },
     ],
@@ -155,83 +89,38 @@ export const primaryNav: NavItem[] = [
   {
     label: "Solutions",
     href: "/solutions",
-    megaMenuLayout: "rich",
+    megaMenuLayout: "columns",
     megaMenu: [
       {
-        title: "Who we serve",
+        title: "Service Workshops",
         items: [
-          {
-            label: "Independent workshops",
-            href: "/features/automobile-workshop",
-            description: "Run job cards, billing, and customers from one cloud workshop OS.",
-            icon: Wrench,
-          },
-          {
-            label: "Multi-brand service workshops",
-            href: "/features/workshop-management",
-            description: "Take control of multi-make service with seamless daily operations.",
-            icon: Network,
-          },
-          {
-            label: "Car detailing centers",
-            href: "/features/car-detailing",
-            description: "Give your detailing business a premium, organized customer experience.",
-            icon: Paintbrush,
-          },
-          {
-            label: "Auto repair centers",
-            href: "/features/auto-repair-shop",
-            description: "A cloud platform to enhance repair workflows and front-desk clarity.",
-            icon: Car,
-          },
-          {
-            label: "Motorcycle service centers",
-            href: "/features/bike-workshop",
-            description: "An intelligent platform built for bike and two-wheeler workshops.",
-            icon: Bike,
-          },
-          {
-            label: "Oil / lube service chains",
-            href: "/features/car-garage",
-            description: "A smarter way to impress customers with faster, consistent service.",
-            icon: Droplets,
-          },
-          {
-            label: "Car wash & detailing",
-            href: "/features/car-detailing",
-            description: "Bridge wash-bay speed with CRM, packages, and follow-ups.",
-            icon: Droplets,
-          },
-          {
-            label: "Service & repair franchisees",
-            href: "/features/multi-branch",
-            description: "Spend more time on repair and less on paperwork across outlets.",
-            icon: Store,
-          },
-          {
-            label: "Fleet operation businesses",
-            href: "/features/fleet-workshop",
-            description: "Bring dealership-grade visibility to fleets and workshop partners.",
-            icon: Truck,
-          },
-          {
-            label: "Tyre / battery retailers",
-            href: "/features/ev-garage",
-            description: "Charge up tyre and battery sales with inventory and job tracking.",
-            icon: Disc,
-          },
-          {
-            label: "OEM distributors",
-            href: "/features/inventory",
-            description: "Modernize distribution experience with stock and dealer visibility.",
-            icon: Factory,
-          },
-          {
-            label: "Oils / lubricants OEMs",
-            href: "/features/inventory-hub",
-            description: "A smarter way to lock in workshops and track product movement.",
-            icon: Fuel,
-          },
+          { label: "Independent workshops", href: "/features/automobile-workshop" },
+          { label: "Multi-brand service workshops", href: "/features/workshop-management" },
+          { label: "Auto repair centers", href: "/features/auto-repair-shop" },
+          { label: "Motorcycle service centers", href: "/features/bike-workshop" },
+        ],
+      },
+      {
+        title: "Detailing & Care",
+        items: [
+          { label: "Car detailing centers", href: "/features/car-detailing" },
+          { label: "Car wash & detailing", href: "/features/car-wash" },
+          { label: "Oil / lube service chains", href: "/features/oil-lube" },
+        ],
+      },
+      {
+        title: "Fleet & Retail",
+        items: [
+          { label: "Fleet operation businesses", href: "/features/fleet-workshop" },
+          { label: "Tyre / battery retailers", href: "/features/ev-garage" },
+          { label: "Service & repair franchisees", href: "/features/multi-branch" },
+        ],
+      },
+      {
+        title: "OEM & Partners",
+        items: [
+          { label: "OEM distributors", href: "/features/inventory" },
+          { label: "Oils / lubricants OEMs", href: "/features/inventory-hub" },
         ],
       },
     ],
@@ -284,9 +173,23 @@ export const footerNav = {
   ],
 } as const;
 
-/** All feature/solution page slugs linked from primary mega menus. */
+/** Workshop-type landing pages linked from the home grid (may not all appear in mega menus). */
+const WORKSHOP_TYPE_SLUGS = [
+  "car-garage",
+  "bike-workshop",
+  "car-wash",
+  "auto-spa",
+  "fleet-workshop",
+  "car-detailing",
+  "oil-lube",
+  "ceramic-ppf",
+  "multi-branch",
+  "automobile-workshop",
+] as const;
+
+/** All feature/solution page slugs linked from primary mega menus + workshop type grid. */
 export function getAllFeatureSlugs(): string[] {
-  const slugs = new Set<string>();
+  const slugs = new Set<string>(WORKSHOP_TYPE_SLUGS);
   for (const item of primaryNav) {
     for (const column of item.megaMenu ?? []) {
       for (const link of column.items) {
