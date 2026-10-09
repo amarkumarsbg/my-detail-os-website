@@ -44,7 +44,7 @@ export function Footer() {
 
           <FooterColumn title="Considering MY DETAIL OS?" links={footerNav.considering}>
             <Link
-              href="/login"
+              href="/how-it-works"
               className="group mt-5 flex items-center text-sm font-bold text-teal-500 hover:text-teal-400"
             >
               Why MY DETAIL OS
@@ -74,7 +74,7 @@ export function Footer() {
 
           <FooterColumn title="Resources" links={footerNav.resources}>
             <Link
-              href="/contact"
+              href="/faq"
               className="group mt-5 flex items-center text-sm font-bold text-teal-500 hover:text-teal-400"
             >
               All docs
